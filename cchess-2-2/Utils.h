@@ -4,7 +4,15 @@
 #include <thread>
 #include <concepts>
 
-template<typename T> concept numeric = std::is_integral_v<T> || std::is_floating_point_v<T>;
+template<typename T>
+concept numeric = std::is_integral_v<T> || std::is_floating_point_v<T>;
+
+template<typename Func, typename T>
+concept Evalable = requires(Func fn, T px)
+{
+    { fn(px) };
+};
+
 
 // Get a console handle
 extern HWND window;
@@ -42,9 +50,25 @@ namespace space
     }
 }
 
-int Snap(int value, int gridsize);
+template<std::integral iT>
+bool IsOdd(iT a)
+{
+    return !!(a & (iT)1);
+}
 
-bool Even(int a);
+template<std::integral iT>
+bool IsEven(iT a)
+{
+    return !(a & (iT)1);
+}
+
+template<std::integral iT1, std::integral iT2>
+iT1 Snap(iT1 value, iT2 gridsize) {
+    using TBig = std::conditional_t<sizeof(iT1) >= sizeof(iT2), iT1, iT2>;
+    value = (iT1)((TBig)value / (TBig)gridsize);
+    value = (iT1)((TBig)value * (TBig)gridsize);
+    return value;
+}
 
 struct Coord;
 struct PixelPos;
@@ -129,9 +153,6 @@ struct PixelPos : public Vec2
         Vec2()
     {}
 
-    // Conversion to boardspace.
-    operator Coord() const;
-
     PixelPos& operator=(const PixelPos b)
     {
         x = b.x;
@@ -193,7 +214,7 @@ struct PixelPos : public Vec2
     }
 
     template<std::floating_point fT>
-    PixelPos  operator* (const fT scale) const
+    PixelPos operator*(const fT scale) const
     {
         return {
             (int)((fT)x * scale),
@@ -201,7 +222,7 @@ struct PixelPos : public Vec2
         };
     }
     template<std::floating_point fT>
-    PixelPos  operator/ (const fT scale) const
+    PixelPos operator/(const fT scale) const
     {
         return {
             (int)((fT)x / scale),
@@ -244,9 +265,6 @@ struct Coord : public Vec2
         Vec2()
     {}
 
-    // Conversion to screenspace.
-    operator PixelPos() const;
-
     bool operator==(const Coord& p2) const
     {
         return
@@ -268,23 +286,16 @@ PixelPos PixelSpace(const Coord tile);
 Coord BoardSpace(const PixelPos pixel);
 
 // The start and end positions of a space.
+// [start..end)
 struct BoardTile
 {
-    BoardTile();
+    BoardTile() :
+        beginPx{},
+        endPx{}
+    {}
+
     BoardTile(Coord tile);
+    BoardTile(int tileX, int tileY);
 
-    PixelPos start, end;
+    PixelPos beginPx, endPx;
 };
-
-// I think the idea of this was so that the pixels could be iterated over using a ranged for-loop.
-// This can be performed better by simply using begin() and end() methods.
-#if false
-// An array of all pixels in a board tile
-struct BoardTile2
-{
-BoardTile2();
-BoardTile2(Coord tile);
-
-std::vector<PixelPos> pixels[space::screen::tileArea];
-};
-#endif
