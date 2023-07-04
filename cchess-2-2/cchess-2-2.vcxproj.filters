@@ -57,6 +57,12 @@
     <ClCompile Include="King.cpp">
       <Filter>Source Files\Units</Filter>
     </ClCompile>
+    <ClCompile Include="Sprites.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitDirections.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">
@@ -91,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="King.h">
       <Filter>Header Files\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitDirections.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

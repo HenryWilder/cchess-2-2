@@ -1,8 +1,9 @@
+#include "UnitDirections.h"
 #include "Queen.h"
 
 Piece Queen::GetPieceType() const
 {
-	return Piece::Piece_Queen;
+	return Piece::Queen;
 }
 
 sprite::Sprite* Queen::GetSpritePointer()
@@ -12,7 +13,7 @@ sprite::Sprite* Queen::GetSpritePointer()
 
 void Queen::AvailableMoves(PieceMoves* moves)
 {
-	Coord confirmedMoves[sideTileCount * 4];
+	Coord confirmedMoves[space::game::sideTileCount * 4];
 
 	unsigned char confirmedMoveCount = 0;
 

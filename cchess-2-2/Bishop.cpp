@@ -1,8 +1,9 @@
+#include "UnitDirections.h"
 #include "Bishop.h"
 
 Piece Bishop::GetPieceType() const
 {
-	return Piece::Piece_Bishop;
+	return Piece::Bishop;
 }
 
 sprite::Sprite* Bishop::GetSpritePointer()
@@ -12,7 +13,7 @@ sprite::Sprite* Bishop::GetSpritePointer()
 
 void Bishop::AvailableMoves(PieceMoves* moves)
 {
-	Coord confirmedMoves[sideTileCount * 3];
+	Coord confirmedMoves[space::game::sideTileCount * 3];
 
 	unsigned char confirmedMoveCount = 0;
 

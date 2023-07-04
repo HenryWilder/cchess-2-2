@@ -392,32 +392,37 @@ FrameBuffer g_frameBuffer;
 
 namespace sprite
 {
-    const Color colorPalette[] = {
-
+    const Color colorPalette[15]
+    {
         // Board
-        {236, 167, 95}, // Black
-        {252, 219, 166},  // White
 
-                          // Black
-        {80, 80, 90}, // Fill
-        {50, 55, 60}, // Shade
-        {40, 30, 50}, // Outline
-        {100, 100, 110}, // Shine
+        { 236, 167,  95 }, // Black
+        { 252, 219, 166 },  // White
 
-                         // White
-        {240, 240, 230}, // Fill
-        {180, 150, 120}, // Shade
-        {100, 100, 90}, // Outline
-        {255, 255, 255}, // Shine
+        // Black
 
-                         // Select
-        {44, 200, 37}, // Unit we are moving
-        {155, 235, 135}, // Available space we can move to
-        {255, 80, 80}, // Available space with a piece we can take
+        {  80,  80,  90 }, // Fill
+        {  50,  55,  60 }, // Shade
+        {  40,  30,  50 }, // Outline
+        { 100, 100, 110 }, // Shine
 
-                       // NoSelect
-        {255, 200, 80}, // King would be put in check
-        {127, 127, 127}, // A teammate is already at that space
+        // White
+
+        { 240, 240, 230 }, // Fill
+        { 180, 150, 120 }, // Shade
+        { 100, 100,  90 }, // Outline
+        { 255, 255, 255 }, // Shine
+
+        // Select
+
+        {  44, 200,  37 }, // Unit we are moving
+        { 155, 235, 135 }, // Available space we can move to
+        { 255,  80,  80 }, // Available space with a piece we can take
+
+        // NoSelect
+
+        { 255, 200,  80 }, // King would be put in check
+        { 127, 127, 127 }, // A teammate is already at that space
     };
 
     COLORREF PaletteColor(Pltt col)
@@ -427,245 +432,40 @@ namespace sprite
 
     COLORREF Sprite::SpriteColor(int index, int team) const
     {
-        unsigned char value = m_texture[index];
+        char value = m_texture[index];
 
         Pltt out = Pltt::Board_Black;
 
-        switch (team)
+        bool isTeam  = (team == 0 || team == 1);
+        bool isBoard = (team == 2);
+
+        // Glow
+        if ((isTeam && value == '5') || (isBoard && value == '2'))
         {
-        case 0:
+            return PaletteColor(Pltt::Select_Unit);
+        }
+
+        if (isTeam)
+        {
+            unsigned int teamOffset = (unsigned int)((team == 1)
+                ? Pltt::UnitW_Fill
+                : Pltt::UnitB_Fill);
+
+            out = (Pltt)((unsigned int)(value - '1') + teamOffset);
+        }
+        else
+        {
             switch (value)
             {
-            case '1':
-                out = Pltt::UnitB_Fill;
-                break;
-            case '2':
-                out = Pltt::UnitB_Shade;
-                break;
-            case '3':
-                out = Pltt::UnitB_Edge;
-                break;
-            case '4':
-                out = Pltt::UnitB_Shine;
-                break;
-            case '5': // Glow
-                out = Pltt::Select_Unit;
-                break;
+            case '1': out = Pltt::Select_Available;    break;
+            // Todo: Something about this gap.
+            case '3': out = Pltt::Select_TakePiece;    break;
+            case '4': out = Pltt::NoSelect_KingDanger; break;
+            case '5': out = Pltt::NoSelect_Teammate;   break;
             }
-            break;
-        case 1:
-            switch (value)
-            {
-            case '1':
-                out = Pltt::UnitW_Fill;
-                break;
-            case '2':
-                out = Pltt::UnitW_Shade;
-                break;
-            case '3':
-                out = Pltt::UnitW_Edge;
-                break;
-            case '4':
-                out = Pltt::UnitW_Shine;
-                break;
-            case '5': // Glow
-                out = Pltt::Select_Unit;
-                break;
-            }
-            break;
-        case 2:
-            switch (value)
-            {
-            case '1':
-                out = Pltt::Select_Available;
-                break;
-            case '2':
-                out = Pltt::Select_Unit;
-                break;
-            case '3':
-                out = Pltt::Select_TakePiece;
-                break;
-            case '4':
-                out = Pltt::NoSelect_KingDanger;
-                break;
-            case '5':
-                out = Pltt::NoSelect_Teammate;
-                break;
-            }
-            break;
         }
 
         return PaletteColor(out);
-    }
-
-    namespace unit
-    {
-        Sprite null = {
-            "                "
-            "                "
-            "                "
-            "                "
-            "                "
-            "                "
-            "                "
-            "                "
-            "                "
-            "                "
-            "                "
-            "                "
-            "                "
-            "                "
-            "                "
-            "                "
-        };
-        Sprite pawn = {
-            "                "
-            "                "
-            "                "
-            "      2222      "
-            "     211442     "
-            "     311442     "
-            "     311112     "
-            "     321113     "
-            "      3242      "
-            "     321143     "
-            "      3243      "
-            "      3143      "
-            "      3143      "
-            "     321413     "
-            "    32111443    "
-            "    33333333    "
-        };
-        Sprite rook = {
-            "                "
-            "                "
-            "   3323333233   "
-            "   3223113243   "
-            "   3233113343   "
-            "   3211111143   "
-            "    32111113    "
-            "     322123     "
-            "     321143     "
-            "     321143     "
-            "     321143     "
-            "    32211443    "
-            "    32114443    "
-            "   3222221143   "
-            "   3221111443   "
-            "   3333333333   "
-        };
-        Sprite knight = {
-            "      33        "
-            "     3212       "
-            "    3214233333  "
-            "   321114422443 "
-            "   321111111123 "
-            "   321121111113 "
-            "    3212111133  "
-            "    32112223    "
-            "     321442     "
-            "      321442    "
-            "      3211443   "
-            "      3211413   "
-            "     32111123   "
-            "    32211123    "
-            "   3221111442   "
-            "   3333333333   "
-        };
-        Sprite bishop = {
-            "       33       "
-            "      3143      "
-            "     322132     "
-            "    3211132     "
-            "    32113143    "
-            "    32111143    "
-            "     321113     "
-            "      3223      "
-            "     321143     "
-            "      3243      "
-            "      3143      "
-            "     321143     "
-            "     321143     "
-            "    32211443    "
-            "   3221111443   "
-            "   3333333333   "
-        };
-        Sprite queen = {
-            "       33       "
-            "   3323143233   "
-            "   3133323313   "
-            "   3211111213   "
-            "    32221213    "
-            "     321113     "
-            "     321123     "
-            "      3223      "
-            "     321143     "
-            "      3243      "
-            "      3143      "
-            "     321143     "
-            "     321143     "
-            "    32221443    "
-            "   3221111443   "
-            "   3333333333   "
-        };
-        Sprite king = {
-            "       33       "
-            "      2332      "
-            "    23311332    "
-            "    32114443    "
-            "    32111123    "
-            "     321113     "
-            "     321123     "
-            "      3223      "
-            "     321143     "
-            "      3243      "
-            "      3143      "
-            "     321143     "
-            "     321143     "
-            "    32221443    "
-            "   3221111443   "
-            "   3333333333   "
-        };
-    }
-
-    namespace symbol
-    {
-        Sprite arrowL = {
-            "       33       "
-            "      313       "
-            "     3113       "
-            "    31113       "
-            "   311113       "
-            "  3111113       "
-            " 31111113       "
-            "311111113       "
-            "311111113       "
-            " 31111113       "
-            "  3111113       "
-            "   311113       "
-            "    31113       "
-            "     3113       "
-            "      313       "
-            "       33       "
-        };
-        Sprite arrowR = {
-            "       33       "
-            "       313      "
-            "       3113     "
-            "       31113    "
-            "       311113   "
-            "       3111113  "
-            "       31111113 "
-            "       311111113"
-            "       311111113"
-            "       31111113 "
-            "       3111113  "
-            "       311113   "
-            "       31113    "
-            "       3113     "
-            "       313      "
-            "       33       "
-        };
     }
 }
 

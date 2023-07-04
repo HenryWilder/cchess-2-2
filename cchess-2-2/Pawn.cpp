@@ -1,14 +1,15 @@
+#include "UnitDirections.h"
 #include "Pawn.h"
 
 signed int Pawn::GetForward() const
 {
-	if (GetColor() == UnitColor::Unit_Black) return 1;
+	if (GetColor() == UnitColor::Black) return 1;
 	else return -1;
 }
 
 Piece Pawn::GetPieceType() const
 {
-	return Piece::Piece_Pawn;
+	return Piece::Pawn;
 }
 
 void Pawn::Move(Coord newPosition)
@@ -80,7 +81,7 @@ bool Pawn::CouldITakeAt(Coord hypothetical)
 {
 	int fwDirection = 1; // Default assumes black unit (because black is first in the enum definition (personal preference, does not affect code.))
 
-	if (GetColor() == UnitColor::Unit_White) fwDirection = -1; // If the unit is found to be white, invert the forward direction.
+	if (GetColor() == UnitColor::White) fwDirection = -1; // If the unit is found to be white, invert the forward direction.
 
 	if (hypothetical == (m_position + Coord{ 1 /*right*/, fwDirection }) ||
 		hypothetical == (m_position + Coord{ -1 /*left*/, fwDirection })) return true;

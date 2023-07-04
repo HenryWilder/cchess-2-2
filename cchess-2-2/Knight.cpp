@@ -1,8 +1,9 @@
+#include "UnitDirections.h"
 #include "Knight.h"
 
 Piece Knight::GetPieceType() const
 {
-	return Piece::Piece_Knight;
+	return Piece::Knight;
 }
 
 sprite::Sprite* Knight::GetSpritePointer()

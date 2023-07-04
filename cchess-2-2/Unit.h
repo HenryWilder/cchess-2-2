@@ -3,8 +3,6 @@
 #include "Rendering.h"
 #include "Board.h"
 
-class Board;
-
 enum class Piece : unsigned char
 {
 	Null = 0,
@@ -14,6 +12,7 @@ enum class Piece : unsigned char
 	Bishop,
 	Queen,
 	King,
+	Empty = 0b111,
 };
 
 struct PieceMoves
@@ -34,8 +33,8 @@ struct PieceMoves
 // The color of the piece
 enum class UnitColor : bool
 {
-	Unit_Black = false,
-	Unit_White = true,
+	Black = false,
+	White = true,
 };
 
 struct Unit
@@ -78,3 +77,10 @@ protected:
 
 //int size = sizeof(Unit);
 //int align = alignof(Unit);
+
+#include "Pawn.h"
+#include "Rook.h"
+#include "Knight.h"
+#include "Bishop.h"
+#include "Queen.h"
+#include "King.h"

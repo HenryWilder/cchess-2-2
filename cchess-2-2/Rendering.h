@@ -13,40 +13,49 @@ COLORREF CRef(Color c);
 
 namespace sprite
 {
-    enum class Pltt
+    // Should stay synced with `colorPalette`.
+    enum class Pltt : unsigned int
     {
-        Board_Black = 0,
-        Board_White = 1,
+        // Board
 
-        UnitB_Fill = 2,
-        UnitB_Shade = 3,
-        UnitB_Edge = 4,
-        UnitB_Shine = 5,
+        Board_Black,
+        Board_White,
 
-        UnitW_Fill = 6,
-        UnitW_Shade = 7,
-        UnitW_Edge = 8,
-        UnitW_Shine = 9,
+        // Black
 
-        Select_Unit = 10, // This is the piece we want to move
-        Select_Available = 11, // This space is available to move to
-        Select_TakePiece = 12, // There is an enemy unit here we can take
+        UnitB_Fill,
+        UnitB_Shade,
+        UnitB_Edge,
+        UnitB_Shine,
 
-        NoSelect_KingDanger = 13, // The space would put the king into check
-        NoSelect_Teammate = 14, // There is a teammate there blocking us from movement
+        // White
+
+        UnitW_Fill,
+        UnitW_Shade,
+        UnitW_Edge,
+        UnitW_Shine,
+
+        // Select
+
+        Select_Unit,      // This is the piece we want to move
+        Select_Available, // This space is available to move to
+        Select_TakePiece, // There is an enemy unit here we can take
+
+        // NoSelect
+
+        NoSelect_KingDanger, // The space would put the king into check
+        NoSelect_Teammate,   // There is a teammate there blocking us from movement
     };
-    extern const Color colorPalette[];
+    extern const Color colorPalette[15];
 
     COLORREF PaletteColor(Pltt col);
 
     struct Sprite
     {
-        /// <summary>
-        /// ' ' = empty,
-        /// '1' = fill,
-        /// '2' = shade,
-        /// '3' = edge,
-        /// </summary>
+        // ' ' = empty (space)
+        // '1' = fill
+        // '2' = shade
+        // '3' = edge
         const char* m_texture;
 
         COLORREF SpriteColor(int index, int team) const;
@@ -61,6 +70,8 @@ namespace sprite
         extern Sprite bishop;
         extern Sprite queen;
         extern Sprite king;
+
+        extern Sprite* all[7];
     }
 
     namespace symbol

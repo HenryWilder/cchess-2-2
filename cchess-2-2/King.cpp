@@ -1,3 +1,4 @@
+#include "UnitDirections.h"
 #include "King.h"
 
 Piece King::GetPieceType() const

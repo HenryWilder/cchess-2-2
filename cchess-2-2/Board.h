@@ -6,52 +6,31 @@
 #include "Rendering.h"
 #include "Input.h"
 
-enum class Piece;
-struct PieceMoves;
-struct Unit;
-enum class UnitColor : bool;
-
 char NumToLetter(int value);
-
 int LetterToNum(char letter);
-
 char CharToValue(char character);
-
 void ClearTextLine(int start = 0, int count = 1);
+
+// Data regarding a space on the board
+struct UnitData
+{
+	UnitColor color : 1;
+	Piece piece : 3; // Piece::Null is considered erroneous. Use Piece::Empty if there is no piece.
+};
 
 class BoardStateMemory
 {
 private:
-	int Index(int x, int y) const;
-	const char GetUnitData(int x, int y) const; // Retrieces unit data
-	UnitColor GetUnitData_Color(const char data) const;
-	Piece GetUnitData_Piece(const char data) const;
+	UnitData m_stateData[space::game::sideTileCount][space::game::sideTileCount];
 
 public:
-	UnitColor GetUnitData_Color(int x, int y) const;
-	Piece GetUnitData_Piece(int x, int y) const;
-	void SetStateSpace(int x, int y, const char data); // Writes data into the state
-
-private:
-	char m_stateData[space::game::boardArea];
-	/* Memory layout:
-	* 1 char = 1 unit = { [empty][empty][empty][empty] [color][class][class][class] }
-	* 
-	* 0 000 = NULL (avoid pls)
-	* 1 001 = pawn
-	* 2 010 = rook
-	* 3 011 = knight
-	* 4 100 = bishop
-	* 5 101 = queen
-	* 6 110 = king
-	* 7 111 = empty */
+	UnitData  operator[](Coord coord) const;
+	UnitData& operator[](Coord coord);
 };
 
 // Creates unit data
 // Input nullptr for empty space
-char MakeUnitData(Unit* unit);
-
-//class AI;
+UnitData MakeUnitData(Unit* unit);
 
 class Board
 {
@@ -70,6 +49,9 @@ private:
 
 	void BuildRoyalty(int y, UnitColor col, unsigned char& unitID);
 	void ConstructNewUnit(Coord pos, Piece type, UnitColor color, unsigned char& unitID);
+
+	UnitColor CurrentTeam();
+	UnitColor OpponentTeam();
 
 public:
 	Unit* GetTeamUnitAtPos(Coord pos, UnitColor team);
@@ -118,6 +100,4 @@ public:
 	void DrawBoardState(int state);
 	int FlipbookWFClick(int state);
 	void GameFlipbook();
-
-	//friend AI;
 };

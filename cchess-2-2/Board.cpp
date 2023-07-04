@@ -1,19 +1,27 @@
 #include "Board.h"
 #include <string>
-#define CURRENT_TEAM UnitColor(Even(turn))
-#define OPPONENT_TEAM UnitColor(!Even(turn))
-#define TEAM_NAME(team) ((team) == UnitColor::Unit_White ? "white" : "black")
-#define RESTORE_CURSOR "\x1b[u"
-#define CURSOR_TO_POSITION(x,y) ('\x1b','[',#x,';',#y,'f')
 
-char NumToLetter(int value)
+#define CURSOR_TO_POSITION(x,y) "\x1b[" #x ";" #y "f"
+
+constexpr const char* cursorRestor = "\x1b[u";
+
+UnitColor Board::CurrentTeam()
 {
-    return value + 'a';
+    return (UnitColor)IsEven(turn);
 }
 
-int LetterToNum(char letter)
+UnitColor Board::OpponentTeam()
 {
-    return letter - 'a';
+    return (UnitColor)IsEven(turn);
+}
+
+const char* TeamNameStr(UnitColor team)
+{
+    switch (team)
+    {
+    case UnitColor::White: return "white";
+    case UnitColor::Black: return "black";
+    }
 }
 
 char CharToValue(char character)
@@ -33,7 +41,7 @@ char CharToValue(char character)
 
 void ClearTextLine(int start, int count)
 {
-    std::cout << RESTORE_CURSOR;
+    std::cout << cursorRestor;
 
     std::cout << CURSOR_TO_POSITION(0, 0);
 
@@ -45,7 +53,7 @@ void ClearTextLine(int start, int count)
     for (int row = 0; row < count; ++row)
         std::cout << "                                                                              \n";
 
-    std::cout << RESTORE_CURSOR;
+    std::cout << cursorRestor;
 
     // Reset to start
     for (int row = 0; row < start; ++row)
@@ -70,11 +78,11 @@ Unit* Board::GetTeamUnitAtPos(Coord pos, UnitColor team)
 
 Unit* Board::GetUnitAtPos(Coord pos)
 {
-    Unit* out = GetTeamUnitAtPos(pos, UnitColor::Unit_Black);
+    Unit* out = GetTeamUnitAtPos(pos, UnitColor::Black);
     if (out != nullptr)
         return out;
     else
-        return GetTeamUnitAtPos(pos, UnitColor::Unit_White);
+        return GetTeamUnitAtPos(pos, UnitColor::White);
 }
 
 bool Board::IsTeamAtPos(Coord pos, UnitColor team)
@@ -95,7 +103,7 @@ bool Board::IsTeamAtPos(Coord pos, UnitColor team)
 
 bool Board::IsUnitAtPos(Coord pos)
 {
-    return IsTeamAtPos(pos, UnitColor::Unit_Black) || IsTeamAtPos(pos, UnitColor::Unit_White);
+    return IsTeamAtPos(pos, UnitColor::Black) || IsTeamAtPos(pos, UnitColor::White);
 }
 
 void Board::ResetBoard(int _width, int _height)
@@ -115,9 +123,9 @@ void Board::ResetBoard(int _width, int _height)
 
     // Construct
     for (int x = 0; x < width; ++x)
-        ConstructNewUnit({ x,1 }, Piece::Piece_Pawn, UnitColor::Unit_Black, unitID);
+        ConstructNewUnit({ x,1 }, Piece::Pawn, UnitColor::Black, unitID);
 
-    BuildRoyalty(0, UnitColor::Unit_Black, unitID);
+    BuildRoyalty(0, UnitColor::Black, unitID);
 
     // White units
     // Clear
@@ -126,9 +134,9 @@ void Board::ResetBoard(int _width, int _height)
 
     // Construct
     for (int x = 0; x < width; ++x)
-        ConstructNewUnit({ x,height - 2 }, Piece::Piece_Pawn, UnitColor::Unit_White, unitID);
+        ConstructNewUnit({ x,height - 2 }, Piece::Pawn, UnitColor::White, unitID);
 
-    BuildRoyalty(height - 1, UnitColor::Unit_White, unitID);
+    BuildRoyalty(height - 1, UnitColor::White, unitID);
 
     PrintBoard();
 }
@@ -320,7 +328,7 @@ void Board::MovePiece(Unit* unit, Coord moveTo)
         if (unit->GetLocation().y == space::game::sideTileCount || unit->GetLocation().y == 0) // On the other side of the board
         {
             unsigned char id = unit->GetID();
-            ConstructNewUnit(unit->GetLocation(), Piece::Piece_Queen, unit->GetColor(), id);
+            ConstructNewUnit(unit->GetLocation(), Piece::Queen, unit->GetColor(), id);
             RemoveUnit(unit);
         }
     }
@@ -466,7 +474,7 @@ Unit* Board::FindKingFromTeam(UnitColor team)
 
     // Find the king in the team array
     for (Unit* unit : *teamArray) {
-        if (unit->GetPieceType() == Piece::Piece_King) return unit;
+        if (unit->GetPieceType() == Piece::King) return unit;
     }
 
     return nullptr; // Defaults to current position
@@ -474,7 +482,7 @@ Unit* Board::FindKingFromTeam(UnitColor team)
 
 void Board::PlayBoard()
 {
-    const UnitColor team = CURRENT_TEAM;
+    const UnitColor team = CurrentTeam();
     Coord input; // User input for start position
     Coord output; // User input for end position
     Unit* unit = nullptr; // Unit at the user-input coorinates
@@ -718,7 +726,7 @@ std::cout << '\n'; // Go to the next line (to make it look nice when the player 
 
 std::vector<Unit*>* Board::GetTeamArray(UnitColor team)
 {
-    if (team == UnitColor::Unit_Black)
+    if (team == UnitColor::Black)
         return &blackUnits;
     else
         return &whiteUnits;
@@ -739,19 +747,19 @@ void Board::BuildRoyalty(int y, UnitColor col, unsigned char& unitID)
         int i = (x > (width / 2) ? (width)-x - 1 : x);
         switch (i) {
         default:
-            type = Piece::Piece_Rook;
+            type = Piece::Rook;
             break;
         case 1:
-            type = Piece::Piece_Knight;
+            type = Piece::Knight;
             break;
         case 2:
-            type = Piece::Piece_Bishop;
+            type = Piece::Bishop;
             break;
         case 3:
-            type = Piece::Piece_Queen;
+            type = Piece::Queen;
             break;
         case 4:
-            type = Piece::Piece_King;
+            type = Piece::King;
             break;
         }
         ConstructNewUnit({ x,y }, type, col, unitID);
@@ -767,23 +775,23 @@ void Board::ConstructNewUnit(Coord pos, Piece type, UnitColor color, unsigned ch
         newUnit = new Pawn();
         break;
 
-    case Piece::Piece_Knight:
+    case Piece::Knight:
         newUnit = new Knight();
         break;
 
-    case Piece::Piece_Rook:
+    case Piece::Rook:
         newUnit = new Rook();
         break;
 
-    case Piece::Piece_Bishop:
+    case Piece::Bishop:
         newUnit = new Bishop();
         break;
 
-    case Piece::Piece_Queen:
+    case Piece::Queen:
         newUnit = new Queen();
         break;
 
-    case Piece::Piece_King:
+    case Piece::King:
         newUnit = new King();
         break;
     }
@@ -817,7 +825,7 @@ void Board::RemoveUnit(Unit* unit)
 
 void Board::ResetEnPasant()
 {
-    std::vector<Unit*>* teamArray = GetTeamArray(CURRENT_TEAM);
+    std::vector<Unit*>* teamArray = GetTeamArray(CurrentTeam());
 
     for (Unit* unit : *teamArray)
     {
@@ -832,18 +840,19 @@ void Board::ResetEnPasant()
 
 void Board::StoreBoardState()
 {
-    for (int y = 0; y < space::game::sideTileCount; ++y) {
-        for (int x = 0; x < space::game::sideTileCount; ++x)
+    Coord coord;
+    for (coord.y = 0; coord.y < space::game::sideTileCount; ++coord.y) {
+        for (coord.x = 0; coord.x < space::game::sideTileCount; ++coord.x)
         {
-            Unit* unit = GetUnitAtPos({ x,y });
-            m_history[turn].SetStateSpace(x, y, MakeUnitData(unit));
+            Unit* unit = GetUnitAtPos(coord);
+            m_history[turn][coord] = MakeUnitData(unit);
         }
     }
 }
 
 bool Board::IncrementTurn()
 {
-    King* king = dynamic_cast<King*>(FindKingFromTeam(CURRENT_TEAM));
+    King* king = dynamic_cast<King*>(FindKingFromTeam(CurrentTeam()));
 
     if (king == nullptr) // Game over
     {
@@ -862,7 +871,7 @@ bool Board::IncrementTurn()
 
         ResetEnPasant(); 
 
-        king = dynamic_cast<King*>(FindKingFromTeam(CURRENT_TEAM));
+        king = dynamic_cast<King*>(FindKingFromTeam(CurrentTeam()));
 
         if (king == nullptr) // Game over
         {
@@ -877,59 +886,32 @@ bool Board::IncrementTurn()
     }
 }
 
-int BoardStateMemory::Index(int x, int y) const
+UnitData BoardStateMemory::operator[](Coord coord) const
 {
-    return (space::game::sideTileCount) * y + x;
+    return m_stateData[coord.y][coord.x];
+}
+UnitData& BoardStateMemory::operator[](Coord coord)
+{
+    return m_stateData[coord.y][coord.x];
 }
 
-char MakeUnitData(Unit* unit)
+UnitData MakeUnitData(Unit* unit)
 {
-    char data = 0b00000000; // Space is empty by default
-
     if (unit != nullptr)
     {
-        data = char(unit->GetPieceType());
-        if (unit->GetColor() == UnitColor::Unit_White) data |= 0b1000;
+        return UnitData{
+            .color = unit->GetColor(),
+            .piece = unit->GetPieceType(),
+        };
     }
-
-    return data;
-}
-
-const char BoardStateMemory::GetUnitData(int x, int y) const
-{
-    return m_stateData[Index(x, y)];
-}
-
-UnitColor BoardStateMemory::GetUnitData_Color(const char data) const
-{
-    if (data & 0b1000) return UnitColor::Unit_White;
-    else return UnitColor::Unit_Black;
-}
-
-UnitColor BoardStateMemory::GetUnitData_Color(int x, int y) const
-{
-    return GetUnitData_Color(GetUnitData(x, y));
-}
-
-Piece BoardStateMemory::GetUnitData_Piece(const char data) const
-{
-    char check = data;
-    if (check >= 8) check -= 8;
-    for (char test = 1; test < 7; ++test)
+    else
     {
-        if (check == test) return Piece(test);
+        return {
+            // Space is empty by default
+            .color = 0,
+            .piece = 0,
+        };
     }
-    return Piece::Piece_NULL;
-}
-
-Piece BoardStateMemory::GetUnitData_Piece(int x, int y) const
-{
-    return GetUnitData_Piece(GetUnitData(x, y));
-}
-
-void BoardStateMemory::SetStateSpace(int x, int y, const char data)
-{
-    m_stateData[Index(x, y)] = data; // Set
 }
 
 void Board::DrawBoardState(int state)
@@ -943,50 +925,17 @@ void Board::DrawBoardState(int state)
         for (int x = 0; x < space::game::sideTileCount; ++x)
         {
             Coord space = { x, y };
-
-            UnitColor color;
-            color = gameState.GetUnitData_Color(x, y);
-
-            Piece piece = gameState.GetUnitData_Piece(x, y);
-
-            if (piece != Piece::Piece_NULL)
-            {
-                sprite::Sprite* sprite;
-                switch (piece)
-                {
-                case Piece::Piece_Pawn: // Default is pawn
-                    sprite = &sprite::unit::pawn;
-                    break;
-
-                case Piece::Piece_Knight:
-                    sprite = &sprite::unit::knight;
-                    break;
-
-                case Piece::Piece_Rook:
-                    sprite = &sprite::unit::rook;
-                    break;
-
-                case Piece::Piece_Bishop:
-                    sprite = &sprite::unit::bishop;
-                    break;
-
-                case Piece::Piece_Queen:
-                    sprite = &sprite::unit::queen;
-                    break;
-
-                case Piece::Piece_King:
-                    sprite = &sprite::unit::king;
-                    break;
-
-                default: // Null
-                    sprite = &sprite::unit::null;
-                    break;
-                }
-                g_frameBuffer.DrawSpriteFASTWithBG(space, sprite,(bool)color, g_frameBuffer.SpacePatternAtPos(space));
-            }
-            else
+            UnitData data = gameState[space];
+            if (data.piece == Piece::Null)
             {
                 g_frameBuffer.DrawBoardPattern1SpaceFAST(space);
+                return;
+            }
+
+            if (data.piece != Piece::Null)
+            {
+                sprite::Sprite* sprite = sprite::unit::all[(size_t)data.piece];
+                g_frameBuffer.DrawSpriteFASTWithBG(space, sprite, (bool)data.color, g_frameBuffer.SpacePatternAtPos(space));
             }
         }
     }

@@ -1,8 +1,9 @@
+#include "UnitDirections.h"
 #include "Rook.h"
 
 Piece Rook::GetPieceType() const
 {
-	return Piece::Piece_Rook;
+	return Piece::Rook;
 }
 
 void Rook::Move(Coord newPosition)
@@ -18,7 +19,7 @@ sprite::Sprite* Rook::GetSpritePointer()
 
 void Rook::AvailableMoves(PieceMoves* moves)
 {
-	Coord confirmedMoves[sideTileCount * 2];
+	Coord confirmedMoves[space::game::sideTileCount * 2];
 
 	unsigned char confirmedMoveCount = 0;
 
