@@ -1,6 +1,6 @@
-#include "Board.h"
 #include "UnitDirections.h"
 #include "Knight.h"
+#include "Board.h"
 
 Piece Knight::GetPieceType() const
 {

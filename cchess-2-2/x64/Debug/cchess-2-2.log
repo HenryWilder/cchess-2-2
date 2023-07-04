@@ -1,16 +1,12 @@
 ﻿  Bishop.cpp
   Board.cpp
   King.cpp
-  Main.cpp
   Knight.cpp
+  Main.cpp
   Pawn.cpp
   Queen.cpp
-  Rendering.cpp
   Rook.cpp
-  Sprites.cpp
   Unit.cpp
   UnitDirections.cpp
-  Utils.cpp
   Generating Code...
-C:\Users\Henry\source\repos\HenryWilder\cchess-2-2\cchess-2-2\Board.cpp(39): warning C4715: 'TeamNameStr': not all control paths return a value
   cchess-2-2.vcxproj -> C:\Users\Henry\source\repos\HenryWilder\cchess-2-2\x64\Debug\cchess-2-2.exe

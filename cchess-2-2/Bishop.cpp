@@ -1,5 +1,6 @@
 #include "UnitDirections.h"
 #include "Bishop.h"
+#include "Board.h"
 
 Piece Bishop::GetPieceType() const
 {

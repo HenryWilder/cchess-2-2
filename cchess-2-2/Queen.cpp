@@ -1,5 +1,6 @@
 #include "UnitDirections.h"
 #include "Queen.h"
+#include "Board.h"
 
 const sprite::Sprite* Queen::GetSpritePointer()
 {

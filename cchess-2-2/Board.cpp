@@ -29,15 +29,6 @@ UnitColor Board::OpponentTeam()
     return (UnitColor)IsEven(turn);
 }
 
-const char* TeamNameStr(UnitColor team)
-{
-    switch (team)
-    {
-    case UnitColor::White: return "white";
-    case UnitColor::Black: return "black";
-    }
-}
-
 Unit* Board::GetTeamUnitAtPos(Coord pos, UnitColor team)
 {
     const std::vector<Unit*>& teamArray = GetTeamArrayReadOnly(team);
@@ -683,7 +674,7 @@ void Board::ConstructNewUnit(Coord pos, Piece type, UnitColor color, unsigned ch
 
 void Board::BuildRoyalty(int y, UnitColor col, unsigned char& unitID)
 {
-    constexpr Piece order[8] = {
+    constexpr Piece order[width] = {
         Piece::Rook,
         Piece::Knight,
         Piece::Bishop,

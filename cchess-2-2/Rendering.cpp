@@ -497,7 +497,7 @@ void Ghost::Glide(Coord _newPos)
 
     for (int frame = 0; frame < numFrames; ++frame)
     {
-        double t = (double)(frame * dt);
+        double t = ((double)frame * (double)dt);
 
         double ease = EaseInOutQuad(t);
         double easedX = deltaX * ease;

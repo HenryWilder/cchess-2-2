@@ -49,17 +49,17 @@ public:
 	virtual bool CouldITakeAt(Coord hypothetical); // Used in code for king
 
 protected:
-	Coord position;
+	Coord position = {};
 
-	UnitColor team;
+	UnitColor team = UnitColor(0);
 
 	// Set once during initialization. Never override again.
-	Board* boardIAmOf;
+	Board* boardIAmOf = nullptr;
 
 	// Should we hide the unit from the renderer?
-	bool isHidden;
+	bool isHidden = false;
 
-	unsigned char id;
+	unsigned char id = 0;
 };
 
 //int size = sizeof(Unit);

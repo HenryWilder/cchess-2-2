@@ -1,6 +1,6 @@
-#include "Board.h"
 #include "UnitDirections.h"
 #include "Pawn.h"
+#include "Board.h"
 
 signed int Pawn::GetForward() const
 {

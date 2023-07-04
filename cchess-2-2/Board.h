@@ -33,8 +33,8 @@ enum class Phase {
 class Board
 {
 private:
-	constexpr static int width = 0;
-	constexpr static int height = 0;
+	constexpr static int width = space::game::sideTileCount;
+	constexpr static int height = space::game::sideTileCount;
 
 	int turn = 0;
 	std::vector<Unit*> whiteUnits;

@@ -1,5 +1,6 @@
 #include "UnitDirections.h"
 #include "Rook.h"
+#include "Board.h"
 
 Piece Rook::GetPieceType() const
 {
