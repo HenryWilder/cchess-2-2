@@ -5,9 +5,9 @@ extern HANDLE g_console;
 extern HANDLE outh;
 
 class Mouse {
-	bool b_mouseClicked; // Has the mouse been clicked since we last checked?
-	Coord m_clickCoord; // Where the mouse was when it was clicked
-	Coord m_tileCoord; // The boardspace coordinate of the mouse (which tile it is over)
+	bool isMouseClicked; // Has the mouse been clicked since we last checked?
+	Coord clickCoord; // Where the mouse was when it was clicked
+	Coord tileCoord; // The boardspace coordinate of the mouse (which tile it is over)
 
 	Coord MouseToBoardspace(COORD pos); // Helper function
 public:

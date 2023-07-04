@@ -9,6 +9,7 @@ Coord CardinalDir(int i)
 	Coord cardinals[] = { { 0, 1 },{ 1, 0 },{ 0, -1 },{ -1, 0 } };
 	return cardinals[i % 4]; // Pick the index from the array
 }
+
 Coord DiagonalDir(int i)
 {
 	/* Array of diagonal directions
@@ -18,6 +19,7 @@ Coord DiagonalDir(int i)
 	Coord diagonals[] = { { 1, 1 },{ 1, -1 },{ -1, -1 },{ -1, 1 } };
 	return diagonals[i % 4]; // Pick the index from the array
 }
+
 Coord AllDir(int i)
 {
 	/* Array of all directions
@@ -27,6 +29,7 @@ Coord AllDir(int i)
 	if (IsEven(i)) return CardinalDir(i / 2);	// Return cardinal on even input
 	else return DiagonalDir((i - 1) / 2);	// Return diagonal on odd input
 }
+
 Coord KnightDir(int i)
 {
 	/* Array of all knight directions

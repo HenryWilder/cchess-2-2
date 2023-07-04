@@ -173,6 +173,7 @@
     <ClInclude Include="Rendering.h" />
     <ClInclude Include="Rook.h" />
     <ClInclude Include="Unit.h" />
+    <ClInclude Include="UnitData.h" />
     <ClInclude Include="UnitDirections.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>

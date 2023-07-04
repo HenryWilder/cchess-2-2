@@ -12,7 +12,7 @@ void Rook::Move(Coord newPosition)
 	Unit::Move(newPosition);
 }
 
-sprite::Sprite* Rook::GetSpritePointer()
+const sprite::Sprite* Rook::GetSpritePointer()
 {
 	return &sprite::unit::rook;
 }
@@ -37,7 +37,7 @@ void Rook::AvailableMoves(PieceMoves* moves)
 // We are assuming that a straight line of sight has already been established for this to be called.
 bool Rook::CouldITakeAt(Coord hypothetical)
 {
-	if (hypothetical.x == m_position.x ||
-		hypothetical.y == m_position.y) return true;
+	if (hypothetical.x == position.x ||
+		hypothetical.y == position.y) return true;
 	else return false;
 }

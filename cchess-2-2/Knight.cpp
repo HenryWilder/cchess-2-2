@@ -1,3 +1,4 @@
+#include "Board.h"
 #include "UnitDirections.h"
 #include "Knight.h"
 
@@ -6,7 +7,7 @@ Piece Knight::GetPieceType() const
 	return Piece::Knight;
 }
 
-sprite::Sprite* Knight::GetSpritePointer()
+const sprite::Sprite* Knight::GetSpritePointer()
 {
 	return &sprite::unit::knight;
 }
@@ -24,7 +25,7 @@ void Knight::AvailableMoves(PieceMoves* moves)
 
 		if (ValidPos(testPos)) // On the board
 		{
-			const Unit* testUnit = m_boardIAmOf->GetUnitAtPos(testPos);
+			const Unit* testUnit = boardIAmOf->GetUnitAtPos(testPos);
 			if (NullOrEnemy(testUnit)) confirmedMoves[confirmedMoveCount++] = testPos;
 		}
 	}

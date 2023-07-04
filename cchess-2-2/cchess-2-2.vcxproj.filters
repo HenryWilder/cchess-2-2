@@ -101,5 +101,8 @@
     <ClInclude Include="UnitDirections.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UnitData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

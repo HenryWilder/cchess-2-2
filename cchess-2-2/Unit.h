@@ -1,24 +1,14 @@
 #pragma once
 #include "Utils.h"
 #include "Rendering.h"
-#include "Board.h"
+#include "UnitData.h"
 
-enum class Piece : unsigned char
-{
-	Null = 0,
-	Pawn,
-	Rook,
-	Knight,
-	Bishop,
-	Queen,
-	King,
-	Empty = 0b111,
-};
+class Board;
 
 struct PieceMoves
 {
-	Coord m_available[space::game::sideTileCount * 4];
-	unsigned char m_availableMovesCount = 0;
+	Coord available[space::game::sideTileCount * 4];
+	unsigned char numAvailableMoves = 0;
 
 	// Set all of the moves at once
 	void SetMoves(const Coord* moves, const unsigned char count);
@@ -30,15 +20,9 @@ struct PieceMoves
 	bool MoveIsValid(Coord move) const;
 };
 
-// The color of the piece
-enum class UnitColor : bool
+class Unit
 {
-	Black = false,
-	White = true,
-};
-
-struct Unit
-{
+public:
 	// Re-initializes the piece in the case that a constructor won't do.
 	void Init(Coord pos, UnitColor color, Board* boardSpawningMe, unsigned char id);
 
@@ -55,7 +39,7 @@ protected:
 public:
 	virtual void Move(Coord newPosition);
 
-	virtual sprite::Sprite* GetSpritePointer();
+	virtual const sprite::Sprite* GetSpritePointer();
 	virtual void AvailableMoves(PieceMoves* moves);
 	virtual Piece GetPieceType() const;
 	bool IsHidden();
@@ -65,14 +49,17 @@ public:
 	virtual bool CouldITakeAt(Coord hypothetical); // Used in code for king
 
 protected:
-	Coord m_position; // 8 bytes
-	UnitColor m_team; // 8 bytes
-					  // Set once during initialization. Never override again.
-	Board* m_boardIAmOf; // 8 bytes
-						 // Should we hide the unit from the renderer?
-	bool b_hidden; // 1 byte
-	unsigned char m_ID; // 1 byte
-						// 2 bytes left in alignment
+	Coord position;
+
+	UnitColor team;
+
+	// Set once during initialization. Never override again.
+	Board* boardIAmOf;
+
+	// Should we hide the unit from the renderer?
+	bool isHidden;
+
+	unsigned char id;
 };
 
 //int size = sizeof(Unit);

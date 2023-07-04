@@ -1,9 +1,23 @@
-#include "Board.h"
 #include <string>
+#include "Board.h"
+#include "Unit.h"
 
 #define CURSOR_TO_POSITION(x,y) "\x1b[" #x ";" #y "f"
 
-constexpr const char* cursorRestor = "\x1b[u";
+constexpr const char* cursorRestore = "\x1b[u";
+
+void RestoreCursor()
+{
+    std::cout << cursorRestore;
+}
+void MoveCursorTo(int x, int y)
+{
+    std::cout << "\x1b[" << x << ";" << y << "f";
+}
+void MoveCursorToZero()
+{
+    std::cout << "\x1b[0;0f";
+}
 
 UnitColor Board::CurrentTeam()
 {
@@ -24,52 +38,18 @@ const char* TeamNameStr(UnitColor team)
     }
 }
 
-char CharToValue(char character)
-{
-    char out = character;
-    if (out >= '1' && out <= '8') // A number (1-8)
-        out = out - '1';
-    else if (out >= 'a' && out <= 'h') // A lowercase letter (a-h)
-        out = out - 'a';
-    else if (out >= 'A' && out <= 'H') // an uppercase letter (A-H)
-        out = out - 'A';
-    else
-        out = 9; // Out of bounds
-
-    return out;
-}
-
-void ClearTextLine(int start, int count)
-{
-    std::cout << cursorRestor;
-
-    std::cout << CURSOR_TO_POSITION(0, 0);
-
-    // Move to start
-    for (int row = 0; row < start; ++row)
-        std::cout << '\n';
-
-    // Clear the lines by filling them with spaces
-    for (int row = 0; row < count; ++row)
-        std::cout << "                                                                              \n";
-
-    std::cout << cursorRestor;
-
-    // Reset to start
-    for (int row = 0; row < start; ++row)
-        std::cout << '\n';
-}
-
 Unit* Board::GetTeamUnitAtPos(Coord pos, UnitColor team)
 {
-    std::vector<Unit*>* teamArray = GetTeamArray(team);
+    const std::vector<Unit*>& teamArray = GetTeamArrayReadOnly(team);
 
     // Look at all black units
-    for (Unit* checkUnit : *teamArray)
+    for (Unit* checkUnit : teamArray)
     {
-        if (checkUnit->GetLocation() == pos) {
+        bool isPositionMatching = checkUnit->GetLocation() == pos;
+
+        if (isPositionMatching)
+        {
             return checkUnit;
-            break;
         }
     }
 
@@ -79,17 +59,14 @@ Unit* Board::GetTeamUnitAtPos(Coord pos, UnitColor team)
 Unit* Board::GetUnitAtPos(Coord pos)
 {
     Unit* out = GetTeamUnitAtPos(pos, UnitColor::Black);
-    if (out != nullptr)
-        return out;
-    else
-        return GetTeamUnitAtPos(pos, UnitColor::White);
+    return (out != nullptr) ? out : GetTeamUnitAtPos(pos, UnitColor::White);
 }
 
 bool Board::IsTeamAtPos(Coord pos, UnitColor team)
 {
-    const std::vector<Unit*>* teamArray = GetTeamArrayReadOnly(team);
+    const std::vector<Unit*>& teamArray = GetTeamArrayReadOnly(team);
 
-    for (const Unit* checkUnit : *teamArray)
+    for (const Unit* checkUnit : teamArray)
     {
         if (checkUnit->GetLocation() == pos)
         {
@@ -106,35 +83,41 @@ bool Board::IsUnitAtPos(Coord pos)
     return IsTeamAtPos(pos, UnitColor::Black) || IsTeamAtPos(pos, UnitColor::White);
 }
 
-void Board::ResetBoard(int _width, int _height)
+void Board::ResetBoard()
 {
-    if (_height == 0) { _height = _width; }
-
-    this->width = _width;
-    this->height = _height;
     this->turn = 0;
 
     unsigned char unitID = 0;
 
     // Black units
-    // Clear
+
     for (Unit* unit : blackUnits)
-        RemoveUnit(unit);
+    {
+        delete unit;
+    }
+    blackUnits.clear();
 
     // Construct
     for (int x = 0; x < width; ++x)
+    {
         ConstructNewUnit({ x,1 }, Piece::Pawn, UnitColor::Black, unitID);
+    }
 
     BuildRoyalty(0, UnitColor::Black, unitID);
 
     // White units
-    // Clear
+
     for (Unit* unit : whiteUnits)
-        RemoveUnit(unit);
+    {
+        delete unit;
+    }
+    whiteUnits.clear();
 
     // Construct
     for (int x = 0; x < width; ++x)
+    {
         ConstructNewUnit({ x,height - 2 }, Piece::Pawn, UnitColor::White, unitID);
+    }
 
     BuildRoyalty(height - 1, UnitColor::White, unitID);
 
@@ -145,17 +128,11 @@ void Board::DrawBoardSpaceColored(Coord pos, COLORREF color, bool effect)
 {
     Unit* unit = GetUnitAtPos(pos); // Find the unit at the space
 
-    if (unit != nullptr && // Make sure there was actually a piece
-        !unit->IsHidden()) // Don't render hidden pieces
+    if ((unit != nullptr) && (!unit->IsHidden()))
     {
-        g_frameBuffer.DrawSpriteFASTWithBG( // Draw the unit sprite
-            pos, // Which space
-            unit->GetSpritePointer(), // The sprite to draw
-            bool(unit->GetColor()), // Which team the unit is on
-            color, // The color of the background
-            effect); // Whether to use the ghost effect
+        frameBuffer::DrawSpriteWithBackgroundNOW(pos, unit->GetSpritePointer(), bool(unit->GetColor()), color, effect);
     }
-    else g_frameBuffer.DrawGridSpaceFAST(pos, color);
+    else frameBuffer::DrawGridSpaceNOW(pos, color);
 }
 
 void Board::DrawBoardSpaceColored(Coord pos, Color color, bool effect)
@@ -163,45 +140,10 @@ void Board::DrawBoardSpaceColored(Coord pos, Color color, bool effect)
     DrawBoardSpaceColored(pos, CRef(color), effect);
 }
 
-// Draws the space as it is without any selection or effects. Draws the unit there if there is one.
 void Board::DrawBoardSpaceReset(Coord pos)
 {
-    DrawBoardSpaceColored(pos, g_frameBuffer.SpacePatternAtPos(pos)); // Draws the space with the background color being the color of the space
-}
-
-bool InString(const char* string, const char* substring)
-{
-    int i = 0;
-
-    do {
-        if (*(string + i) == *substring) // First character
-        {
-            bool match = true;
-
-            int n = 0;
-
-            do {
-                char strHere = *(string + i + n);
-
-                char subStrHere = *(substring + n);
-
-                if (strHere != subStrHere) // Nth character
-                {
-                    match = false;
-                    break;
-                }
-                ++n;
-
-            } while (*(substring + n));
-
-            if (match)
-                return true;
-        }
-        ++i;
-
-    } while (*(string + i));
-
-    return false;
+    // Draws the space with the background color being the color of the space
+    DrawBoardSpaceColored(pos, frameBuffer::SpacePatternAtPos(pos));
 }
 
 //
@@ -210,84 +152,68 @@ bool InString(const char* string, const char* substring)
 //
 //
 
-/* Made obsolete by WaitForClick()
-Coord Board::TakePosInput()
-{
-std::cout << " (xy): ";
-
-char input[5];
-
-std::cin >> input[0] >> input[1];
-
-input[4] = 0;
-
-if (input[0] == 'm')
-{
-std::cin >> input[2] >> input[3];
-std::cout << input << "\n";
-return Coord{ -1,-1 };
-}
-else // User commands
-{
-char inputx = CharToValue(input[0]);
-char inputy = CharToValue(input[1]);
-
-//cout << inputx << inputy << ")\n"; // Debug
-
-Coord out = { (int)inputx, int(height - inputy) - 1 };
-
-//cout << '(' << out.x << ", " << out.y << ")\n"; // Debug
-
-return out;
-}
-}
-*/
-
 Coord Board::WaitForClick(Phase turnPhase, const PieceMoves* pMoves, const sprite::Sprite* sprite, bool team)
 {
     InitInput();
 
-    Coord mouseCoordLast = { 0,0 };
-    Coord mouseCoordCurrent = { 0,0 };
+    Coord prevMouseCoord = { 0,0 };
+    Coord currMouseCoord = { 0,0 };
 
-    COLORREF lastSpaceColor = g_frameBuffer.Get(PixelSpace(mouseCoordLast));
+    COLORREF prevSpaceColor = frameBuffer::Get(PixelSpace(prevMouseCoord));
 
     while (true)
     {
         PingInput(); // Update the mouse location
 
-        mouseCoordCurrent = g_mouse.ReadMouseHover();
+        currMouseCoord = g_mouse.ReadMouseHover();
 
-        if (mouseCoordLast != mouseCoordCurrent) // If the mouse location has changed
+        bool isMouseCoordChanged = prevMouseCoord != prevMouseCoord;
+
+        if (isMouseCoordChanged)
         {
-            if (ValidPos(mouseCoordLast))
-                DrawBoardSpaceColored(mouseCoordLast, lastSpaceColor); // Reset the old space's color
+            bool isPrevMouseCoordValid = ValidPos(prevMouseCoord);
+            bool isCurrMouseCoordValid = ValidPos(currMouseCoord);
 
-            mouseCoordLast = mouseCoordCurrent; // Update the temporary mouse position variable
-
-            if (ValidPos(mouseCoordCurrent))
+            // Previously hovered space is dirty
+            if (isPrevMouseCoordValid)
             {
-                lastSpaceColor = g_frameBuffer.Get(PixelSpace(mouseCoordCurrent)); // Store the color of the new space before we recolor it
+                // Reset the old space's color
+                DrawBoardSpaceColored(prevMouseCoord, prevSpaceColor);
+            }
 
-                                                                                   // Draw transparent image of our piece at the move we are hovering over
-                if (turnPhase == Phase::Move && pMoves != nullptr && pMoves->MoveIsValid(mouseCoordCurrent))
-                    g_frameBuffer.DrawSpriteFASTWithBG(mouseCoordCurrent, sprite, team, lastSpaceColor, true);
+            // Update the temporary mouse position variable
+            prevMouseCoord = currMouseCoord;
 
-                else DrawBoardSpaceColored(mouseCoordCurrent, RGB(127, 127, 255)); // Color the new space
+            // Currently hovering a space that needs to be rendered
+            if (isCurrMouseCoordValid)
+            {
+                // Store the color of the new space before we recolor it
+                prevSpaceColor = frameBuffer::Get(PixelSpace(currMouseCoord));
+
+                bool isMovePhase = (turnPhase == Phase::Move);
+                bool isHoveredMoveValid = (pMoves != nullptr) && (pMoves->MoveIsValid(currMouseCoord));
+
+                if (isMovePhase && isHoveredMoveValid)
+                {
+                    // Draw transparent image of our piece at the move we are hovering over
+                    frameBuffer::DrawSpriteWithBackgroundNOW(currMouseCoord, sprite, team, prevSpaceColor, true);
+                }
+                else
+                {
+                    // Color the new space
+                    DrawBoardSpaceColored(currMouseCoord, RGB(127, 127, 255));
+                }
             }
         }
 
-        if (g_mouse.CheckMouseState()) // Click is true
+        bool isMouseClicked = g_mouse.CheckMouseState();
+
+        // Actual input and not just waiting
+        if (isMouseClicked)
         {
-            //DrawBoardSpaceColored(mouseCoordCurrent, RGB(64, 64, 255)); // Click color
-
-            //SleepForMS(127); // Delay
-
-            DrawBoardSpaceColored(mouseCoordCurrent, lastSpaceColor); // Reset space color
-
+            DrawBoardSpaceColored(currMouseCoord, prevSpaceColor); // Reset space color
             break;
         }
-        //else SleepForMS(16.7); // Otherwise sleep (feels less responsive)
     }
     return g_mouse.GetMouseClickCoord();
 }
@@ -297,7 +223,7 @@ void Board::MovePiece(Unit* unit, Coord moveTo)
     unit->Hide();
     //DrawBoardSpaceReset(unit->GetLocation()); // Sanity check
 
-    Ghost unitGhost = Ghost(
+    Ghost unitGhost(
         unit->GetLocation(),
         unit->GetSpritePointer(),
         (bool)unit->GetColor());
@@ -339,9 +265,9 @@ void Board::MovePiece(Unit* unit, Coord moveTo)
 void Board::DrawPossibleMoves(PieceMoves* moves, const UnitColor team)
 {
     // Draw the available positions
-    for (unsigned char i = 0; i < moves->m_availableMovesCount; ++i)
+    for (unsigned char i = 0; i < moves->numAvailableMoves; ++i)
     {
-        Coord pMove = moves->m_available[i]; // The move we are currently looking at/drawing
+        Coord pMove = moves->available[i]; // The move we are currently looking at/drawing
         Unit* pEnemy = GetUnitAtPos(pMove); // The (potential) enemy at that space
 
         sprite::Pltt spaceColor = sprite::Pltt::Select_Available; // Default with selection color
@@ -361,8 +287,8 @@ void Board::DrawPossibleMoves(PieceMoves* moves, const UnitColor team)
 void Board::UnDrawPossibleMoves(PieceMoves* moves)
 {
     // Reset the potential positions
-    for (unsigned char i = 0; i < moves->m_availableMovesCount; ++i) {
-        DrawBoardSpaceReset(moves->m_available[i]);
+    for (unsigned char i = 0; i < moves->numAvailableMoves; ++i) {
+        DrawBoardSpaceReset(moves->available[i]);
     }
 }
 
@@ -402,9 +328,8 @@ bool Board::HandleSelection(Coord input, Unit*& unit, PieceMoves* moves)
 {
     unit->AvailableMoves(moves);
 
-    if (moves->m_availableMovesCount == 0)
+    if (moves->numAvailableMoves == 0)
     {
-        //std::cout << "That piece is stuck.";
         return false;
     }
     else
@@ -415,23 +340,15 @@ bool Board::HandleSelection(Coord input, Unit*& unit, PieceMoves* moves)
         // Draw all legal moves that can be made by this piece
         DrawPossibleMoves(moves, unit->GetColor());
 
-        // Clear the input area before continuing
-        //ClearTextLine(0, 6);
-
         return true;
     }
 }
 int Board::MovePhase(Coord& input, Coord& output, Unit*& unit, PieceMoves* moves, const UnitColor team)
 {
-    //ClearTextLine(0);
-
-    //std::cout << "Which space would you like to move to?";
-
     output = WaitForClick(Phase::Move, moves, unit->GetSpritePointer(), (bool)team);
 
     if (output.x > width || output.y > height) // Out of bounds
     {
-        //std::cout << "OUT OF BOUNDS\n";
         return 0;
     }
     else
@@ -448,7 +365,6 @@ int Board::MovePhase(Coord& input, Coord& output, Unit*& unit, PieceMoves* moves
         }
         else if (!(moves->MoveIsValid(output))) // Not a legal move
         {
-            //std::cout << "This is not an available position.\n";
             return 0;
         }
         else return 1;
@@ -462,18 +378,15 @@ bool Board::WrapUpTurn(Coord& input, Coord& output, Unit*& unit, PieceMoves* mov
 
     MovePiece(unit, output); // Move the piece
 
-                             // Clear the input area
-                             //ClearTextLine(0, 6);
-
     return true;
 }
 
 Unit* Board::FindKingFromTeam(UnitColor team)
 {
-    const std::vector<Unit*>* teamArray = GetTeamArray(team);
+    const std::vector<Unit*>& teamArray = GetTeamArray(team);
 
     // Find the king in the team array
-    for (Unit* unit : *teamArray) {
+    for (Unit* unit : teamArray) {
         if (unit->GetPieceType() == Piece::King) return unit;
     }
 
@@ -541,7 +454,7 @@ void Board::PrintBoard()
         }
     }
 
-    g_frameBuffer.Draw(); // Render the board
+    frameBuffer::Draw(); // Render the board
 }
 
 /*
@@ -724,46 +637,14 @@ std::cout << '\n'; // Go to the next line (to make it look nice when the player 
 //
 //
 
-std::vector<Unit*>* Board::GetTeamArray(UnitColor team)
+std::vector<Unit*>& Board::GetTeamArray(UnitColor team)
 {
-    if (team == UnitColor::Black)
-        return &blackUnits;
-    else
-        return &whiteUnits;
+    return (team == UnitColor::Black) ? blackUnits : whiteUnits;
 }
 
-const std::vector<Unit*>* Board::GetTeamArrayReadOnly(UnitColor team)
+const std::vector<Unit*>& Board::GetTeamArrayReadOnly(UnitColor team) const
 {
-    const std::vector<Unit*>* teamArray = GetTeamArray(team);
-    return teamArray;
-}
-
-void Board::BuildRoyalty(int y, UnitColor col, unsigned char& unitID)
-{
-    for (int x = 0; x < width; ++x)
-    {
-        Piece type;
-        type = Piece();
-        int i = (x > (width / 2) ? (width)-x - 1 : x);
-        switch (i) {
-        default:
-            type = Piece::Rook;
-            break;
-        case 1:
-            type = Piece::Knight;
-            break;
-        case 2:
-            type = Piece::Bishop;
-            break;
-        case 3:
-            type = Piece::Queen;
-            break;
-        case 4:
-            type = Piece::King;
-            break;
-        }
-        ConstructNewUnit({ x,y }, type, col, unitID);
-    }
+    return (team == UnitColor::Black) ? blackUnits : whiteUnits;
 }
 
 void Board::ConstructNewUnit(Coord pos, Piece type, UnitColor color, unsigned char& unitID)
@@ -771,7 +652,8 @@ void Board::ConstructNewUnit(Coord pos, Piece type, UnitColor color, unsigned ch
     Unit* newUnit;
     switch (type)
     {
-    default: // Default is pawn
+    default:
+    case Piece::Pawn:
         newUnit = new Pawn();
         break;
 
@@ -799,9 +681,30 @@ void Board::ConstructNewUnit(Coord pos, Piece type, UnitColor color, unsigned ch
     AddUnit(newUnit);
 }
 
+void Board::BuildRoyalty(int y, UnitColor col, unsigned char& unitID)
+{
+    constexpr Piece order[8] = {
+        Piece::Rook,
+        Piece::Knight,
+        Piece::Bishop,
+        Piece::Queen,
+        Piece::King,
+        Piece::Bishop,
+        Piece::Knight,
+        Piece::Rook,
+    };
+
+    Coord coord(0, y);
+    for (int x = 0; x < width; ++x)
+    {
+        coord.x = x;
+        ConstructNewUnit(coord, order[x], col, unitID); // Increments unitID
+    }
+}
+
 void Board::AddUnit(Unit* unit)
 {
-    GetTeamArray(unit->GetColor())->push_back(unit);
+    GetTeamArray(unit->GetColor()).push_back(unit);
 }
 
 void Board::RemoveUnit(Unit* unit)
@@ -812,7 +715,7 @@ void Board::RemoveUnit(Unit* unit)
 
     Coord unitSpace = unit->GetLocation(); // For resetting the space after we've destroyed the unit
 
-    std::vector<Unit*>& teamArray = *GetTeamArray(unit->GetColor());
+    std::vector<Unit*>& teamArray = GetTeamArray(unit->GetColor());
 
     for (i; i < teamArray.size(); ++i)
         if (teamArray[i]->GetID() == id)
@@ -825,9 +728,9 @@ void Board::RemoveUnit(Unit* unit)
 
 void Board::ResetEnPasant()
 {
-    std::vector<Unit*>* teamArray = GetTeamArray(CurrentTeam());
+    std::vector<Unit*>& teamArray = GetTeamArray(CurrentTeam());
 
-    for (Unit* unit : *teamArray)
+    for (Unit* unit : teamArray)
     {
         Pawn* pawn = dynamic_cast<Pawn*>(unit);
         if (pawn != nullptr && pawn->en_pasant)
@@ -895,25 +798,6 @@ UnitData& BoardStateMemory::operator[](Coord coord)
     return m_stateData[coord.y][coord.x];
 }
 
-UnitData MakeUnitData(Unit* unit)
-{
-    if (unit != nullptr)
-    {
-        return UnitData{
-            .color = unit->GetColor(),
-            .piece = unit->GetPieceType(),
-        };
-    }
-    else
-    {
-        return {
-            // Space is empty by default
-            .color = 0,
-            .piece = 0,
-        };
-    }
-}
-
 void Board::DrawBoardState(int state)
 {
     system("CLS");
@@ -928,14 +812,14 @@ void Board::DrawBoardState(int state)
             UnitData data = gameState[space];
             if (data.piece == Piece::Null)
             {
-                g_frameBuffer.DrawBoardPattern1SpaceFAST(space);
+                frameBuffer::DrawBoardPattern1SpaceNOW(space);
                 return;
             }
 
             if (data.piece != Piece::Null)
             {
-                sprite::Sprite* sprite = sprite::unit::all[(size_t)data.piece];
-                g_frameBuffer.DrawSpriteFASTWithBG(space, sprite, (bool)data.color, g_frameBuffer.SpacePatternAtPos(space));
+                const sprite::Sprite* sprite = sprite::unit::all[(size_t)data.piece];
+                frameBuffer::DrawSpriteWithBackgroundNOW(space, sprite, (bool)data.color, frameBuffer::SpacePatternAtPos(space));
             }
         }
     }
@@ -956,12 +840,12 @@ int Board::FlipbookWFClick(int state)
     if (state > 0)
     {
         b_lArrow = true;
-        g_frameBuffer.DrawSymbolSkippingBuffer(arrowPosL, '<', 0);
+        frameBuffer::DrawSymbolSkippingBuffer(arrowPosL, '<', 0);
     }
     if (state < this->turn - 1)
     {
         b_rArrow = true;
-        g_frameBuffer.DrawSymbolSkippingBuffer(arrowPosR, '>', 0);
+        frameBuffer::DrawSymbolSkippingBuffer(arrowPosR, '>', 0);
     }
 
     InitInput();
@@ -980,13 +864,13 @@ int Board::FlipbookWFClick(int state)
             // Draw transparent image of our piece at the move we are hovering over
             if (b_lArrow)
             {
-                if (mouseCoordCurrent == arrowPosL) g_frameBuffer.DrawSymbolSkippingBuffer(arrowPosL, '<', 1);
-                if (mouseCoordLast == arrowPosL) g_frameBuffer.DrawSymbolSkippingBuffer(arrowPosL, '<', 0);
+                if (mouseCoordCurrent == arrowPosL) frameBuffer::DrawSymbolSkippingBuffer(arrowPosL, '<', 1);
+                if (mouseCoordLast == arrowPosL) frameBuffer::DrawSymbolSkippingBuffer(arrowPosL, '<', 0);
             }
             if (b_rArrow)
             {
-                if (mouseCoordCurrent == arrowPosR) g_frameBuffer.DrawSymbolSkippingBuffer(arrowPosR, '>', 1);
-                if (mouseCoordLast == arrowPosR) g_frameBuffer.DrawSymbolSkippingBuffer(arrowPosR, '>', 0);
+                if (mouseCoordCurrent == arrowPosR) frameBuffer::DrawSymbolSkippingBuffer(arrowPosR, '>', 1);
+                if (mouseCoordLast == arrowPosR) frameBuffer::DrawSymbolSkippingBuffer(arrowPosR, '>', 0);
             }
             mouseCoordLast = mouseCoordCurrent; // Update the temporary mouse position variable
         }
@@ -1014,4 +898,22 @@ void Board::GameFlipbook()
         }
         state += update;
     }
+}
+
+UnitData MakeUnitData(Unit* unit)
+{
+    UnitData result;
+
+    if (unit != nullptr)
+    {
+        result.color = unit->GetColor();
+        result.piece = unit->GetPieceType();
+    }
+    else
+    {
+        result.color = UnitColor(0);
+        result.piece = Piece::Null;
+    }
+
+    return result;
 }

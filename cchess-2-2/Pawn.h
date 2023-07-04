@@ -9,7 +9,7 @@ public:
 	bool m_moved = false;
 	bool en_pasant = false;
 	void Move(Coord newPosition) override;
-	sprite::Sprite* GetSpritePointer() override;
+	const sprite::Sprite* GetSpritePointer() override;
 	void AvailableMoves(PieceMoves* moves) override;
 	bool CouldITakeAt(Coord hypothetical) override;
 };

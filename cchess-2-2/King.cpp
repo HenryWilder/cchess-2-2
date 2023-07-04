@@ -1,4 +1,5 @@
 #include "UnitDirections.h"
+#include "Board.h"
 #include "King.h"
 
 Piece King::GetPieceType() const
@@ -8,18 +9,18 @@ Piece King::GetPieceType() const
 
 void King::Move(Coord newPosition)
 {
-	m_moved = true;
+	isMoved = true;
 	Unit::Move(newPosition);
 }
 
-sprite::Sprite* King::GetSpritePointer()
+const sprite::Sprite* King::GetSpritePointer()
 {
 	return &sprite::unit::king;
 }
 
 Unit* King::TestMoveSafety(Coord testPos)
 {
-	Unit* unit = m_boardIAmOf->GetUnitAtPos(testPos);
+	Unit* unit = boardIAmOf->GetUnitAtPos(testPos);
 
 	if (unit != nullptr) return unit;
 	return nullptr; // Nobody is there
@@ -74,7 +75,7 @@ bool King::CheckSafeAgainstKnight(Coord position)
 	{
 		const Coord testPos = position + KnightDir(i);
 
-		unit = m_boardIAmOf->GetUnitAtPos(testPos);
+		unit = boardIAmOf->GetUnitAtPos(testPos);
 
 		//m_boardIAmOf->DrawBoardSpaceColored(testPos, RGB(127, 127, 127)); // Debug
 
@@ -90,12 +91,12 @@ bool King::CheckSafeAgainstKnight(Coord position)
 
 bool King::SpaceIsSafeFromCheck(Coord ifIWasHere)
 {
-	Coord fromPerspective = ifIWasHere;
+	return CheckSafetyDirectional(ifIWasHere) && CheckSafeAgainstKnight(ifIWasHere);
+}
 
-	if (ifIWasHere == Coord{ -1,-1 }/*The default vaule*/) fromPerspective = GetLocation(); // If the input is still the default value, set it to our current position (test if we are in check)
-
-	if (CheckSafetyDirectional(fromPerspective) && CheckSafeAgainstKnight(fromPerspective)) return true; // Safe
-	else return false; // Not safe to move to this space
+bool King::SpaceIsSafeFromCheck()
+{
+	return SpaceIsSafeFromCheck(GetLocation());
 }
 
 void King::AvailableMoves(PieceMoves* moves)

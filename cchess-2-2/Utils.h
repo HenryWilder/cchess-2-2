@@ -13,7 +13,6 @@ concept Evalable = requires(Func fn, T px)
     { fn(px) };
 };
 
-
 // Get a console handle
 extern HWND window;
 
@@ -78,31 +77,26 @@ struct PixelPos;
 struct Vec2
 {
     template<std::floating_point fT>
-    Vec2(fT x, fT y) :
+    constexpr Vec2(fT x, fT y) :
         x{ (int)(x + ((fT)0.5)) },
-        y{ (int)(y + ((fT)0.5)) }
-    {}
+        y{ (int)(y + ((fT)0.5)) } {}
 
     template<std::integral iT>
-    Vec2(iT x, iT y) :
+    constexpr Vec2(iT x, iT y) :
         x{ (int)x },
-        y{ (int)y }
-    {}
+        y{ (int)y } {}
 
-    Vec2(int x, int y) :
+    constexpr Vec2(int x, int y) :
         x{ x },
-        y{ y }
-    {}
+        y{ y } {}
 
-    Vec2(const Vec2& in) :
+    constexpr Vec2(const Vec2& in) :
         x{ in.x },
-        y{ in.y }
-    {}
+        y{ in.y } {}
 
-    Vec2() :
+    constexpr Vec2() :
         x{ 0 },
-        y{ 0 }
-    {}
+        y{ 0 } {}
 
     int x, y;
 
@@ -112,11 +106,11 @@ struct Vec2
         y = b.y;
         return *this;
     }
-    Vec2 operator+(const Vec2 b) const
+    constexpr Vec2 operator+(const Vec2 b) const
     {
         return { x + b.x, y + b.y};
     }
-    Vec2 operator-(const Vec2 b) const
+    constexpr Vec2 operator-(const Vec2 b) const
     {
         return { x - b.x, y - b.y};
     }
@@ -130,28 +124,22 @@ struct Vec2
     }
 };
 
-bool ValidPos(const Coord testPos);
-
 // Screenspace position.
 // Can be multiplied/divided and scaled.
 struct PixelPos : public Vec2
 {
     template<numeric nT>
-    PixelPos(nT x, nT y) :
-        Vec2(x,y)
-    {}
+    constexpr PixelPos(nT x, nT y) :
+        Vec2(x,y) {}
 
-    PixelPos(const Vec2& in) :
-        Vec2(in)
-    {}
+    constexpr PixelPos(const Vec2& in) :
+        Vec2(in) {}
 
-    PixelPos(const PixelPos& in) :
-        Vec2(in.x, in.y)
-    {}
+    constexpr PixelPos(const PixelPos& in) :
+        Vec2(in.x, in.y) {}
 
-    PixelPos() :
-        Vec2()
-    {}
+    constexpr PixelPos() :
+        Vec2() {}
 
     PixelPos& operator=(const PixelPos b)
     {
@@ -160,31 +148,33 @@ struct PixelPos : public Vec2
         return *this;
     }
 
-    PixelPos operator*(const PixelPos b) const
+    constexpr PixelPos operator*(const PixelPos b) const
     {
         return {
             x * b.x,
             y * b.y
         };
     }
-    PixelPos operator/(const PixelPos b) const
+    constexpr PixelPos operator/(const PixelPos b) const
     {
         return {
             x / b.x,
             y / b.y
         };
     }
+
     PixelPos& operator*=(const PixelPos b)
     {
         return *this = *this * b;
     }
+
     PixelPos& operator/=(const PixelPos b)
     {
         return *this = *this / b;
     }
 
     template<std::integral iT>
-    PixelPos operator*(const iT scale) const
+    constexpr PixelPos operator*(const iT scale) const
     {
         using TBig = std::conditional_t<sizeof(iT) >= sizeof(int), iT, int>;
         return {
@@ -192,8 +182,9 @@ struct PixelPos : public Vec2
             (int)((TBig)y * (TBig)scale)
         };
     }
+
     template<std::integral iT>
-    PixelPos operator/(const iT scale) const
+    constexpr PixelPos operator/(const iT scale) const
     {
         using TBig = std::conditional_t<sizeof(iT) >= sizeof(int), iT, int>;
         return {
@@ -207,6 +198,7 @@ struct PixelPos : public Vec2
     {
         return *this = *this * scale;
     }
+
     template<std::integral iT>
     PixelPos& operator/=(const iT scale)
     {
@@ -214,26 +206,29 @@ struct PixelPos : public Vec2
     }
 
     template<std::floating_point fT>
-    PixelPos operator*(const fT scale) const
+    constexpr PixelPos operator*(const fT scale) const
     {
         return {
             (int)((fT)x * scale),
             (int)((fT)y * scale)
         };
     }
+
     template<std::floating_point fT>
-    PixelPos operator/(const fT scale) const
+    constexpr PixelPos operator/(const fT scale) const
     {
         return {
             (int)((fT)x / scale),
             (int)((fT)y / scale)
         };
     }
+
     template<std::floating_point fT>
     PixelPos& operator*=(const fT scale)
     {
         return *this = *this * scale;
     }
+
     template<std::floating_point fT>
     PixelPos& operator/=(const fT scale)
     {
@@ -241,61 +236,95 @@ struct PixelPos : public Vec2
     }
 };
 
-PixelPos Snap(PixelPos pix, PixelPos gridsize);
-PixelPos Snap(PixelPos pix, int gridsize);
+constexpr PixelPos Snap(PixelPos px, PixelPos gridsize)
+{
+    return {
+        Snap(px.x, gridsize.x),
+        Snap(px.y, gridsize.y)
+    };
+}
+
+constexpr PixelPos Snap(PixelPos px, int gridsize)
+{
+    return {
+        Snap(px.x, gridsize),
+        Snap(px.y, gridsize)
+    };
+}
 
 // Boardspace position.
 // Can be compared for equality (but not greater/less than).
 struct Coord : public Vec2
 {
     template<numeric nT>
-    Coord(nT x, nT y) :
-        Vec2(x,y)
-    {}
+    constexpr Coord(nT x, nT y) :
+        Vec2(x,y) {}
 
-    Coord(const Vec2& in) :
-        Vec2(in)
-    {}
+    constexpr Coord(const Vec2& in) :
+        Vec2(in) {}
 
-    Coord(const Coord& in) :
-        Vec2(in.x, in.y)
-    {}
+    constexpr Coord(const Coord& in) :
+        Vec2(in.x, in.y) {}
 
-    Coord() :
-        Vec2()
-    {}
+    constexpr Coord() :
+        Vec2() {}
 
-    bool operator==(const Coord& p2) const
+    constexpr bool operator==(const Coord& p2) const
     {
-        return
-            (x == p2.x) &&
-            (y == p2.y);
+        return (x == p2.x) && (y == p2.y);
     }
-    bool operator!=(const Coord& p2) const
+
+    constexpr bool operator!=(const Coord& p2) const
     {
-        return
-            (x != p2.x) ||
-            (y != p2.y);
+        return (x != p2.x) || (y != p2.y);
     }
 };
 
+constexpr bool ValidPos(const Coord testPos)
+{
+    if (((testPos.x >= 0) && (testPos.x < space::game::sideTileCount)) &&
+        ((testPos.y >= 0) && (testPos.y < space::game::sideTileCount))) return true;
+    else return false;
+}
+
 // Returns the top-left pixel of the input board space.
-PixelPos PixelSpace(const Coord tile);
+constexpr PixelPos PixelSpace(const Coord tile)
+{
+    return {
+        tile.x * space::screen::tileWidth,
+        tile.y * space::screen::tileWidth
+    };
+}
 
 // Returns the coordinate of the board tile containing the pixel.
-Coord BoardSpace(const PixelPos pixel);
+constexpr Coord BoardSpace(const PixelPos pixel)
+{
+    return {
+        pixel.x / space::screen::tileWidth,
+        pixel.y / space::screen::tileWidth
+    };
+}
 
 // The start and end positions of a space.
-// [start..end)
+// [start..end]
 struct BoardTile
 {
+    inline BoardTile(Coord tile)
+    {
+        constexpr PixelPos tileSize = PixelPos(space::screen::tileWidth, space::screen::tileWidth);
+
+        beginPx = PixelSpace(tile);
+        endPx = beginPx + tileSize;
+    }
+
+    inline BoardTile(int tileX, int tileY)
+    {
+        BoardTile(Coord(tileX, tileY));
+    }
+
     BoardTile() :
         beginPx{},
-        endPx{}
-    {}
-
-    BoardTile(Coord tile);
-    BoardTile(int tileX, int tileY);
+          endPx{} {}
 
     PixelPos beginPx, endPx;
 };

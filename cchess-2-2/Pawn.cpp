@@ -1,3 +1,4 @@
+#include "Board.h"
 #include "UnitDirections.h"
 #include "Pawn.h"
 
@@ -19,7 +20,7 @@ void Pawn::Move(Coord newPosition)
 	Unit::Move(newPosition);
 }
 
-sprite::Sprite* Pawn::GetSpritePointer()
+const sprite::Sprite* Pawn::GetSpritePointer()
 {
 	return &sprite::unit::pawn;
 }
@@ -44,13 +45,13 @@ void Pawn::AvailableMoves(PieceMoves* moves)
 	unsigned char confirmedMoveCount = 0;
 
 	// Can move forward one?
-	if (ValidPos(possibleMoves[0]) && !m_boardIAmOf->IsUnitAtPos(possibleMoves[0])) confirmedMoves[confirmedMoveCount++] = possibleMoves[0];
+	if (ValidPos(possibleMoves[0]) && !boardIAmOf->IsUnitAtPos(possibleMoves[0])) confirmedMoves[confirmedMoveCount++] = possibleMoves[0];
 
 	// Can move forward two?
 	// No pawn will ever be starting at a position 2 moves behind an out-of-bounds position, so we don't have to validate the position.
 	if (m_moved == false &&
-		!m_boardIAmOf->IsUnitAtPos(possibleMoves[0]) && // Really weird edge-case
-		!m_boardIAmOf->IsUnitAtPos(possibleMoves[1]))
+		!boardIAmOf->IsUnitAtPos(possibleMoves[0]) && // Really weird edge-case
+		!boardIAmOf->IsUnitAtPos(possibleMoves[1]))
 	{
 		confirmedMoves[confirmedMoveCount++] = possibleMoves[1];
 	}
@@ -58,7 +59,7 @@ void Pawn::AvailableMoves(PieceMoves* moves)
 	// Can move diagonally?
 	for (char i = 2; i < 4; ++i)
 	{
-		Unit* pEnemy = m_boardIAmOf->GetUnitAtPos((possibleMoves[i]));
+		Unit* pEnemy = boardIAmOf->GetUnitAtPos((possibleMoves[i]));
 
 		// Note that we don't have to check if the position is valid, as no enemy will be at an invalid position.
 		if (UnitIsEnemy(pEnemy)) confirmedMoves[confirmedMoveCount++] = possibleMoves[i];
@@ -67,7 +68,7 @@ void Pawn::AvailableMoves(PieceMoves* moves)
 		// En'passant
 		//
 		Coord passantPos = { possibleMoves[i].x, possibleMoves[i].y - fw };
-		Pawn* passantPawn = dynamic_cast<Pawn*>(m_boardIAmOf->GetUnitAtPos(passantPos));
+		Pawn* passantPawn = dynamic_cast<Pawn*>(boardIAmOf->GetUnitAtPos(passantPos));
 
 		if (UnitIsEnemy(passantPawn) && passantPawn->en_pasant) confirmedMoves[confirmedMoveCount++] = possibleMoves[i];
 	}
@@ -83,7 +84,7 @@ bool Pawn::CouldITakeAt(Coord hypothetical)
 
 	if (GetColor() == UnitColor::White) fwDirection = -1; // If the unit is found to be white, invert the forward direction.
 
-	if (hypothetical == (m_position + Coord{ 1 /*right*/, fwDirection }) ||
-		hypothetical == (m_position + Coord{ -1 /*left*/, fwDirection })) return true;
+	if (hypothetical == (position + Coord{ 1 /*right*/, fwDirection }) ||
+		hypothetical == (position + Coord{ -1 /*left*/, fwDirection })) return true;
 	else return false;
 }

@@ -6,7 +6,7 @@ Piece Bishop::GetPieceType() const
 	return Piece::Bishop;
 }
 
-sprite::Sprite* Bishop::GetSpritePointer()
+const sprite::Sprite* Bishop::GetSpritePointer()
 {
 	return &sprite::unit::bishop;
 }
@@ -31,7 +31,7 @@ void Bishop::AvailableMoves(PieceMoves* moves)
 // We are assuming that a straight line of sight has already been established for this to be called.
 bool Bishop::CouldITakeAt(Coord hypothetical)
 {
-	if (hypothetical.x != m_position.x &&
-		hypothetical.y != m_position.y) return true;
+	if (hypothetical.x != position.x &&
+		hypothetical.y != position.y) return true;
 	else return false;
 }

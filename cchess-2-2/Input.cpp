@@ -1,8 +1,4 @@
 #include "Input.h"
-#define DEBUG_MODE false
-#if DEBUG_MODE
-#include "Rendering.h"
-#endif
 
 using namespace space;
 using namespace screen;
@@ -17,14 +13,8 @@ void InitInput()
     // A handle for the input stream
     g_console = GetStdHandle(STD_INPUT_HANDLE);
     SetConsoleMode(g_console, ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
-
-    /*
-    for (int i = 0; i < KeyStateSlots; ++i)
-    {
-    g_keyStates[i] = KeyState::Up;
-    }
-    */
 }
+
 Coord Mouse::MouseToBoardspace(COORD pos)
 {
     PixelPos out;
@@ -36,21 +26,21 @@ Coord Mouse::MouseToBoardspace(COORD pos)
 
 bool Mouse::CheckMouseState()
 {
-    bool state = b_mouseClicked;
+    bool state = isMouseClicked;
 
-    b_mouseClicked = false;
+    isMouseClicked = false;
 
     return state;
 }
 
 Coord Mouse::GetMouseClickCoord()
 {
-    return m_clickCoord;
+    return clickCoord;
 }
 
 Coord Mouse::ReadMouseHover()
 {
-    return m_tileCoord;
+    return tileCoord;
 }
 
 void Mouse::MouseEventProc(MOUSE_EVENT_RECORD mEvent)
@@ -59,27 +49,13 @@ void Mouse::MouseEventProc(MOUSE_EVENT_RECORD mEvent)
     {
     case 0:
         if (mEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
-            b_mouseClicked = true;
-            m_clickCoord = m_tileCoord;
+            isMouseClicked = true;
+            clickCoord = tileCoord;
         }
         break;
 
     case MOUSE_MOVED:
-        m_tileCoord = MouseToBoardspace(mEvent.dwMousePosition);
-
-        // Clamp to board
-        /*
-        m_tileCoord.x = min(m_tileCoord.x, game::sideTileCount - 1);
-        m_tileCoord.y = min(m_tileCoord.y, game::sideTileCount - 1);
-        */
-
-#if DEBUG_MODE
-        /* --TESTING-- */
-        g_frameBuffer.DrawGridSpaceFAST(m_tileCoord, RGB(255,0,0));
-        g_frameBuffer.DrawPixel(m_tileCoord, RGB(0, 255, 0));
-#endif
-
-
+        tileCoord = MouseToBoardspace(mEvent.dwMousePosition);
         break;
 
     default:

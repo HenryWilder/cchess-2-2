@@ -1,3 +1,4 @@
+#include "Board.h"
 #include "Unit.h"
 
 bool Unit::NullOrEnemy(const Unit* unit)
@@ -14,14 +15,14 @@ bool Unit::UnitIsEnemy(const Unit* unit)
 // Used for testing the aliance of a unit at a space we have the coordinates of, but haven't yet searched for a unit in.
 bool Unit::SpaceHasNoTeammate(const Coord testPos)
 {
-	const Unit* unitAtPos = m_boardIAmOf->GetUnitAtPos(testPos);
+	const Unit* unitAtPos = boardIAmOf->GetUnitAtPos(testPos);
 
 	return NullOrEnemy(unitAtPos);
 }
 
 bool Unit::PieceIsBlocking(Coord testPos, Coord* confirmedMoves, unsigned char& confirmedMoveCount)
 {
-	const Unit* testUnit = m_boardIAmOf->GetUnitAtPos(testPos);
+	const Unit* testUnit = boardIAmOf->GetUnitAtPos(testPos);
 
 	bool thereIsUnit = testUnit != nullptr;
 
@@ -44,27 +45,27 @@ void Unit::LineTrace(Coord* confirmedMoves, unsigned char& confirmedMoveCount, c
 
 void PieceMoves::SetMoves(const Coord* moves, const unsigned char count)
 {
-	m_availableMovesCount = count;
+	numAvailableMoves = count;
 
-	for (unsigned char i = 0; i < m_availableMovesCount; ++i)
+	for (unsigned char i = 0; i < numAvailableMoves; ++i)
 	{
-		m_available[i] = *(moves + i); // The next index of the moves array
+		available[i] = *(moves + i); // The next index of the moves array
 	}
 }
 
 int PieceMoves::GetMoves(Coord* moves)
 {
-	moves = m_available;
-	return (int)m_availableMovesCount;
+	moves = available;
+	return (int)numAvailableMoves;
 }
 
 bool PieceMoves::MoveIsValid(Coord move) const
 {
 	bool valid = false;
 
-	for (unsigned int i = 0; i < m_availableMovesCount; ++i)
+	for (unsigned int i = 0; i < numAvailableMoves; ++i)
 	{
-		if (move == m_available[i])
+		if (move == available[i])
 		{
 			valid = true;
 			break;
@@ -76,34 +77,37 @@ bool PieceMoves::MoveIsValid(Coord move) const
 
 void Unit::Init(Coord pos, UnitColor color, Board* boardSpawningMe, unsigned char id)
 {
-	m_position = pos;
-	m_team = color;
-	m_boardIAmOf = boardSpawningMe;
-	b_hidden = false;
-	m_ID = id;
+	position = pos;
+	team = color;
+	boardIAmOf = boardSpawningMe;
+	isHidden = false;
+	id = id;
 }
 
 Coord Unit::GetLocation() const
 {
-	return m_position;
+	return position;
 }
 
 UnitColor Unit::GetColor() const
 {
-	return m_team;
+	return team;
 }
 
 UnitColor Unit::GetEnemyColor() const
 {
-	return (m_team == UnitColor::Black ? UnitColor::White : UnitColor::Black);
+	return (team == UnitColor::Black ? UnitColor::White : UnitColor::Black);
 }
 
 void Unit::Move(Coord newPosition)
 {
-	m_position = newPosition;
+	position = newPosition;
 }
 
-sprite::Sprite* Unit::GetSpritePointer() {	return &sprite::unit::null;	}
+const sprite::Sprite* Unit::GetSpritePointer()
+{
+	return &sprite::unit::null;
+}
 
 void Unit::AvailableMoves(PieceMoves* moves) {}
 
@@ -114,22 +118,22 @@ Piece Unit::GetPieceType() const
 
 bool Unit::IsHidden()
 {
-	return b_hidden;
+	return isHidden;
 }
 
 void Unit::Hide()
 {
-	b_hidden = true;
+	isHidden = true;
 }
 
 void Unit::UnHide()
 {
-	b_hidden = false;
+	isHidden = false;
 }
 
 unsigned char Unit::GetID()
 {
-	return m_ID;
+	return id;
 }
 
 bool Unit::CouldITakeAt(Coord hypothetical)

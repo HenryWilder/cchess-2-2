@@ -1,12 +1,7 @@
 #include "UnitDirections.h"
 #include "Queen.h"
 
-Piece Queen::GetPieceType() const
-{
-	return Piece::Queen;
-}
-
-sprite::Sprite* Queen::GetSpritePointer()
+const sprite::Sprite* Queen::GetSpritePointer()
 {
 	return &sprite::unit::queen;
 }
