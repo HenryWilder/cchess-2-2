@@ -49,14 +49,14 @@ struct PixelPos;
 
 struct Vec2
 {
-    template<std::floating_point T>
-    Vec2(T x, T y) :
-        x{ (int)(x + ((T)0.5)) },
-        y{ (int)(y + ((T)0.5)) }
+    template<std::floating_point fT>
+    Vec2(fT x, fT y) :
+        x{ (int)(x + ((fT)0.5)) },
+        y{ (int)(y + ((fT)0.5)) }
     {};
 
-    template<std::integral T>
-    Vec2(T x, T y) :
+    template<std::integral iT>
+    Vec2(iT x, iT y) :
         x{ (int)x },
         y{ (int)y }
     {};
@@ -73,11 +73,28 @@ struct Vec2
 
     int x, y;
 
-    Vec2& operator =(const Vec2 b)       { x = b.x; y = b.y; return *this; }
-    Vec2  operator+ (const Vec2 b) const { return { x + b.x, y + b.y}; }
-    Vec2  operator- (const Vec2 b) const { return { x - b.x, y - b.y}; }
-    Vec2& operator+=(const Vec2 b)       { return *this = *this + b; }
-    Vec2& operator-=(const Vec2 b)       { return *this = *this - b; }
+    Vec2& operator=(const Vec2 b)
+    {
+        x = b.x;
+        y = b.y;
+        return *this;
+    }
+    Vec2 operator+(const Vec2 b) const
+    {
+        return { x + b.x, y + b.y};
+    }
+    Vec2 operator-(const Vec2 b) const
+    {
+        return { x - b.x, y - b.y};
+    }
+    Vec2& operator+=(const Vec2 b)
+    {
+        return *this = *this + b;
+    }
+    Vec2& operator-=(const Vec2 b)
+    {
+        return *this = *this - b;
+    }
 };
 
 bool ValidPos(const Coord testPos);
@@ -86,79 +103,99 @@ bool ValidPos(const Coord testPos);
 // Can be multiplied/divided
 struct PixelPos : public Vec2
 {
-    PixelPos() : Vec2({ 0,0 }) {};
+    template<std::floating_point fT> PixelPos(fT x, fT y) : Vec2(x,y) {};
+    template<std::integral iT> PixelPos(iT x, iT y) : Vec2(x,y) {};
+    PixelPos(int x, int y) : Vec2(x,y) {};
     PixelPos(Vec2 in) : Vec2( in ) {};
-    PixelPos(int _x, int _y) : Vec2({ _x,_y }) {};
+    PixelPos() : Vec2(0,0) {};
 
     operator Coord() const;
 
-    PixelPos operator=(const PixelPos b) {
+    PixelPos& operator=(const PixelPos b)
+    {
         x = b.x;
         y = b.y;
         return *this;
     }
 
-    PixelPos operator*(const PixelPos b) const {
-        PixelPos out;
-        out.x = x * b.x;
-        out.y = y * b.y;
-        return out;
+    PixelPos operator*(const PixelPos b) const
+    {
+        return {
+            x * b.x,
+            y * b.y
+        };
     }
-    PixelPos operator/(const PixelPos b) const {
-        PixelPos out;
-        out.x = x / b.x;
-        out.y = y / b.y;
-        return out;
+    PixelPos operator/(const PixelPos b) const
+    {
+        return {
+            x / b.x,
+            y / b.y
+        };
     }
-    PixelPos operator*=(const PixelPos b) {
-        *this = *this * b;
-        return *this;
+    PixelPos& operator*=(const PixelPos b)
+    {
+        return *this = *this * b;
     }
-    PixelPos operator/=(const PixelPos b) {
-        *this = *this / b;
-        return *this;
-    }
-
-    PixelPos operator*(const double scale) const {
-        PixelPos out;
-        out.x = int((double)x * scale);
-        out.y = int((double)y * scale);
-        return out;
-    }
-    PixelPos operator/(const double scale) const {
-        PixelPos out;
-        out.x = int((double)x / scale);
-        out.y = int((double)y / scale);
-        return out;
-    }
-    PixelPos operator*=(const double scale) {
-        *this = *this * scale;
-        return *this;
-    }
-    PixelPos operator/=(const double scale) {
-        *this = *this * scale;
-        return *this;
+    PixelPos& operator/=(const PixelPos b)
+    {
+        return *this = *this / b;
     }
 
-    PixelPos operator*(const int scale) const {
-        PixelPos out;
-        out.x = x * scale;
-        out.y = y * scale;
-        return out;
+    template<std::integral iT>
+    PixelPos operator*(const iT scale) const
+    {
+        using TBig = std::conditional_t<sizeof(iT) >= sizeof(int), iT, int>;
+        return {
+            (int)((TBig)x * (TBig)scale),
+            (int)((TBig)y * (TBig)scale)
+        };
     }
-    PixelPos operator/(const int scale) const {
-        PixelPos out;
-        out.x = x / scale;
-        out.y = y / scale;
-        return out;
+    template<std::integral iT>
+    PixelPos operator/(const iT scale) const
+    {
+        using TBig = std::conditional_t<sizeof(iT) >= sizeof(int), iT, int>;
+        return {
+            (int)((TBig)x / (TBig)scale),
+            (int)((TBig)y / (TBig)scale)
+        };
     }
-    PixelPos operator*=(const int scale) {
-        *this = *this * scale;
-        return *this;
+
+    template<std::integral iT>
+    PixelPos& operator*=(const iT scale)
+    {
+        return *this = *this * scale;
     }
-    PixelPos operator/=(const int scale) {
-        *this = *this * scale;
-        return *this;
+    template<std::integral iT>
+    PixelPos& operator/=(const iT scale)
+    {
+        return *this = *this / scale;
+    }
+
+    template<std::floating_point fT>
+    PixelPos  operator* (const fT scale) const
+    {
+        return {
+            (int)((fT)x * scale),
+            (int)((fT)y * scale)
+        };
+    }
+    template<std::floating_point fT>
+    PixelPos  operator/ (const fT scale) const
+    {
+        return {
+            (int)((fT)x / scale),
+            (int)((fT)y / scale)
+        };
+    }
+    template<std::floating_point fT>
+    PixelPos& operator*=(const fT scale)
+    {
+        return *this = *this * scale;
+    }
+    template<std::floating_point fT>
+    PixelPos& operator/=(const fT scale)
+    {
+        return *this = *this / scale;
     }
 };
 
@@ -198,7 +235,7 @@ struct BoardTile
     PixelPos start, end;
 };
 
-/*
+#if false
 // An array of all pixels in a board tile
 struct BoardTile2
 {
@@ -207,4 +244,4 @@ BoardTile2(Coord tile);
 
 std::vector<PixelPos> pixels[space::screen::tileArea];
 };
-*/
+#endif
