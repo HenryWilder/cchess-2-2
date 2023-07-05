@@ -45,11 +45,11 @@ namespace frameBuffer
 
     COLORREF SpacePatternAtPos(Coord space)
     {
-        // Pick the color
-        if (IsEven(space.x + space.y))
-            return sprite::PaletteColor(sprite::Pltt::Board_Black);
-        else
-            return sprite::PaletteColor(sprite::Pltt::Board_White);
+        int spaceHash = space.x + space.y;
+        bool isSpaceBlack = IsEven(spaceHash);
+        return sprite::PaletteColor(isSpaceBlack
+            ? sprite::Pltt::Board_Black
+            : sprite::Pltt::Board_White);
     }
 
     void DrawPixel(PixelPos pixel, COLORREF color)
@@ -57,8 +57,12 @@ namespace frameBuffer
         PixelPos pix = pixel * space::screen::gameScale; // Output-space
 
         for (int x = pix.x; x < pix.x + space::screen::gameScale; ++x)
+        {
             for (int y = pix.y; y < pix.y + space::screen::gameScale; ++y)
+            {
                 SetPixelV(hdc, x, y, color);
+            }
+        }
     }
     void DrawPixel(PixelPos pixel, Color color)
     {
@@ -67,12 +71,12 @@ namespace frameBuffer
 
     bool DrawPixelSafe(PixelPos pixel, COLORREF color)
     {
-        if (IsValidPxPosition(pixel)) {
+        bool isValid = IsValidPxPosition(pixel);
+        if (isValid)
+        {
             DrawPixel(pixel, color);
-            return true;
         }
-        else
-            return false;
+        return isValid;
     }
     bool DrawPixelSafe(PixelPos pixel, Color color)
     {
@@ -90,11 +94,13 @@ namespace frameBuffer
         DrawToBufferAndScreen(pos, CRef(c));
     }
 
+    // Writes to buffer, does not draw to render
     void WriteToBuffer(PixelPos pos, COLORREF c)
     {
         m_frame[Index(pos)] = c;
     }
 
+    // Writes to buffer, does not draw to render
     void WriteToBuffer(PixelPos pos, Color c)
     {
         WriteToBuffer(pos, CRef(c));
@@ -102,13 +108,14 @@ namespace frameBuffer
 
     bool DrawToBufferSafe(PixelPos pos, COLORREF c)
     {
-        if (IsValidPxPosition(pos)) {
+        bool isValid = IsValidPxPosition(pos);
+        if (isValid)
+        {
             m_frame[Index(pos)] = c;
-            return true;
         }
-        else
-            return false;
+        return isValid;
     }
+
     bool DrawToBufferSafe(PixelPos pos, Color c)
     {
         return DrawToBufferSafe(pos, CRef(c));
@@ -201,68 +208,63 @@ namespace frameBuffer
         {
             for (pix.x = spaceBounds.beginPx.x; pix.x < spaceBounds.endPx.x; ++pix.x)
             {
-                WriteToBuffer(pix, color); // Writes to buffer, does not draw to render
+                WriteToBuffer(pix, color);
             }
         }
-        //DrawGridSpaceNOW(space, 0); Sanity check
     }
 
-    void DrawGhost(
-        PixelPos spritePosTL, // The top-left corner of the sprite
-        PixelPos cleanPosTL, // The top-left corner of the cleanplate
-        const sprite::Sprite* sprite, bool team)
+    void DrawGhost(PixelPos spritePosTL, PixelPos cleanPosTL, const sprite::Sprite* sprite, bool team)
     {
         // Start and end WILL NOT be the same size as a tile. There will always be some amount of movement.
         PixelPos start;
         PixelPos end;
 
         // X-values
-        if (spritePosTL.x > cleanPosTL.x) {
+        if (spritePosTL.x > cleanPosTL.x)
+        {
             start.x = cleanPosTL.x;
             end.x = spritePosTL.x + screen::tileWidth;
         }
-        else {
+        else
+        {
             start.x = spritePosTL.x;
             end.x = cleanPosTL.x + screen::tileWidth;
         }
+
         // Y-values
-        if (spritePosTL.y > cleanPosTL.y) {
+        if (spritePosTL.y > cleanPosTL.y)
+        {
             start.y = cleanPosTL.y;
             end.y = spritePosTL.y + screen::tileWidth;
         }
-        else {
+        else
+        {
             start.y = spritePosTL.y;
             end.y = cleanPosTL.y + screen::tileWidth;
         }
 
+        PixelPos px; // The pixel we are currently drawing
 
-        PixelPos pix; // The pixel we are currently drawing
+        size_t i = 0; // The index of the sprite's array
 
-        unsigned int i = 0; // The index of the sprite's array
-
-        for (pix.y = start.y; pix.y < end.y; ++pix.y) {
-            for (pix.x = start.x; pix.x < end.x; ++pix.x)
+        for (px.y = start.y; px.y < end.y; ++px.y)
+        {
+            for (px.x = start.x; px.x < end.x; ++px.x)
             {
                 // We want to pause incrementing the sprite index when we are outside the bounds of the sprite's image.
                 bool inSpriteBounds =
-                    pix.x >= spritePosTL.x &&
-                    pix.y >= spritePosTL.y &&
-                    pix.x < (spritePosTL.x + screen::tileWidth) &&
-                    pix.y < (spritePosTL.y + screen::tileWidth);
+                    spritePosTL.x <= px.x && px.x < (spritePosTL.x + screen::tileWidth) &&
+                    spritePosTL.y <= px.y && px.y < (spritePosTL.y + screen::tileWidth);
+                
+                bool isOpaque = inSpriteBounds && sprite->m_texture[i] != ' ';
 
-                if (inSpriteBounds)
-                {
-                    if (sprite->m_texture[i] != ' ') // Check is opaque
-                        DrawPixel(pix, sprite->SpriteColor(i, team));
-                    else
-                        DrawPixel(pix, Get(pix));
+                COLORREF color = isOpaque
+                    ? sprite->SpriteColor(i, team)
+                    : Get(px);
 
-                    ++i;
-                }
-                else
-                {
-                    DrawPixel(pix, Get(pix));
-                }
+                DrawPixel(px, color);
+
+                i += (size_t)inSpriteBounds;
             }
         }
     }

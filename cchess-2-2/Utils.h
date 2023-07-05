@@ -1,14 +1,12 @@
 #pragma once
 #include <Windows.h>
-#include <chrono>
-#include <thread>
 #include <concepts>
 
 template<typename T>
 concept numeric = std::is_integral_v<T> || std::is_floating_point_v<T>;
 
 template<typename Func, typename T>
-concept Evalable = requires(Func fn, T px)
+concept evalable = requires(Func fn, T px)
 {
     { fn(px) };
 };

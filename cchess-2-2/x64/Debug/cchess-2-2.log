@@ -1,12 +1,1 @@
-﻿  Bishop.cpp
-  Board.cpp
-  King.cpp
-  Knight.cpp
-  Main.cpp
-  Pawn.cpp
-  Queen.cpp
-  Rook.cpp
-  Unit.cpp
-  UnitDirections.cpp
-  Generating Code...
-  cchess-2-2.vcxproj -> C:\Users\Henry\source\repos\HenryWilder\cchess-2-2\x64\Debug\cchess-2-2.exe
+﻿

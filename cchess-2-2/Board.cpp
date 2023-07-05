@@ -1,6 +1,7 @@
 #include <string>
 #include "Board.h"
 #include "Unit.h"
+#include "Input.h"
 
 #define CURSOR_TO_POSITION(x,y) "\x1b[" #x ";" #y "f"
 

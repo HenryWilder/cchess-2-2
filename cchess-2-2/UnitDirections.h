@@ -1,7 +1,15 @@
 #pragma once
-#include "Unit.h"
+#include "Utils.h"
 
-Coord CardinalDir(int i);
-Coord DiagonalDir(int i);
-Coord AllDir(int i);
-Coord KnightDir(int i);
+// Starts at 12:00
+Coord Cardinal(int i);
+
+// Starts at 1:30
+Coord Diagonal(int i);
+
+// Starts at 12:00
+Coord Clockwise(int i);
+
+// Starts at 12:00
+Coord Knight(int i);
+

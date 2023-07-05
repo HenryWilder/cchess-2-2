@@ -3,7 +3,6 @@
 #include <vector>
 #include "Utils.h"
 #include "Rendering.h"
-#include "Input.h"
 #include "UnitData.h"
 
 class Unit;
@@ -51,7 +50,6 @@ private:
 	UnitColor OpponentTeam();
 
 	Coord WaitForClick(Phase turnPhase, const PieceMoves* pMoves = nullptr, const sprite::Sprite* sprite = nullptr, bool team = 0);
-	//Coord TakePosInput();
 	void MovePiece(Unit* unit, Coord moveTo);
 
 	void DrawPossibleMoves(PieceMoves* moves, const UnitColor team);
