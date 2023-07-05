@@ -132,11 +132,13 @@ Dependencies
 
 #### Takes
 
--
+| From | Namespace | Identifier | Kind |
+| ---- | :-------: | ---------- | :--: |
 
 #### Gives
 
--
+| Namespace | Identifier  |  Kind  |
+| :-------: | ----------- | :----: |
 
 ---
 
