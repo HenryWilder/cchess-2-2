@@ -17,13 +17,6 @@ int main()
 	HWND window = GetConsoleWindow();
 	hdc = GetDC(window);
 
-	Unit unit = InitUnit(0,0, UNIT_PAWN, TEAM_BLACK);
-
-	BoardPos movesP[NUM_PAWN_MAX_MOVE_OPTIONS];
-	BoardPos movesR[NUM_ROOK_MAX_MOVE_OPTIONS];
-	MoveOptionsPawn(movesP, &unit);
-	MoveOptionsRook(movesR, &unit);
-
 	while (replay)
 	{
 		ResetBoard();

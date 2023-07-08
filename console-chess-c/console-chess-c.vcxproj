@@ -90,6 +90,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard />
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -107,6 +108,7 @@
       <LanguageStandard />
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <SupportJustMyCode>true</SupportJustMyCode>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,6 +125,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard />
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,6 +143,7 @@
       <LanguageStandard />
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <SupportJustMyCode>true</SupportJustMyCode>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
