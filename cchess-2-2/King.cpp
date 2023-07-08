@@ -1,6 +1,8 @@
-#include "UnitDirections.h"
-#include "King.h"
-#include "Board.h"
+#include "Rendering.hpp"
+#include "PieceMoves.hpp"
+#include "UnitDirections.hpp"
+#include "King.hpp"
+#include "Board.hpp"
 
 Piece King::GetPieceType() const
 {

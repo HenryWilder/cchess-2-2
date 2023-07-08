@@ -1,6 +1,8 @@
-#include "UnitDirections.h"
-#include "Rook.h"
-#include "Board.h"
+#include "Rendering.hpp"
+#include "PieceMoves.hpp"
+#include "UnitDirections.hpp"
+#include "Rook.hpp"
+#include "Board.hpp"
 
 Piece Rook::GetPieceType() const
 {
@@ -20,7 +22,7 @@ const sprite::Sprite* Rook::GetSpritePointer()
 
 void Rook::AvailableMoves(PieceMoves* moves)
 {
-	Coord confirmedMoves[space::game::sideTileCount * 2];
+	Coord confirmedMoves[space::board::sideTileCount * 2];
 
 	unsigned char confirmedMoveCount = 0;
 
@@ -29,7 +31,7 @@ void Rook::AvailableMoves(PieceMoves* moves)
 	// Straight lines
 	for (int direction = 0; direction < 4; ++direction)
 	{
-		LineTrace(confirmedMoves, confirmedMoveCount, CardinalDir(direction));
+		LineTrace(confirmedMoves, confirmedMoveCount, Cardinal(direction));
 	}
 
 	moves->SetMoves(confirmedMoves, confirmedMoveCount);

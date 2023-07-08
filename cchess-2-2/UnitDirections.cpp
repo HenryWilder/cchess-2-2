@@ -1,4 +1,4 @@
-#include "UnitDirections.h"
+#include "UnitDirections.hpp"
 
 // Identical to sine for integer multiples of pi/2 radians
 int isin(int x)
@@ -56,7 +56,7 @@ Coord Clockwise(int i)
 }
 
 // Starts at 12:00
-Coord Knight(int i)
+Coord KnightWise(int i)
 {
 	int x = -i + 1;
 

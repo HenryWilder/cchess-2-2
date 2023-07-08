@@ -1,7 +1,14 @@
-#include <string>
-#include "Board.h"
-#include "Unit.h"
-#include "Input.h"
+#include <iostream>
+#include "Board.hpp"
+#include "Unit.hpp"
+#include "Input.hpp"
+
+#include "Pawn.hpp"
+#include "Rook.hpp"
+#include "Knight.hpp"
+#include "Bishop.hpp"
+#include "Queen.hpp"
+#include "King.hpp"
 
 #define CURSOR_TO_POSITION(x,y) "\x1b[" #x ";" #y "f"
 
@@ -243,7 +250,7 @@ void Board::MovePiece(Unit* unit, Coord moveTo)
             DrawBoardSpaceReset(passantPos);
         }
 
-        if (unit->GetLocation().y == space::game::sideTileCount || unit->GetLocation().y == 0) // On the other side of the board
+        if (unit->GetLocation().y == space::board::sideTileCount || unit->GetLocation().y == 0) // On the other side of the board
         {
             unsigned char id = unit->GetID();
             ConstructNewUnit(unit->GetLocation(), Piece::Queen, unit->GetColor(), id);
@@ -437,10 +444,10 @@ void Board::PrintBoard()
 {
     Coord space;
     // Cycle through all rows
-    for (space.y = 0; space.y < space::game::sideTileCount; ++space.y)
+    for (space.y = 0; space.y < space::board::sideTileCount; ++space.y)
     {
         // Cycle through all columns
-        for (space.x = 0; space.x < space::game::sideTileCount; ++space.x)
+        for (space.x = 0; space.x < space::board::sideTileCount; ++space.x)
         {
             DrawBoardSpaceReset(space);
         }
@@ -736,8 +743,8 @@ void Board::ResetEnPasant()
 void Board::StoreBoardState()
 {
     Coord coord;
-    for (coord.y = 0; coord.y < space::game::sideTileCount; ++coord.y) {
-        for (coord.x = 0; coord.x < space::game::sideTileCount; ++coord.x)
+    for (coord.y = 0; coord.y < space::board::sideTileCount; ++coord.y) {
+        for (coord.x = 0; coord.x < space::board::sideTileCount; ++coord.x)
         {
             Unit* unit = GetUnitAtPos(coord);
             m_history[turn][coord] = MakeUnitData(unit);
@@ -797,8 +804,8 @@ void Board::DrawBoardState(int state)
 
     BoardStateMemory& gameState = m_history[state];
 
-    for (int y = 0; y < space::game::sideTileCount; ++y) {
-        for (int x = 0; x < space::game::sideTileCount; ++x)
+    for (int y = 0; y < space::board::sideTileCount; ++y) {
+        for (int x = 0; x < space::board::sideTileCount; ++x)
         {
             Coord space = { x, y };
             UnitData data = gameState[space];
@@ -821,8 +828,8 @@ int Board::FlipbookWFClick(int state)
 {
     // Initialization
     Coord arrowPosR;
-    arrowPosR.x = space::game::sideTileCount / 2;
-    arrowPosR.y = space::game::sideTileCount + 1;
+    arrowPosR.x = space::board::sideTileCount / 2;
+    arrowPosR.y = space::board::sideTileCount + 1;
     Coord arrowPosL = arrowPosR;
     arrowPosL.x -= 1;
 

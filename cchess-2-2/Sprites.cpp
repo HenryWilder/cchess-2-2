@@ -1,4 +1,4 @@
-#include "Rendering.h"
+#include "Sprite.hpp"
 
 namespace sprite
 {
@@ -21,7 +21,7 @@ namespace sprite
             "                "
             "                "
             "                "
-            "                "
+            "               "
         };
 
         const Sprite pawn
@@ -41,7 +41,7 @@ namespace sprite
             "      3143      "
             "     321413     "
             "    32111443    "
-            "    33333333    "
+            "    33333333   "
         };
 
         const Sprite rook
@@ -61,7 +61,7 @@ namespace sprite
             "    32114443    "
             "   3222221143   "
             "   3221111443   "
-            "   3333333333   "
+            "   3333333333  "
         };
 
         const Sprite knight
@@ -81,7 +81,7 @@ namespace sprite
             "     32111123   "
             "    32211123    "
             "   3221111442   "
-            "   3333333333   "
+            "   3333333333  "
         };
 
         const Sprite bishop
@@ -101,7 +101,7 @@ namespace sprite
             "     321143     "
             "    32211443    "
             "   3221111443   "
-            "   3333333333   "
+            "   3333333333  "
         };
 
         const Sprite queen
@@ -121,7 +121,7 @@ namespace sprite
             "     321143     "
             "    32221443    "
             "   3221111443   "
-            "   3333333333   "
+            "   3333333333  "
         };
 
         const Sprite king
@@ -141,7 +141,7 @@ namespace sprite
             "     321143     "
             "    32221443    "
             "   3221111443   "
-            "   3333333333   "
+            "   3333333333  "
         };
 
         const Sprite* all[7]
@@ -152,7 +152,7 @@ namespace sprite
             &knight,
             &bishop,
             &queen,
-            &king
+            &king,
         };
     }
 
@@ -175,7 +175,7 @@ namespace sprite
             "    31113       "
             "     3113       "
             "      313       "
-            "       33       "
+            "       33      "
         };
 
         const Sprite arrowR
@@ -195,7 +195,13 @@ namespace sprite
             "       31113    "
             "       3113     "
             "       313      "
-            "       33       "
+            "       33      "
+        };
+
+        const Sprite* arrows[2]
+        {
+            &arrowL,
+            &arrowR,
         };
     }
 }

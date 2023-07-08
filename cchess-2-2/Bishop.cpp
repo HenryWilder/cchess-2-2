@@ -1,6 +1,8 @@
-#include "UnitDirections.h"
-#include "Bishop.h"
-#include "Board.h"
+#include "Rendering.hpp"
+#include "PieceMoves.hpp"
+#include "UnitDirections.hpp"
+#include "Bishop.hpp"
+#include "Board.hpp"
 
 Piece Bishop::GetPieceType() const
 {
@@ -14,7 +16,7 @@ const sprite::Sprite* Bishop::GetSpritePointer()
 
 void Bishop::AvailableMoves(PieceMoves* moves)
 {
-	Coord confirmedMoves[space::game::sideTileCount * 3];
+	Coord confirmedMoves[space::board::sideTileCount * 3];
 
 	unsigned char confirmedMoveCount = 0;
 
@@ -23,7 +25,7 @@ void Bishop::AvailableMoves(PieceMoves* moves)
 	// Diagonals
 	for (int direction = 0; direction < 4; ++direction)
 	{
-		LineTrace(confirmedMoves, confirmedMoveCount, DiagonalDir(direction));
+		LineTrace(confirmedMoves, confirmedMoveCount, Diagonal(direction));
 	}
 
 	moves->SetMoves(confirmedMoves, confirmedMoveCount);

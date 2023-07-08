@@ -1,6 +1,7 @@
+#include "Utils.hpp"
 #include <chrono>
 #include <thread>
-#include "Utils.h"
+#include <Windows.h>
 
 // Get a console handle
 HWND window = GetConsoleWindow();

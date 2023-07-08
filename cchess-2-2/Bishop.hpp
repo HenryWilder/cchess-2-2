@@ -1,5 +1,8 @@
 #pragma once
-#include "Unit.h"
+#include "Unit.hpp"
+
+namespace sprite { struct Sprite; }
+struct PieceMoves;
 
 class Bishop : public Unit
 {

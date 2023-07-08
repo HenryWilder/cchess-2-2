@@ -1,6 +1,8 @@
-#include "UnitDirections.h"
-#include "Queen.h"
-#include "Board.h"
+#include "Rendering.hpp"
+#include "PieceMoves.hpp"
+#include "UnitDirections.hpp"
+#include "Queen.hpp"
+#include "Board.hpp"
 
 const sprite::Sprite* Queen::GetSpritePointer()
 {
@@ -9,7 +11,7 @@ const sprite::Sprite* Queen::GetSpritePointer()
 
 void Queen::AvailableMoves(PieceMoves* moves)
 {
-	Coord confirmedMoves[space::game::sideTileCount * 4];
+	Coord confirmedMoves[space::board::sideTileCount * 4];
 
 	unsigned char confirmedMoveCount = 0;
 
@@ -18,7 +20,7 @@ void Queen::AvailableMoves(PieceMoves* moves)
 	// All directions
 	for (int direction = 0; direction < 8; ++direction)
 	{
-		LineTrace(confirmedMoves, confirmedMoveCount, AllDir(direction));
+		LineTrace(confirmedMoves, confirmedMoveCount, Clockwise(direction));
 	}
 
 	moves->SetMoves(confirmedMoves, confirmedMoveCount);

@@ -1,8 +1,18 @@
-#include "Utils.h"
-#include "Input.h"
-#include "Rendering.h"
-#include "Board.h"
-#include "Unit.h"
+#include "Utils.hpp"
+#include "Input.hpp"
+#include "Rendering.hpp"
+#include "Board.hpp"
+#include "Unit.hpp"
+#include <iostream>
+
+// Might need to be made universal
+/////////////////////////////////
+// Get a console handle
+extern HWND window;
+
+// Get a handle to device context
+extern HDC hdc;
+/////////////////////////////////
 
 bool PromptReplay()
 {

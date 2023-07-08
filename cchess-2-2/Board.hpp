@@ -1,17 +1,17 @@
 #pragma once
-#include <iostream>
 #include <vector>
-#include "Utils.h"
-#include "Rendering.h"
-#include "UnitData.h"
+#include "Coord.hpp"
+#include "UnitData.hpp"
+#include "Constants.hpp"
 
 class Unit;
 struct PieceMoves;
+namespace sprite { struct Sprite; }
 
 class BoardStateMemory
 {
 private:
-	UnitData m_stateData[space::game::sideTileCount][space::game::sideTileCount];
+	UnitData m_stateData[space::board::sideTileCount][space::board::sideTileCount];
 
 public:
 	UnitData  operator[](Coord coord) const;
@@ -29,11 +29,12 @@ enum class Phase {
 	Wrapup = 3,
 };
 
+// Might change this to a namespace
 class Board
 {
 private:
-	constexpr static int width = space::game::sideTileCount;
-	constexpr static int height = space::game::sideTileCount;
+	constexpr static int width = space::board::sideTileCount;
+	constexpr static int height = space::board::sideTileCount;
 
 	int turn = 0;
 	std::vector<Unit*> whiteUnits;

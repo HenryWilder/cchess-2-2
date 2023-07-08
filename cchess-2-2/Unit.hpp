@@ -1,24 +1,10 @@
 #pragma once
-#include "Utils.h"
-#include "Rendering.h"
-#include "UnitData.h"
+#include "Utils.hpp"
+#include "UnitData.hpp"
 
 class Board;
-
-struct PieceMoves
-{
-	Coord available[space::game::sideTileCount * 4];
-	unsigned char numAvailableMoves = 0;
-
-	// Set all of the moves at once
-	void SetMoves(const Coord* moves, const unsigned char count);
-
-	// For modifying an outside array of moves. Returns the number of moves valid in the array being modified.
-	int GetMoves(Coord* moves);
-
-	// Takes a coord as input and checks whether it is in the list of valid moves
-	bool MoveIsValid(Coord move) const;
-};
+struct PieceMoves;
+namespace sprite { struct Sprite; }
 
 class Unit
 {
@@ -61,13 +47,3 @@ protected:
 
 	unsigned char id = 0;
 };
-
-//int size = sizeof(Unit);
-//int align = alignof(Unit);
-
-#include "Pawn.h"
-#include "Rook.h"
-#include "Knight.h"
-#include "Bishop.h"
-#include "Queen.h"
-#include "King.h"

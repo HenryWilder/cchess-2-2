@@ -149,33 +149,48 @@
   <ItemGroup>
     <ClCompile Include="Bishop.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="FrameBuffer.cpp" />
+    <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="King.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Pawn.cpp" />
+    <ClCompile Include="PieceMoves.cpp" />
     <ClCompile Include="Queen.cpp" />
     <ClCompile Include="Rendering.cpp" />
     <ClCompile Include="Rook.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="UnitDirections.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bishop.h" />
-    <ClInclude Include="Board.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="King.h" />
-    <ClInclude Include="Knight.h" />
-    <ClInclude Include="Pawn.h" />
-    <ClInclude Include="Queen.h" />
-    <ClInclude Include="Rendering.h" />
-    <ClInclude Include="Rook.h" />
-    <ClInclude Include="Unit.h" />
-    <ClInclude Include="UnitData.h" />
-    <ClInclude Include="UnitDirections.h" />
-    <ClInclude Include="Utils.h" />
+    <ClInclude Include="Bishop.hpp" />
+    <ClInclude Include="Board.hpp" />
+    <ClInclude Include="BoardTile.hpp" />
+    <ClInclude Include="Color.hpp" />
+    <ClInclude Include="Constants.hpp" />
+    <ClInclude Include="Coord.hpp" />
+    <ClInclude Include="FrameBuffer.hpp" />
+    <ClInclude Include="Ghost.hpp" />
+    <ClInclude Include="Input.hpp" />
+    <ClInclude Include="King.hpp" />
+    <ClInclude Include="Knight.hpp" />
+    <ClInclude Include="Pawn.hpp" />
+    <ClInclude Include="PieceMoves.hpp" />
+    <ClInclude Include="PixelPos.hpp" />
+    <ClInclude Include="PositionUtils.hpp" />
+    <ClInclude Include="Queen.hpp" />
+    <ClInclude Include="Rendering.hpp" />
+    <ClInclude Include="Rook.hpp" />
+    <ClInclude Include="Sprite.hpp" />
+    <ClInclude Include="Unit.hpp" />
+    <ClInclude Include="UnitData.hpp" />
+    <ClInclude Include="UnitDirections.hpp" />
+    <ClInclude Include="Utils.hpp" />
+    <ClInclude Include="Vec2.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="dependency.md" />

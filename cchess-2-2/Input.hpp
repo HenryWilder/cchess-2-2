@@ -1,5 +1,6 @@
 #pragma once
-#include "Utils.h"
+#include <Windows.h>
+#include "Utils.hpp"
 
 extern HANDLE g_console;
 extern HANDLE outh;

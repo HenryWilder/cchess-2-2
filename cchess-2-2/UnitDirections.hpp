@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils.h"
+#include "Utils.hpp"
 
 // Starts at 12:00
 Coord Cardinal(int i);
@@ -11,5 +11,5 @@ Coord Diagonal(int i);
 Coord Clockwise(int i);
 
 // Starts at 12:00
-Coord Knight(int i);
+Coord KnightWise(int i);
 

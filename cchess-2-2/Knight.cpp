@@ -1,6 +1,8 @@
-#include "UnitDirections.h"
-#include "Knight.h"
-#include "Board.h"
+#include "Rendering.hpp"
+#include "PieceMoves.hpp"
+#include "UnitDirections.hpp"
+#include "Knight.hpp"
+#include "Board.hpp"
 
 Piece Knight::GetPieceType() const
 {
@@ -21,7 +23,7 @@ void Knight::AvailableMoves(PieceMoves* moves)
 	// Relative space
 	for (unsigned char i = 0; i < 8; ++i)
 	{
-		const Coord testPos = GetLocation() + KnightDir(i); // testPos is the offset location
+		const Coord testPos = GetLocation() + KnightWise(i); // testPos is the offset location
 
 		if (ValidPos(testPos)) // On the board
 		{
@@ -38,7 +40,7 @@ bool Knight::CouldITakeAt(Coord hypothetical)
 	// Find the hypothetical position in the list of possible positions
 	for (int i = 0; i < 8; ++i)
 	{
-		Coord testPos = GetLocation() + KnightDir(i);
+		Coord testPos = GetLocation() + KnightWise(i);
 		if (hypothetical == testPos) return true;
 	}
 	return false;

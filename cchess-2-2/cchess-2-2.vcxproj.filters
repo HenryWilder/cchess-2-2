@@ -19,6 +19,18 @@
     <Filter Include="Source Files\Units">
       <UniqueIdentifier>{b7f2ffdf-9d63-4407-bc36-15cacfa22364}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Positional">
+      <UniqueIdentifier>{25e90196-7b14-4028-b253-c85bed9ac4ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Positional">
+      <UniqueIdentifier>{f454bba4-dc01-43c5-9885-894968377e40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering">
+      <UniqueIdentifier>{f259c38f-d9dd-4e76-b413-b6d002fa287c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering">
+      <UniqueIdentifier>{ada98e81-ea52-4dfa-b609-4ad80afc3089}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -28,9 +40,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Unit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rendering.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp">
@@ -57,52 +66,100 @@
     <ClCompile Include="King.cpp">
       <Filter>Source Files\Units</Filter>
     </ClCompile>
-    <ClCompile Include="Sprites.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="UnitDirections.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PieceMoves.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ghost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameBuffer.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprites.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Board.h">
+    <ClInclude Include="Board.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Unit.h">
+    <ClInclude Include="Unit.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Rendering.h">
+    <ClInclude Include="Input.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
+    <ClInclude Include="Utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Pawn.h">
+    <ClInclude Include="Pawn.hpp">
       <Filter>Header Files\Units</Filter>
     </ClInclude>
-    <ClInclude Include="Rook.h">
+    <ClInclude Include="Rook.hpp">
       <Filter>Header Files\Units</Filter>
     </ClInclude>
-    <ClInclude Include="Knight.h">
+    <ClInclude Include="Knight.hpp">
       <Filter>Header Files\Units</Filter>
     </ClInclude>
-    <ClInclude Include="Bishop.h">
+    <ClInclude Include="Bishop.hpp">
       <Filter>Header Files\Units</Filter>
     </ClInclude>
-    <ClInclude Include="Queen.h">
+    <ClInclude Include="Queen.hpp">
       <Filter>Header Files\Units</Filter>
     </ClInclude>
-    <ClInclude Include="King.h">
+    <ClInclude Include="King.hpp">
       <Filter>Header Files\Units</Filter>
     </ClInclude>
-    <ClInclude Include="UnitDirections.h">
+    <ClInclude Include="UnitDirections.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UnitData.h">
+    <ClInclude Include="UnitData.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PieceMoves.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Coord.hpp">
+      <Filter>Header Files\Positional</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec2.hpp">
+      <Filter>Header Files\Positional</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelPos.hpp">
+      <Filter>Header Files\Positional</Filter>
+    </ClInclude>
+    <ClInclude Include="BoardTile.hpp">
+      <Filter>Header Files\Positional</Filter>
+    </ClInclude>
+    <ClInclude Include="PositionUtils.hpp">
+      <Filter>Header Files\Positional</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering.hpp">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Ghost.hpp">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.hpp">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameBuffer.hpp">
+      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

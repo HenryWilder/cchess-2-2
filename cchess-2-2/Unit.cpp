@@ -1,5 +1,5 @@
-#include "Board.h"
-#include "Unit.h"
+#include "Board.hpp"
+#include "Unit.hpp"
 
 bool Unit::NullOrEnemy(const Unit* unit)
 {
@@ -41,38 +41,6 @@ void Unit::LineTrace(Coord* confirmedMoves, unsigned char& confirmedMoveCount, c
 	{
 		if (PieceIsBlocking(testPos, confirmedMoves, confirmedMoveCount)) break; // If there is a unit at all, break. Append blocking unit if they are an enemy.
 	}
-}
-
-void PieceMoves::SetMoves(const Coord* moves, const unsigned char count)
-{
-	numAvailableMoves = count;
-
-	for (unsigned char i = 0; i < numAvailableMoves; ++i)
-	{
-		available[i] = *(moves + i); // The next index of the moves array
-	}
-}
-
-int PieceMoves::GetMoves(Coord* moves)
-{
-	moves = available;
-	return (int)numAvailableMoves;
-}
-
-bool PieceMoves::MoveIsValid(Coord move) const
-{
-	bool valid = false;
-
-	for (unsigned int i = 0; i < numAvailableMoves; ++i)
-	{
-		if (move == available[i])
-		{
-			valid = true;
-			break;
-		}
-	}
-
-	return valid;
 }
 
 void Unit::Init(Coord pos, UnitColor color, Board* boardSpawningMe, unsigned char id)
