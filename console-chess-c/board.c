@@ -15,7 +15,7 @@ void PlayBoard()
 
 _Bool IncrementTurn()
 {
-
+    return 0;
 }
 
 void GameFlipbook()

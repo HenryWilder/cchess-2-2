@@ -24,6 +24,9 @@
     <ClCompile Include="unit.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="rendering.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h">

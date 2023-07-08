@@ -29,9 +29,10 @@ typedef struct Unit {
     UnitType type;
     UnitTeam team;
     _Bool isMoved;
-} Unit, *UnitPtr, const *UnitCPtr;
+} Unit, *UnitPtr;
 
-void InitUnit(_Inout_ UnitPtr unit, int x, int y, UnitType type, UnitTeam team);
+Unit InitUnit(int x, int y, UnitType type, UnitTeam team);
+void ReInitUnit(_Inout_ UnitPtr unit, int x, int y, UnitType type, UnitTeam team);
 
 // The most moves that any piece can possibly have is a queen at the center of an empty board with an odd-numbered side length.
 // In such a case, the queen can move an entire row and column, as well as two full diagonals (whose lengths match the side length).
@@ -95,9 +96,32 @@ void InitUnit(_Inout_ UnitPtr unit, int x, int y, UnitType type, UnitTeam team);
 
 #define NUM_MAX_MOVE_OPTIONS NUM_QUEEN_MAX_MOVE_OPTIONS
 
-// @returns The number of available movement options
+unsigned int MoveOptionsPawn(
+    _Out_writes_to_(NUM_PAWN_MAX_MOVE_OPTIONS, return) BoardPos options[],
+    _In_ _Pre_satisfies_(_Curr_->type == UNIT_PAWN) const Unit* unit);
+
+unsigned int MoveOptionsRook(
+    _Out_writes_to_(NUM_ROOK_MAX_MOVE_OPTIONS, return) BoardPos options[],
+    _In_ _Pre_satisfies_(_Curr_->type == UNIT_ROOK) const Unit* unit);
+
+unsigned int MoveOptionsKnight(
+    _Out_writes_to_(NUM_KNIGHT_MAX_MOVE_OPTIONS, return) BoardPos options[],
+    _In_ _Pre_satisfies_(_Curr_->type == UNIT_KNIGHT) const Unit* unit);
+
+unsigned int MoveOptionsBishop(
+    _Out_writes_to_(NUM_BISHOP_MAX_MOVE_OPTIONS, return) BoardPos options[],
+    _In_ _Pre_satisfies_(_Curr_->type == UNIT_BISHOP) const Unit* unit);
+
+unsigned int MoveOptionsQueen(
+    _Out_writes_to_(NUM_QUEEN_MAX_MOVE_OPTIONS, return) BoardPos options[],
+    _In_ _Pre_satisfies_(_Curr_->type == UNIT_QUEEN) const Unit* unit);
+
+unsigned int MoveOptionsKing(
+    _Out_writes_to_(NUM_KING_MAX_MOVE_OPTIONS, return) BoardPos options[],
+    _In_ _Pre_satisfies_(_Curr_->type == UNIT_KING) const Unit* unit);
+
 unsigned int MoveOptions(
-    _Pre_count_(NUM_MAX_MOVE_OPTIONS) _Post_count_(return) BoardPos options[],
-    _In_ UnitCPtr unit);
+    _Out_writes_to_(NUM_MAX_MOVE_OPTIONS, return) BoardPos options[],
+    _In_ const Unit* unit);
 
 #endif // !UNIT_H

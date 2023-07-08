@@ -2,7 +2,19 @@
 #include <sal.h>
 #include <assert.h>
 
-void InitUnit(_Inout_ UnitPtr unit, int x, int y, UnitType type, UnitTeam team)
+Unit InitUnit(int x, int y, UnitType type, UnitTeam team)
+{
+    Unit unit = {
+        .position.x = x,
+        .position.y = y,
+        .type = type,
+        .team = team,
+        .isMoved = 0,
+    };
+    return unit;
+}
+
+void ReInitUnit(_Inout_ UnitPtr unit, int x, int y, UnitType type, UnitTeam team)
 {
     unit->position.x = x;
     unit->position.y = y;
@@ -12,8 +24,8 @@ void InitUnit(_Inout_ UnitPtr unit, int x, int y, UnitType type, UnitTeam team)
 }
 
 unsigned int MoveOptionsPawn(
-    _Pre_count_(NUM_PAWN_MAX_MOVE_OPTIONS) _Post_count_(return) BoardPos options[],
-    _In_ const Unit* unit)
+    _Out_writes_to_(NUM_PAWN_MAX_MOVE_OPTIONS, return) BoardPos options[],
+    _In_ _Pre_satisfies_(_Curr_->type == UNIT_PAWN) const Unit* unit)
 {
     assert(unit->type == UNIT_PAWN);
 
@@ -32,8 +44,8 @@ unsigned int MoveOptionsPawn(
 }
 
 unsigned int MoveOptionsRook(
-    _Pre_count_(NUM_ROOK_MAX_MOVE_OPTIONS) _Post_count_(return) BoardPos options[],
-    _In_ const Unit* unit)
+    _Out_writes_to_(NUM_ROOK_MAX_MOVE_OPTIONS, return) BoardPos options[],
+    _In_ _Pre_satisfies_(_Curr_->type == UNIT_ROOK) const Unit* unit)
 {
     assert(unit->type == UNIT_ROOK);
 
@@ -52,8 +64,8 @@ unsigned int MoveOptionsRook(
 }
 
 unsigned int MoveOptionsKnight(
-    _Pre_count_(NUM_KNIGHT_MAX_MOVE_OPTIONS) _Post_count_(return) BoardPos options[],
-    _In_ const Unit* unit)
+    _Out_writes_to_(NUM_KNIGHT_MAX_MOVE_OPTIONS, return) BoardPos options[],
+    _In_ _Pre_satisfies_(_Curr_->type == UNIT_KNIGHT) const Unit* unit)
 {
     assert(unit->type == UNIT_KNIGHT);
 
@@ -72,8 +84,8 @@ unsigned int MoveOptionsKnight(
 }
 
 unsigned int MoveOptionsBishop(
-    _Pre_count_(NUM_BISHOP_MAX_MOVE_OPTIONS) _Post_count_(return) BoardPos options[],
-    _In_ const Unit* unit)
+    _Out_writes_to_(NUM_BISHOP_MAX_MOVE_OPTIONS, return) BoardPos options[],
+    _In_ _Pre_satisfies_(_Curr_->type == UNIT_BISHOP) const Unit* unit)
 {
     assert(unit->type == UNIT_BISHOP);
 
@@ -92,8 +104,8 @@ unsigned int MoveOptionsBishop(
 }
 
 unsigned int MoveOptionsQueen(
-    _Pre_count_(NUM_QUEEN_MAX_MOVE_OPTIONS) _Post_count_(return) BoardPos options[],
-    _In_ const Unit* unit)
+    _Out_writes_to_(NUM_QUEEN_MAX_MOVE_OPTIONS, return) BoardPos options[],
+    _In_ _Pre_satisfies_(_Curr_->type == UNIT_QUEEN) const Unit* unit)
 {
     assert(unit->type == UNIT_QUEEN);
 
@@ -112,8 +124,8 @@ unsigned int MoveOptionsQueen(
 }
 
 unsigned int MoveOptionsKing(
-    _Pre_count_(NUM_KING_MAX_MOVE_OPTIONS) _Post_count_(return) BoardPos options[],
-    _In_ const Unit* unit)
+    _Out_writes_to_(NUM_KING_MAX_MOVE_OPTIONS, return) BoardPos options[],
+    _In_ _Pre_satisfies_(_Curr_->type == UNIT_KING) const Unit* unit)
 {
     assert(unit->type == UNIT_KING);
 
@@ -132,9 +144,17 @@ unsigned int MoveOptionsKing(
 }
 
 unsigned int MoveOptions(
-    _Pre_count_(NUM_MAX_MOVE_OPTIONS) _Post_count_(return) BoardPos options[],
-    _In_ UnitCPtr unit)
+    _Out_writes_to_(NUM_MAX_MOVE_OPTIONS, return) BoardPos options[],
+    _In_ const Unit* unit)
 {
+#if _DEBUG
+    for (unsigned int i = 0; i < NUM_MAX_MOVE_OPTIONS; ++i)
+    {
+        options[i].x = 0;
+        options[i].y = 0;
+    }
+#endif
+
     switch (unit->type)
     {
     case UNIT_PAWN:   return MoveOptionsPawn  (options, unit);
