@@ -3,6 +3,13 @@
 #include "constants.h"
 #include <sal.h>
 
+// Keep parity with vcruntime.h
+#ifdef _WIN64
+typedef unsigned __int64 size_t;
+#else
+typedef unsigned int     size_t;
+#endif
+
 // Uses 3 bits
 typedef enum UnitType {
     UNIT_NONE   = 0,
@@ -20,8 +27,11 @@ typedef enum UnitTeam {
     TEAM_BLACK = 1,
 } UnitTeam;
 
+typedef unsigned char BoardPosCoord_t;
+
 typedef struct BoardPos {
-    unsigned char x, y;
+    BoardPosCoord_t x;
+    BoardPosCoord_t y;
 } BoardPos;
 
 typedef struct Unit {
@@ -31,34 +41,34 @@ typedef struct Unit {
     _Bool isMoved;
 } Unit;
 
-Unit InitUnit(int x, int y, UnitType type, UnitTeam team);
-void ReInitUnit(_Inout_ Unit* unit, int x, int y, UnitType type, UnitTeam team);
+Unit InitUnit(BoardPosCoord_t x, BoardPosCoord_t y, UnitType type, UnitTeam team);
+void ReInitUnit(_Inout_ Unit* unit, BoardPosCoord_t x, BoardPosCoord_t y, UnitType type, UnitTeam team);
 
-unsigned int MoveOptionsPawn(
+size_t MoveOptionsPawn(
     _Out_writes_to_(NUM_PAWN_MAX_MOVE_OPTIONS, return) BoardPos options[],
     _In_ const Unit* unit);
 
-unsigned int MoveOptionsRook(
+size_t MoveOptionsRook(
     _Out_writes_to_(NUM_ROOK_MAX_MOVE_OPTIONS, return) BoardPos options[],
     _In_ const Unit* unit);
 
-unsigned int MoveOptionsKnight(
+size_t MoveOptionsKnight(
     _Out_writes_to_(NUM_KNIGHT_MAX_MOVE_OPTIONS, return) BoardPos options[],
     _In_ const Unit* unit);
 
-unsigned int MoveOptionsBishop(
+size_t MoveOptionsBishop(
     _Out_writes_to_(NUM_BISHOP_MAX_MOVE_OPTIONS, return) BoardPos options[],
     _In_ const Unit* unit);
 
-unsigned int MoveOptionsQueen(
+size_t MoveOptionsQueen(
     _Out_writes_to_(NUM_QUEEN_MAX_MOVE_OPTIONS, return) BoardPos options[],
     _In_ const Unit* unit);
 
-unsigned int MoveOptionsKing(
+size_t MoveOptionsKing(
     _Out_writes_to_(NUM_KING_MAX_MOVE_OPTIONS, return) BoardPos options[],
     _In_ const Unit* unit);
 
-unsigned int MoveOptions(
+size_t MoveOptions(
     _Out_writes_to_(NUM_MAX_MOVE_OPTIONS, return) BoardPos options[],
     _In_ const Unit* unit);
 

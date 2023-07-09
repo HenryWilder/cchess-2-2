@@ -4,9 +4,12 @@
 #include "unit.h"
 #include <sal.h>
 
-void ResetBoard(void);
-void PlayBoard(void);
-_Bool IncrementTurn(void);
+// Keep parity with vcruntime.h
+#ifdef _WIN64
+typedef unsigned __int64 size_t;
+#else
+typedef unsigned int     size_t;
+#endif
 
 void PushMove(BoardPos from, BoardPos to);
 
@@ -21,9 +24,14 @@ struct BoardState {
 
 } extern board;
 
+// Next move in the history
 void GameStateIncrement();
+// Previous move in the history
 void GameStateDecrement();
 
+void ResetBoard(void);
+void PlayBoard(void);
+_Bool IncrementTurn(void);
 void GameFlipbook(void);
 
 #endif // !BOARD_H

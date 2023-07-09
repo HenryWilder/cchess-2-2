@@ -3,21 +3,6 @@
 #include <assert.h>
 #include <stdlib.h>
 
-void ResetBoard()
-{
-    // todo
-}
-
-void PlayBoard()
-{
-    // todo
-}
-
-_Bool IncrementTurn()
-{
-    return 0;
-}
-
 typedef struct Move {
     BoardPos from, to;
 } Move;
@@ -90,9 +75,8 @@ void PushMove(BoardPos from, BoardPos to)
             : 32);
     }
 
-    history.moves[history.numMoves].from = from;
-    history.moves[history.numMoves].to   = to;
-    ++history.numMoves;
+    Move latestMove = { .from = from, .to = to };
+    history.moves[history.numMoves++] = latestMove;
 }
 
 void PopMove()
@@ -118,6 +102,86 @@ void GameStateDecrement()
     // todo
 
     ++historyIndex;
+}
+
+void PushUnit(BoardPosCoord_t x, BoardPosCoord_t y, UnitType type, UnitTeam team)
+{
+    board.units[board.numUnits++] = InitUnit(x, y, type, team);
+}
+
+void RemoveUnit(size_t index)
+{
+
+}
+
+/**
+ * Finds the index of the unit at the coordinates(if any exists).
+ * Returns board.numUnits if not found.
+ */
+size_t IndexOfUnitAtPosition(BoardPosCoord_t x, BoardPosCoord_t y)
+{
+    for (size_t i = 0; i < board.numUnits; ++i)
+    {
+        const BoardPos pos = board.units[i].position;
+        if (pos.x == x && pos.y == y)
+        {
+            return i;
+        }
+    }
+    return board.numUnits;
+}
+
+/**
+ * Finds the index of the unit at the coordinates (if any exists).  
+ * Returns board.numUnits if not found.  
+ * Prefer IndexOfUnitAtPosition() over constructing a BoardPos.
+ */
+inline size_t IndexOfUnitAtBoardPos(BoardPos pos)
+{
+    return IndexOfUnitAtPosition(pos.x, pos.y);
+}
+
+void ResetBoard()
+{
+    board.numUnits = 0;
+
+    UnitType royalty[NUM_BOARD_SIDE_TILES] = {
+        UNIT_ROOK,
+        UNIT_KNIGHT,
+        UNIT_BISHOP,
+        UNIT_QUEEN,
+        UNIT_KING,
+        UNIT_BISHOP,
+        UNIT_KNIGHT,
+        UNIT_ROOK,
+    };
+
+    for (BoardPosCoord_t x = 0; x < NUM_BOARD_SIDE_TILES; ++x)
+    {
+        for (unsigned char yRep = 0; yRep < 4; ++yRep)
+        {
+            _Bool isFirstHalf = (yRep <= 1);
+            _Bool isCenterHalf = ((1 <= yRep) && (yRep <= 2));
+
+            BoardPosCoord_t baseY = isFirstHalf ? (NUM_BOARD_SIDE_TILES - 1) : 0;
+            BoardPosCoord_t offsY = isCenterHalf ? (isFirstHalf ? 1 : -1) : 0;
+
+            UnitType type = isCenterHalf ? royalty[x] : UNIT_PAWN;
+            UnitTeam team = isFirstHalf ? TEAM_WHITE : TEAM_BLACK;
+
+            PushUnit(x, baseY + offsY, type, team);
+        }
+    }
+}
+
+void PlayBoard()
+{
+    // todo
+}
+
+_Bool IncrementTurn()
+{
+    return 0;
 }
 
 void GameFlipbook()

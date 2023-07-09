@@ -17,6 +17,7 @@ int main()
 	HWND window = GetConsoleWindow();
 	hdc = GetDC(window);
 
+	// Program loop
 	while (replay)
 	{
 		ResetBoard();

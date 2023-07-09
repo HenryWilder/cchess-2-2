@@ -2,7 +2,7 @@
 #include <sal.h>
 #include <assert.h>
 
-Unit InitUnit(int x, int y, UnitType type, UnitTeam team)
+Unit InitUnit(BoardPosCoord_t x, BoardPosCoord_t y, UnitType type, UnitTeam team)
 {
     Unit unit = {
         .position.x = x,
@@ -14,7 +14,7 @@ Unit InitUnit(int x, int y, UnitType type, UnitTeam team)
     return unit;
 }
 
-void ReInitUnit(_Inout_ Unit* unit, int x, int y, UnitType type, UnitTeam team)
+void ReInitUnit(_Inout_ Unit* unit, BoardPosCoord_t x, BoardPosCoord_t y, UnitType type, UnitTeam team)
 {
     unit->position.x = x;
     unit->position.y = y;
@@ -23,14 +23,14 @@ void ReInitUnit(_Inout_ Unit* unit, int x, int y, UnitType type, UnitTeam team)
     unit->isMoved = 0;
 }
 
-unsigned int MoveOptionsPawn(
+size_t MoveOptionsPawn(
     _Out_writes_to_(NUM_PAWN_MAX_MOVE_OPTIONS, return) BoardPos options[],
     _In_ const Unit* unit)
 {
     assert(unit->type == UNIT_PAWN);
 
-    unsigned int numOptions = 0;
-    for (unsigned int i = 0; i < NUM_PAWN_MAX_MOVE_OPTIONS; ++i)
+    size_t numOptions = 0;
+    for (size_t i = 0; i < NUM_PAWN_MAX_MOVE_OPTIONS; ++i)
     {
         BoardPos testPos = { 0,0 };
         if (0) { break; }
@@ -43,14 +43,14 @@ unsigned int MoveOptionsPawn(
     return numOptions;
 }
 
-unsigned int MoveOptionsRook(
+size_t MoveOptionsRook(
     _Out_writes_to_(NUM_ROOK_MAX_MOVE_OPTIONS, return) BoardPos options[],
     _In_ const Unit* unit)
 {
     assert(unit->type == UNIT_ROOK);
 
-    unsigned int numOptions = 0;
-    for (unsigned int i = 0; i < NUM_ROOK_MAX_MOVE_OPTIONS; ++i)
+    size_t numOptions = 0;
+    for (size_t i = 0; i < NUM_ROOK_MAX_MOVE_OPTIONS; ++i)
     {
         BoardPos testPos = { 0,0 };
         if (0) { break; }
@@ -63,14 +63,14 @@ unsigned int MoveOptionsRook(
     return numOptions;
 }
 
-unsigned int MoveOptionsKnight(
+size_t MoveOptionsKnight(
     _Out_writes_to_(NUM_KNIGHT_MAX_MOVE_OPTIONS, return) BoardPos options[],
     _In_ const Unit* unit)
 {
     assert(unit->type == UNIT_KNIGHT);
 
-    unsigned int numOptions = 0;
-    for (unsigned int i = 0; i < NUM_KNIGHT_MAX_MOVE_OPTIONS; ++i)
+    size_t numOptions = 0;
+    for (size_t i = 0; i < NUM_KNIGHT_MAX_MOVE_OPTIONS; ++i)
     {
         BoardPos testPos = { 0,0 };
         if (0) { break; }
@@ -83,14 +83,14 @@ unsigned int MoveOptionsKnight(
     return numOptions;
 }
 
-unsigned int MoveOptionsBishop(
+size_t MoveOptionsBishop(
     _Out_writes_to_(NUM_BISHOP_MAX_MOVE_OPTIONS, return) BoardPos options[],
     _In_ const Unit* unit)
 {
     assert(unit->type == UNIT_BISHOP);
 
-    unsigned int numOptions = 0;
-    for (unsigned int i = 0; i < NUM_BISHOP_MAX_MOVE_OPTIONS; ++i)
+    size_t numOptions = 0;
+    for (size_t i = 0; i < NUM_BISHOP_MAX_MOVE_OPTIONS; ++i)
     {
         BoardPos testPos = { 0,0 };
         if (0) { break; }
@@ -103,14 +103,14 @@ unsigned int MoveOptionsBishop(
     return numOptions;
 }
 
-unsigned int MoveOptionsQueen(
+size_t MoveOptionsQueen(
     _Out_writes_to_(NUM_QUEEN_MAX_MOVE_OPTIONS, return) BoardPos options[],
     _In_ const Unit* unit)
 {
     assert(unit->type == UNIT_QUEEN);
 
-    unsigned int numOptions = 0;
-    for (unsigned int i = 0; i < NUM_QUEEN_MAX_MOVE_OPTIONS; ++i)
+    size_t numOptions = 0;
+    for (size_t i = 0; i < NUM_QUEEN_MAX_MOVE_OPTIONS; ++i)
     {
         BoardPos testPos = { 0,0 };
         if (0) { break; }
@@ -123,14 +123,14 @@ unsigned int MoveOptionsQueen(
     return numOptions;
 }
 
-unsigned int MoveOptionsKing(
+size_t MoveOptionsKing(
     _Out_writes_to_(NUM_KING_MAX_MOVE_OPTIONS, return) BoardPos options[],
     _In_ const Unit* unit)
 {
     assert(unit->type == UNIT_KING);
 
-    unsigned int numOptions = 0;
-    for (unsigned int i = 0; i < NUM_KING_MAX_MOVE_OPTIONS; ++i)
+    size_t numOptions = 0;
+    for (size_t i = 0; i < NUM_KING_MAX_MOVE_OPTIONS; ++i)
     {
         BoardPos testPos = { 0,0 };
         if (0) { break; }
@@ -143,7 +143,7 @@ unsigned int MoveOptionsKing(
     return numOptions;
 }
 
-unsigned int MoveOptions(
+size_t MoveOptions(
     _Out_writes_to_(NUM_MAX_MOVE_OPTIONS, return) BoardPos options[],
     _In_ const Unit* unit)
 {
