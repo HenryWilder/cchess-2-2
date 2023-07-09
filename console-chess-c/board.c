@@ -212,7 +212,17 @@ void ReverseMove(Move move)
     }
 }
 
-void PushMove(BoardPos from, BoardPos to, Unit* capturedUnit)
+void ApplyCurrentMove()
+{
+    ApplyMove(history.moves[historyIndex++]);
+}
+
+void ReverseCurrentMove()
+{
+    ReverseMove(history.moves[--historyIndex]);
+}
+
+void PushMove(BoardPos from, BoardPos to)
 {
     if (history.numMoves == history.capMoves)
     {
@@ -220,6 +230,10 @@ void PushMove(BoardPos from, BoardPos to, Unit* capturedUnit)
             ? (history.capMoves * 2)
             : 32);
     }
+
+    Unit* capturedUnit = UnitAtBoardPos(to);
+
+    assert(IndexOfUnitAtBoardPos(from) != board.numUnits); // Cannot push pieceless move (legality is not checked here)
 
     Move latestMove = {
         .from = from,
@@ -230,14 +244,6 @@ void PushMove(BoardPos from, BoardPos to, Unit* capturedUnit)
 
     history.moves[history.numMoves++] = latestMove;
     history.capRedoMoves = history.numMoves;
-}
-
-// Prefer PushMove() if Unit* is already known
-void PushMoveIndexed(BoardPos from, BoardPos to, _In_range_(0, board.numUnits) size_t capturedUnitIndex)
-{
-    _Bool isUnitCaptured = capturedUnitIndex != board.numUnits;
-    Unit* capturedUnit = isUnitCaptured ? &(board.units[capturedUnitIndex]) : NULL;
-    PushMove(from, to, capturedUnit);
 }
 
 // For undoing

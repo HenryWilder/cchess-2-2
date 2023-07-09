@@ -15,7 +15,10 @@ extern size_t turnIndex;
 UnitTeam CurrentTeam();
 UnitTeam OpponentTeam();
 
-void PushMove(BoardPos from, BoardPos to, Unit* capturedUnit);
+void ApplyCurrentMove();
+void ReverseCurrentMove();
+
+void PushMove(BoardPos from, BoardPos to);
 
 // Undo
 void PopMove();

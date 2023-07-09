@@ -17,6 +17,27 @@ int main()
 	HWND window = GetConsoleWindow();
 	hdc = GetDC(window);
 
+#if _DEBUG
+
+	// Faux game for testing gameplay without input
+
+	PrintBoardDebug();
+
+	struct { BoardPos from, to; } fauxMoves[] = {
+		{
+			.from = { .x = 6, .y = 6, },
+			.to   = { .x = 5, .y = 5, },
+		}
+	};
+
+	for (size_t i = 0; i < sizeof(fauxMoves) / sizeof(fauxMoves[0]); ++i)
+	{
+		PushMove(fauxMoves[i].from, fauxMoves[i].to);
+		ApplyCurrentMove();
+	}
+
+#endif
+
 	// Program loop
 	while (replay)
 	{
@@ -28,10 +49,6 @@ int main()
 		while (!gameOver)
 		{
 			PlayBoard();
-#if _DEBUG
-			system("CLS");
-			PrintBoardDebug();
-#endif
 			gameOver = IncrementTurn();
 		}
 
