@@ -164,7 +164,7 @@ void ResetBoard()
             _Bool isCenterHalf = ((1 <= yRep) && (yRep <= 2));
 
             BoardPosCoord_t baseY = isFirstHalf ? (NUM_BOARD_SIDE_TILES - 1) : 0;
-            BoardPosCoord_t offsY = isCenterHalf ? (isFirstHalf ? 1 : -1) : 0;
+            BoardPosCoord_t offsY = isCenterHalf ? (isFirstHalf ? -1 : 1) : 0;
 
             UnitType type = isCenterHalf ? royalty[x] : UNIT_PAWN;
             UnitTeam team = isFirstHalf ? TEAM_WHITE : TEAM_BLACK;
@@ -188,3 +188,58 @@ void GameFlipbook()
 {
     // todo
 }
+
+#if _DEBUG
+#include <stdio.h>
+void PrintBoardDebug()
+{
+#define NUM_ROWS NUM_BOARD_SIDE_TILES
+#define NUM_COLS (NUM_BOARD_SIDE_TILES*2)
+#define NUM_ROW_CHARS (NUM_COLS+1)
+#define NUM_CHARS (NUM_ROW_CHARS*NUM_ROWS)
+
+    char debugBoard[NUM_CHARS] = {0};
+    for (size_t row = 0; row < NUM_ROWS; ++row)
+    {
+        size_t rowStartIndex = row * NUM_ROW_CHARS;
+        for (size_t col = 0; col < NUM_COLS; ++col)
+        {
+            debugBoard[rowStartIndex + col] = ' ';
+        }
+        debugBoard[rowStartIndex + NUM_ROW_CHARS - 1] = '\n';
+    }
+    debugBoard[NUM_CHARS - 1] = '\0';
+
+    for (size_t i = 0; i < board.numUnits; ++i)
+    {
+        const Unit unit = board.units[i];
+
+        size_t index0 = (NUM_ROW_CHARS * (size_t)unit.position.y) + (2 * (size_t)unit.position.x);
+
+        char teamChar = (unit.team == TEAM_WHITE) ? 'w' : 'b';
+        char typeChar;
+        switch (unit.type)
+        {
+        case UNIT_PAWN:   typeChar = 'P'; break;
+        case UNIT_ROOK:   typeChar = 'R'; break;
+        case UNIT_KNIGHT: typeChar = 'k'; break;
+        case UNIT_BISHOP: typeChar = 'B'; break;
+        case UNIT_QUEEN:  typeChar = 'Q'; break;
+        case UNIT_KING:   typeChar = 'K'; break;
+
+        default:
+        case UNIT_NONE: typeChar = '?'; break;
+        }
+
+        debugBoard[index0] = teamChar;
+        debugBoard[index0 + 1] = typeChar;
+    }
+
+    printf(debugBoard);
+
+#undef NUM_ROWS
+#undef NUM_COLS
+#undef NUM_ROW_CHARS
+#undef NUM_CHARS
+}
+#endif

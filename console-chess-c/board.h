@@ -34,4 +34,8 @@ void PlayBoard(void);
 _Bool IncrementTurn(void);
 void GameFlipbook(void);
 
+#if _DEBUG
+void PrintBoardDebug();
+#endif
+
 #endif // !BOARD_H
