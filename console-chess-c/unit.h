@@ -11,6 +11,7 @@ typedef unsigned int     size_t;
 #endif
 
 // Uses 3 bits
+_Struct_size_bytes_(1)
 typedef enum UnitType {
     UNIT_NONE   = 0,
     UNIT_PAWN   = 1,
@@ -22,16 +23,22 @@ typedef enum UnitType {
 } UnitType;
 
 // Uses 1 bit
+_Struct_size_bytes_(1)
 typedef enum UnitTeam {
     TEAM_WHITE = 0,
     TEAM_BLACK = 1,
 } UnitTeam;
 
-typedef unsigned char BoardPosCoord_t;
+typedef _Field_range_(0, INDEX_MAX_BOARD_SIDE_TILES) unsigned char BoardPosCoord_t;
 
 typedef struct BoardPos {
+
+    _Field_range_(0, INDEX_MAX_BOARD_SIDE_TILES)
     BoardPosCoord_t x;
+
+    _Field_range_(0, INDEX_MAX_BOARD_SIDE_TILES)
     BoardPosCoord_t y;
+
 } BoardPos;
 
 typedef struct Unit {

@@ -7,6 +7,7 @@
 // const ints used for checking the values of the macros.
 
 #define NUM_BOARD_SIDE_TILES 8
+#define INDEX_MAX_BOARD_SIDE_TILES (NUM_BOARD_SIDE_TILES-1)
 #define NUM_BOARD_TILES (NUM_BOARD_SIDE_TILES*NUM_BOARD_SIDE_TILES)
 
 #define NUM_TILE_SIDE_PIXELS 16

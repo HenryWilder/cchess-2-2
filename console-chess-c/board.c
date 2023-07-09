@@ -3,9 +3,21 @@
 #include <assert.h>
 #include <stdlib.h>
 
+size_t turnIndex = 0;
+
+UnitTeam CurrentTeam()
+{
+    return turnIndex & 1 ? TEAM_BLACK : TEAM_WHITE;
+}
+
+UnitTeam OpponentTeam()
+{
+    return CurrentTeam() == TEAM_WHITE ? TEAM_BLACK : TEAM_WHITE;
+}
+
 typedef struct Move {
     BoardPos from, to;
-    UnitType x;
+    UnitType x; // Use UNIT_NONE to indicate no unit is captured
     _Bool isCaptureMoved;
 } Move;
 
@@ -26,7 +38,7 @@ struct History {
     .capMoves     = 0,
     .capRedoMoves = 0,
     .numMoves     = 0,
-    .moves        = NULL,
+    .moves        = (Move*)NULL,
 };
 
 struct BoardState board = {
@@ -37,7 +49,7 @@ struct BoardState board = {
  * Finds the index of the unit at the coordinates(if any exists).
  * Returns board.numUnits if not found.
  */
-_Return_type_success_(return < board.numUnits) size_t IndexOfUnitAtPosition(BoardPosCoord_t x, BoardPosCoord_t y)
+_Return_type_success_(return < board.numUnits) _Must_inspect_result_ size_t IndexOfUnitAtPosition(BoardPosCoord_t x, BoardPosCoord_t y)
 {
     for (size_t i = 0; i < board.numUnits; ++i)
     {
@@ -55,12 +67,12 @@ _Return_type_success_(return < board.numUnits) size_t IndexOfUnitAtPosition(Boar
  * Returns board.numUnits if not found.  
  * Prefer IndexOfUnitAtPosition() over constructing a BoardPos.
  */
-_Return_type_success_(return < board.numUnits) size_t IndexOfUnitAtBoardPos(BoardPos pos)
+_Return_type_success_(return < board.numUnits) _Must_inspect_result_ size_t IndexOfUnitAtBoardPos(BoardPos pos)
 {
     return IndexOfUnitAtPosition(pos.x, pos.y);
 }
 
-_Return_type_success_(return != NULL) Unit* UnitAtPosition(BoardPosCoord_t x, BoardPosCoord_t y)
+_Return_type_success_(return != NULL) _Must_inspect_result_ Unit* UnitAtPosition(BoardPosCoord_t x, BoardPosCoord_t y)
 {
     size_t index = IndexOfUnitAtPosition(x, y);
 
@@ -73,9 +85,60 @@ _Return_type_success_(return != NULL) Unit* UnitAtPosition(BoardPosCoord_t x, Bo
     return unitPtr;
 }
 
-_Return_type_success_(return != NULL) Unit* UnitAtBoardPos(BoardPos pos)
+// Prefer UnitAtPosition() over constructing a BoardPos
+_Return_type_success_(return != NULL) _Must_inspect_result_ Unit* UnitAtBoardPos(BoardPos pos)
 {
     return UnitAtPosition(pos.x, pos.y);
+}
+
+void PushUnitRaw(Unit unit)
+{
+    board.units[board.numUnits++] = unit;
+}
+
+void PushUnit(BoardPosCoord_t x, BoardPosCoord_t y, UnitType type, UnitTeam team)
+{
+    PushUnitRaw(InitUnit(x, y, type, team));
+}
+
+/**
+ * Assume all unit pointers are invalidated when this is called.
+ */
+void RemoveUnitAtIndex(_In_range_(0, (board.numUnits - 1)) size_t index)
+{
+    assert(index < board.numUnits);
+
+    for (size_t i = index + 1; i < board.numUnits; ++i)
+    {
+        board.units[i - 1] = board.units[i];
+    }
+    --board.numUnits;
+}
+
+/**
+ * Prefer RemoveUnitAtIndex() if unit index is already known
+ * Assume all unit pointers are invalidated when this is called.
+ */
+void RemoveUnit(Unit* unit)
+{
+    assert(unit != NULL);
+
+    size_t index = board.numUnits;
+    for (size_t i = 0; i < board.numUnits; ++i)
+    {
+        if (&(board.units[i]) == unit)
+        {
+            index = i;
+            break;
+        }
+    }
+
+    if (index == board.numUnits)
+    {
+        return;
+    }
+
+    RemoveUnitAtIndex(index);
 }
 
 size_t historyIndex = 0; // Tracks GameState position in history
@@ -119,14 +182,34 @@ _Return_type_success_(1) _Bool ReserveHistory(size_t newSize)
 
 void ApplyMove(Move move)
 {
+    if (move.x != UNIT_NONE)
+    {
+        size_t targetUnitIndex = IndexOfUnitAtBoardPos(move.to);
+        assert(targetUnitIndex != board.numUnits);
+        RemoveUnit(targetUnitIndex);
+    }
+
     Unit* subjectUnit = UnitAtBoardPos(move.from);
-    Unit* targetUnit  = UnitAtBoardPos(move.to);
+    assert(subjectUnit != NULL);
+    subjectUnit->position = move.to;
 }
 
 void ReverseMove(Move move)
 {
-    Unit* subjectUnit = UnitAtBoardPos(move.from);
-    Unit* targetUnit  = UnitAtBoardPos(move.to);
+    Unit* subjectUnit = UnitAtBoardPos(move.to);
+    assert(subjectUnit != NULL);
+    subjectUnit->position = move.from;
+
+    if (move.x != UNIT_NONE)
+    {
+        Unit reincarnatedUnit = {
+            .position = move.to,
+            .type = move.x,
+            .team = OpponentTeam(),
+            .isMoved = move.isCaptureMoved,
+        };
+        PushUnitRaw(reincarnatedUnit);
+    }
 }
 
 void PushMove(BoardPos from, BoardPos to, Unit* capturedUnit)
@@ -147,6 +230,14 @@ void PushMove(BoardPos from, BoardPos to, Unit* capturedUnit)
 
     history.moves[history.numMoves++] = latestMove;
     history.capRedoMoves = history.numMoves;
+}
+
+// Prefer PushMove() if Unit* is already known
+void PushMoveIndexed(BoardPos from, BoardPos to, _In_range_(0, board.numUnits) size_t capturedUnitIndex)
+{
+    _Bool isUnitCaptured = capturedUnitIndex != board.numUnits;
+    Unit* capturedUnit = isUnitCaptured ? &(board.units[capturedUnitIndex]) : NULL;
+    PushMove(from, to, capturedUnit);
 }
 
 // For undoing
@@ -182,20 +273,6 @@ void GameStateIncrement()
     ApplyMove(history.moves[historyIndex]);
 
     ++historyIndex;
-}
-
-void PushUnit(BoardPosCoord_t x, BoardPosCoord_t y, UnitType type, UnitTeam team)
-{
-    board.units[board.numUnits++] = InitUnit(x, y, type, team);
-}
-
-void RemoveUnit(size_t index)
-{
-    for (size_t i = index + 1; i < board.numUnits; ++i)
-    {
-        board.units[i - 1] = board.units[i];
-    }
-    --board.numUnits;
 }
 
 void ResetBoard()

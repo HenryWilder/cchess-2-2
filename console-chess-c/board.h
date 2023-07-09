@@ -11,6 +11,10 @@ typedef unsigned __int64 size_t;
 typedef unsigned int     size_t;
 #endif
 
+extern size_t turnIndex;
+UnitTeam CurrentTeam();
+UnitTeam OpponentTeam();
+
 void PushMove(BoardPos from, BoardPos to, Unit* capturedUnit);
 
 // Undo

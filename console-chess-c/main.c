@@ -22,16 +22,16 @@ int main()
 	{
 		ResetBoard();
 
-#if _DEBUG
-		PrintBoardDebug();
-		break;
-#endif
 		_Bool gameOver = 0;
 
 		// Game loop
 		while (!gameOver)
 		{
 			PlayBoard();
+#if _DEBUG
+			system("CLS");
+			PrintBoardDebug();
+#endif
 			gameOver = IncrementTurn();
 		}
 

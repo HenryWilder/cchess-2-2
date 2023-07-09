@@ -23,9 +23,7 @@ void ReInitUnit(_Inout_ Unit* unit, BoardPosCoord_t x, BoardPosCoord_t y, UnitTy
     unit->isMoved = 0;
 }
 
-size_t MoveOptionsPawn(
-    _Out_writes_to_(NUM_PAWN_MAX_MOVE_OPTIONS, return) BoardPos options[],
-    _In_ const Unit* unit)
+_Use_decl_annotations_ size_t MoveOptionsPawn(BoardPos options[],const Unit* unit)
 {
     assert(unit->type == UNIT_PAWN);
 
@@ -43,9 +41,7 @@ size_t MoveOptionsPawn(
     return numOptions;
 }
 
-size_t MoveOptionsRook(
-    _Out_writes_to_(NUM_ROOK_MAX_MOVE_OPTIONS, return) BoardPos options[],
-    _In_ const Unit* unit)
+_Use_decl_annotations_ size_t MoveOptionsRook(BoardPos options[], const Unit* unit)
 {
     assert(unit->type == UNIT_ROOK);
 
@@ -63,9 +59,7 @@ size_t MoveOptionsRook(
     return numOptions;
 }
 
-size_t MoveOptionsKnight(
-    _Out_writes_to_(NUM_KNIGHT_MAX_MOVE_OPTIONS, return) BoardPos options[],
-    _In_ const Unit* unit)
+_Use_decl_annotations_ size_t MoveOptionsKnight(BoardPos options[], const Unit* unit)
 {
     assert(unit->type == UNIT_KNIGHT);
 
@@ -83,9 +77,7 @@ size_t MoveOptionsKnight(
     return numOptions;
 }
 
-size_t MoveOptionsBishop(
-    _Out_writes_to_(NUM_BISHOP_MAX_MOVE_OPTIONS, return) BoardPos options[],
-    _In_ const Unit* unit)
+_Use_decl_annotations_ size_t MoveOptionsBishop(BoardPos options[], const Unit* unit)
 {
     assert(unit->type == UNIT_BISHOP);
 
@@ -103,9 +95,7 @@ size_t MoveOptionsBishop(
     return numOptions;
 }
 
-size_t MoveOptionsQueen(
-    _Out_writes_to_(NUM_QUEEN_MAX_MOVE_OPTIONS, return) BoardPos options[],
-    _In_ const Unit* unit)
+_Use_decl_annotations_ size_t MoveOptionsQueen(BoardPos options[], const Unit* unit)
 {
     assert(unit->type == UNIT_QUEEN);
 
@@ -123,9 +113,7 @@ size_t MoveOptionsQueen(
     return numOptions;
 }
 
-size_t MoveOptionsKing(
-    _Out_writes_to_(NUM_KING_MAX_MOVE_OPTIONS, return) BoardPos options[],
-    _In_ const Unit* unit)
+_Use_decl_annotations_ size_t MoveOptionsKing(BoardPos options[], const Unit* unit)
 {
     assert(unit->type == UNIT_KING);
 
@@ -143,9 +131,7 @@ size_t MoveOptionsKing(
     return numOptions;
 }
 
-size_t MoveOptions(
-    _Out_writes_to_(NUM_MAX_MOVE_OPTIONS, return) BoardPos options[],
-    _In_ const Unit* unit)
+_Use_decl_annotations_ size_t MoveOptions(BoardPos options[], const Unit* unit)
 {
     switch (unit->type)
     {
