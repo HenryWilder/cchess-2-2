@@ -186,7 +186,7 @@ void ApplyMove(Move move)
     {
         size_t targetUnitIndex = IndexOfUnitAtBoardPos(move.to);
         assert(targetUnitIndex != board.numUnits);
-        RemoveUnit(targetUnitIndex);
+        RemoveUnitAtIndex(targetUnitIndex);
     }
 
     Unit* subjectUnit = UnitAtBoardPos(move.from);
