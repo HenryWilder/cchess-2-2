@@ -5,11 +5,16 @@
 
 typedef struct Move {
     BoardPos from, to;
+    UnitType x;
+    _Bool isCaptureMoved;
 } Move;
 
 struct History {
 
     size_t capMoves;
+
+    _Field_range_(0, capMoves)
+    size_t capRedoMoves;
 
     _Field_range_(0, capMoves)
     size_t numMoves;
@@ -18,14 +23,60 @@ struct History {
     Move* moves;
 
 } history = {
-    .capMoves = 0,
-    .numMoves = 0,
-    .moves    = NULL,
+    .capMoves     = 0,
+    .capRedoMoves = 0,
+    .numMoves     = 0,
+    .moves        = NULL,
 };
 
 struct BoardState board = {
     .numUnits = 0,
 };
+
+/**
+ * Finds the index of the unit at the coordinates(if any exists).
+ * Returns board.numUnits if not found.
+ */
+_Return_type_success_(return < board.numUnits) size_t IndexOfUnitAtPosition(BoardPosCoord_t x, BoardPosCoord_t y)
+{
+    for (size_t i = 0; i < board.numUnits; ++i)
+    {
+        const BoardPos pos = board.units[i].position;
+        if (pos.x == x && pos.y == y)
+        {
+            return i;
+        }
+    }
+    return board.numUnits;
+}
+
+/**
+ * Finds the index of the unit at the coordinates (if any exists).  
+ * Returns board.numUnits if not found.  
+ * Prefer IndexOfUnitAtPosition() over constructing a BoardPos.
+ */
+_Return_type_success_(return < board.numUnits) size_t IndexOfUnitAtBoardPos(BoardPos pos)
+{
+    return IndexOfUnitAtPosition(pos.x, pos.y);
+}
+
+_Return_type_success_(return != NULL) Unit* UnitAtPosition(BoardPosCoord_t x, BoardPosCoord_t y)
+{
+    size_t index = IndexOfUnitAtPosition(x, y);
+
+    _Bool isUnitAtPosition = (index != board.numUnits);
+
+    Unit* unitPtr = isUnitAtPosition
+        ? &(board.units[index])
+        : NULL;
+
+    return unitPtr;
+}
+
+_Return_type_success_(return != NULL) Unit* UnitAtBoardPos(BoardPos pos)
+{
+    return UnitAtPosition(pos.x, pos.y);
+}
 
 size_t historyIndex = 0; // Tracks GameState position in history
 
@@ -66,7 +117,19 @@ _Return_type_success_(1) _Bool ReserveHistory(size_t newSize)
     return 1;
 }
 
-void PushMove(BoardPos from, BoardPos to)
+void ApplyMove(Move move)
+{
+    Unit* subjectUnit = UnitAtBoardPos(move.from);
+    Unit* targetUnit  = UnitAtBoardPos(move.to);
+}
+
+void ReverseMove(Move move)
+{
+    Unit* subjectUnit = UnitAtBoardPos(move.from);
+    Unit* targetUnit  = UnitAtBoardPos(move.to);
+}
+
+void PushMove(BoardPos from, BoardPos to, Unit* capturedUnit)
 {
     if (history.numMoves == history.capMoves)
     {
@@ -75,10 +138,18 @@ void PushMove(BoardPos from, BoardPos to)
             : 32);
     }
 
-    Move latestMove = { .from = from, .to = to };
+    Move latestMove = {
+        .from = from,
+        .to = to,
+        .x = capturedUnit ? capturedUnit->type : UNIT_NONE,
+        .isCaptureMoved = capturedUnit && capturedUnit->isMoved,
+    };
+
     history.moves[history.numMoves++] = latestMove;
+    history.capRedoMoves = history.numMoves;
 }
 
+// For undoing
 void PopMove()
 {
     assert(history.numMoves > 0);
@@ -86,20 +157,29 @@ void PopMove()
     --history.numMoves;
 }
 
-void GameStateIncrement()
+// For redoing
+void UnPopMove()
 {
-    assert(historyIndex > 0);
-
-    // todo
-
-    --historyIndex;
+    if (history.numMoves < history.capRedoMoves)
+    {
+        ++history.numMoves;
+    }
 }
 
 void GameStateDecrement()
 {
+    assert(historyIndex > 0);
+
+    --historyIndex;
+
+    ReverseMove(history.moves[historyIndex]);
+}
+
+void GameStateIncrement()
+{
     assert(historyIndex < (history.numMoves - 1));
     
-    // todo
+    ApplyMove(history.moves[historyIndex]);
 
     ++historyIndex;
 }
@@ -111,34 +191,11 @@ void PushUnit(BoardPosCoord_t x, BoardPosCoord_t y, UnitType type, UnitTeam team
 
 void RemoveUnit(size_t index)
 {
-
-}
-
-/**
- * Finds the index of the unit at the coordinates(if any exists).
- * Returns board.numUnits if not found.
- */
-size_t IndexOfUnitAtPosition(BoardPosCoord_t x, BoardPosCoord_t y)
-{
-    for (size_t i = 0; i < board.numUnits; ++i)
+    for (size_t i = index + 1; i < board.numUnits; ++i)
     {
-        const BoardPos pos = board.units[i].position;
-        if (pos.x == x && pos.y == y)
-        {
-            return i;
-        }
+        board.units[i - 1] = board.units[i];
     }
-    return board.numUnits;
-}
-
-/**
- * Finds the index of the unit at the coordinates (if any exists).  
- * Returns board.numUnits if not found.  
- * Prefer IndexOfUnitAtPosition() over constructing a BoardPos.
- */
-inline size_t IndexOfUnitAtBoardPos(BoardPos pos)
-{
-    return IndexOfUnitAtPosition(pos.x, pos.y);
+    --board.numUnits;
 }
 
 void ResetBoard()
@@ -163,8 +220,8 @@ void ResetBoard()
             _Bool isFirstHalf = (yRep <= 1);
             _Bool isCenterHalf = ((1 <= yRep) && (yRep <= 2));
 
-            BoardPosCoord_t baseY = isFirstHalf ? (NUM_BOARD_SIDE_TILES - 1) : 0;
-            BoardPosCoord_t offsY = isCenterHalf ? (isFirstHalf ? -1 : 1) : 0;
+            BoardPosCoord_t baseY = isFirstHalf ? 0 : (NUM_BOARD_SIDE_TILES - 1);
+            BoardPosCoord_t offsY = isCenterHalf ? (isFirstHalf ? 1 : -1) : 0;
 
             UnitType type = isCenterHalf ? royalty[x] : UNIT_PAWN;
             UnitTeam team = isFirstHalf ? TEAM_WHITE : TEAM_BLACK;

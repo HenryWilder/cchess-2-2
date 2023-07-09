@@ -11,9 +11,12 @@ typedef unsigned __int64 size_t;
 typedef unsigned int     size_t;
 #endif
 
-void PushMove(BoardPos from, BoardPos to);
+void PushMove(BoardPos from, BoardPos to, Unit* capturedUnit);
 
+// Undo
 void PopMove();
+//Redo
+void UnPopMove();
 
 struct BoardState {
 
@@ -24,10 +27,10 @@ struct BoardState {
 
 } extern board;
 
-// Next move in the history
-void GameStateIncrement();
 // Previous move in the history
 void GameStateDecrement();
+// Next move in the history
+void GameStateIncrement();
 
 void ResetBoard(void);
 void PlayBoard(void);
