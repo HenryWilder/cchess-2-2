@@ -1,5 +1,10 @@
 #include "sprite.h"
 
+// Single
+#define S(x)   { 0x##x, 0x##x }
+// Pair
+#define P(x,y) { 0x##x, 0x##y }
+
 // 0 = Fill
 // 1 = Shade
 // 2 = Outline
@@ -28,29 +33,36 @@ HBRUSH spriteBrushes[2][NUM_TEAM_SPRITE_BRUSHES];
 //0123456789ABCDEF//
 
 const SpritePart pawnOutlineParts[] = {
-    {.x = { 0x6, 0x9 }, .y = { 0x3, 0xF }, },
-    {.x = { 0x5, 0xA }, .y = { 0x4, 0x7 }, },
-    {.x = { 0x5, 0xA }, .y = { 0x9, 0x9 }, },
-    {.x = { 0x5, 0xA }, .y = { 0xD, 0xD }, },
-    {.x = { 0x4, 0xB }, .y = { 0xE, 0xF }, },
+    {.x = P(6,9), .y = P(3,F), },
+    {.x = P(5,A), .y = P(4,7), },
+    {.x = P(5,A), .y = S(9),   },
+    {.x = P(5,A), .y = S(D),   },
+    {.x = P(4,B), .y = P(E,F), },
 };
 const SpritePart pawnFillParts[] = {
-    {.x = { 0x6, 0x9 }, .y = { 0x4, 0x7 }, },
-    {.x = { 0x7, 0x8 }, .y = { 0x9, 0xE }, },
-    {.x = { 0x6, 0x9 }, .y = { 0xE, 0xE }, },
+    {.x = P(6,9), .y = P(4,7), },
+    {.x = P(7,8), .y = P(8,E), },
+    {.x = P(6,9), .y = S(9),   },
+    {.x = P(6,9), .y = S(D),   },
+    {.x = P(5,A), .y = S(E),   },
 };
 const SpritePart pawnShadeParts[] = {
-    {.x = { 0x6, 0x9 }, .y = { 0x3, 0x3 }, },
-    {.x = { 0x6, 0x9 }, .y = { 0x3, 0x3 }, },
-    {.x = { 0x5, 0x5 }, .y = { 0x4, 0x4 }, },
-    {.x = { 0xA, 0xA }, .y = { 0x4, 0x6 }, },
-    {.x = { 0x6, 0x6 }, .y = { 0x7, 0x7 }, },
-    {.x = { 0x7, 0x9 }, .y = { 0x8, 0x8 }, },
-    {.x = { 0x6, 0x6 }, .y = { 0x9, 0x9 }, },
+    {.x = P(6,9), .y = S(3),   },
+    {.x = S(5),   .y = S(4),   },
+    {.x = S(A),   .y = P(4,6), },
+    {.x = S(6),   .y = S(7),   },
+    {.x = S(7),   .y = S(8),   },
+    {.x = S(6),   .y = S(9),   },
+    {.x = S(7),   .y = S(A),   },
+    {.x = S(6),   .y = S(D),   },
+    {.x = S(5),   .y = S(E),   },
 };
 const SpritePart pawnShineParts[] = {
-    {.x = { 0x8, 0x9 }, .y = { 0x4, 0x5 }, },
-    {.x = { 0x8, 0x8 }, .y = { 0x8, 0x8 }, },
+    {.x = P(8,9), .y = P(4,5), },
+    {.x = S(8),   .y = S(8),   },
+    {.x = S(9),   .y = S(9),   },
+    {.x = S(8),   .y = P(A,D), },
+    {.x = P(9,A), .y = S(E),   },
 };
 
 const Sprite pawn = {
