@@ -20,9 +20,172 @@
 /////////////////////
 //0123456789ABCDEF//
 
+// Only this one has the layers shown, for example purposes
 const SpritePart pawnParts[] = {
-    { .brushIndex = 1, .x = 0x6, .y = 0x3, .w = 0x4, .h = 0x1, },
-    { .brushIndex = 1, .x = 0x5, .y = 0x4, .w = 0x4, .h = 0x1, },
+    //
+    //
+    //
+    //
+    //
+    //
+    //  222222
+    //
+    //
+    //
+    //
+    //
+    //
+    { .brushIndex = 2, .x0 = 0x5, .x1 = 0xA, .y0 = 0x9, .y1 = 0x9, },
+
+    //
+    //
+    //
+    //
+    //
+    //   2222
+    //  222222
+    //   2222
+    //   2222
+    //   2222
+    //
+    //
+    //
+    { .brushIndex = 2, .x0 = 0x6, .x1 = 0x9, .y0 = 0x8, .y1 = 0xC, },
+
+    //
+    //
+    //
+    //
+    //
+    //   2222
+    //  222222
+    //   2222
+    //   2222
+    //   2222
+    //  222222
+    //
+    //
+    { .brushIndex = 2, .x0 = 0x5, .x1 = 0xA, .y0 = 0xD, .y1 = 0xD, },
+
+    //
+    //
+    //
+    //
+    //
+    //   2222
+    //  222222
+    //   2222
+    //   2222
+    //   2222
+    //  222222
+    // 22222222
+    // 22222222
+    { .brushIndex = 2, .x0 = 0x4, .x1 = 0xB, .y0 = 0xE, .y1 = 0xF, },
+
+    //
+    //
+    //  222222
+    //  222222
+    //  222222
+    //   2222
+    //  222222
+    //   2222
+    //   2222
+    //   2222
+    //  222222
+    // 22222222
+    // 22222222
+    { .brushIndex = 2, .x0 = 0x5, .x1 = 0xA, .y0 = 0x5, .y1 = 0x7, },
+
+    //
+    //  1
+    //  222222
+    //  222222
+    //  222222
+    //   2222
+    //  222222
+    //   2222
+    //   2222
+    //   2222
+    //  222222
+    // 22222222
+    // 22222222
+    { .brushIndex = 1, .x0 = 0x5, .x1 = 0x5, .y0 = 0x4, .y1 = 0x4, },
+
+    //
+    //  1    1
+    //  222221
+    //  222221
+    //  222222
+    //   2222
+    //  222222
+    //   2222
+    //   2222
+    //   2222
+    //  222222
+    // 22222222
+    // 22222222
+    { .brushIndex = 1, .x0 = 0xA, .x1 = 0xA, .y0 = 0x4, .y1 = 0x6, },
+
+    //   1111
+    //  1    1
+    //  222221
+    //  222221
+    //  222222
+    //   2222
+    //  222222
+    //   2222
+    //   2222
+    //   2222
+    //  222222
+    // 22222222
+    // 22222222
+    { .brushIndex = 1, .x0 = 0x6, .x1 = 0x9, .y0 = 0x3, .y1 = 0x3, },
+
+    //   1111
+    //  100  1
+    //  200221
+    //  200221
+    //  222222
+    //   2222
+    //  222222
+    //   2222
+    //   2222
+    //   2222
+    //  222222
+    // 22222222
+    // 22222222
+    { .brushIndex = 0, .x0 = 0x6, .x1 = 0x7, .y0 = 0x4, .y1 = 0x6, },
+
+    //   1111
+    //  100  1
+    //  200221
+    //  200001
+    //  220002
+    //   2222
+    //  222222
+    //   2222
+    //   2222
+    //   2222
+    //  222222
+    // 22222222
+    // 22222222
+    { .brushIndex = 0, .x0 = 0x7, .x1 = 0x9, .y0 = 0x6, .y1 = 0x7, },
+
+    //   1111
+    //  100331
+    //  200331
+    //  200001
+    //  220002
+    //   2222
+    //  222222
+    //   2222
+    //   2222
+    //   2222
+    //  222222
+    // 22222222
+    // 22222222
+    { .brushIndex = 3, .x0 = 0x8, .x1 = 0x9, .y0 = 0x4, .y1 = 0x5, },
 };
 
 // Rook /////////////
@@ -46,7 +209,7 @@ const SpritePart pawnParts[] = {
 //0123456789ABCDEF//
 
 const SpritePart rookParts[] = {
-    { .brushIndex = , .x = , .y = , .w = , .h = , },
+    { .brushIndex = 0, .x0 = 0x0, .x1 = 0x0, .y0 = 0x0, .y1 = 0x0, },
 };
 
 // Knight ///////////
@@ -70,7 +233,7 @@ const SpritePart rookParts[] = {
 //0123456789ABCDEF//
 
 const SpritePart knightParts[] = {
-    { .brushIndex = , .x = , .y = , .w = , .h = , },
+    { .brushIndex = 0, .x0 = 0x0, .x1 = 0x0, .y0 = 0x0, .y1 = 0x0, },
 };
 
 // Bishop ///////////
@@ -94,7 +257,7 @@ const SpritePart knightParts[] = {
 //0123456789ABCDEF//
 
 const SpritePart bishopParts[] = {
-    { .brushIndex = , .x = , .y = , .w = , .h = , },
+    { .brushIndex = 0, .x0 = 0x0, .x1 = 0x0, .y0 = 0x0, .y1 = 0x0, },
 };
 
 // Queen ////////////
@@ -118,7 +281,7 @@ const SpritePart bishopParts[] = {
 //0123456789ABCDEF//
 
 const SpritePart queenParts[] = {
-    { .brushIndex = , .x = , .y = , .w = , .h = , },
+    { .brushIndex = 0, .x0 = 0x0, .x1 = 0x0, .y0 = 0x0, .y1 = 0x0, },
 };
 
 // King /////////////
@@ -142,7 +305,7 @@ const SpritePart queenParts[] = {
 //0123456789ABCDEF//
 
 const SpritePart kingParts[] = {
-    { .brushIndex = , .x = , .y = , .w = , .h = , },
+    { .brushIndex = 0, .x0 = 0x0, .x1 = 0x0, .y0 = 0x0, .y1 = 0x0, },
 };
 
 const Sprite null   = {                     0,         NULL };
@@ -176,7 +339,7 @@ const Sprite* units[] = { &null, &pawn, &rook, &knight, &bishop, &queen, &king, 
 //0123456789ABCDEF//
 
 const SpritePart arrowLParts[] = {
-    { .brushIndex = , .x = , .y = , .w = , .h = , },
+    { .brushIndex = 0, .x0 = 0x0, .x1 = 0x0, .y0 = 0x0, .y1 = 0x0, },
 };
 
 // ArrowR ///////////
@@ -200,7 +363,7 @@ const SpritePart arrowLParts[] = {
 //0123456789ABCDEF//
 
 const SpritePart arrowRParts[] = {
-    { .brushIndex = , .x = , .y = , .w = , .h = , },
+    { .brushIndex = 0, .x0 = 0x0, .x1 = 0x0, .y0 = 0x0, .y1 = 0x0, },
 };
 
 const Sprite arrowL = { _countof(arrowLParts), &arrowLParts };

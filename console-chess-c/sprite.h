@@ -15,9 +15,7 @@ typedef struct SpritePart {
     _Field_range_(0, NUM_TEAM_SPRITE_BRUSHES - 1)
     size_t brushIndex;
 
-    unsigned char
-        x, y,
-        w, h;
+    unsigned char x0, x1, y0, y1;
 
 } SpritePart;
 
