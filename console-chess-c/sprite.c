@@ -1,9 +1,22 @@
 #include "sprite.h"
 
+#if 1
 // Single
 #define S(x)   { 0x##x, 0x##x }
 // Pair
 #define P(x,y) { 0x##x, 0x##y }
+#else
+#define A 0xA
+#define B 0xB
+#define C 0xC
+#define D 0xD
+#define E 0xE
+#define F 0xF
+// Single
+#define S(x)   { x, x }
+// Pair
+#define P(x,y) { x, y }
+#endif
 
 // 0 = Fill
 // 1 = Shade
@@ -98,7 +111,11 @@ const Sprite pawn = {
 //0123456789ABCDEF//
 
 const SpritePart rookOutlineParts[] = {
-    {0}
+    {.x = P(3,C), .y = P(2,5), },
+    {.x = P(4,B), .y = S(6),   },
+    {.x = P(5,A), .y = P(7,A), },
+    {.x = P(4,B), .y = P(B,C), },
+    {.x = P(3,C), .y = P(D,F), },
 };
 const SpritePart rookFillParts[] = {
     {0}
@@ -143,7 +160,18 @@ const Sprite rook = {
 //0123456789ABCDEF//
 
 const SpritePart knightOutlineParts[] = {
-    {0}
+    {.x = P(6,7), .y = S(0),   },
+    {.x = P(5,8), .y = S(1),   },
+    {.x = P(4,D), .y = S(2),   },
+    {.x = P(3,E), .y = P(3,5), },
+    {.x = P(4,D), .y = S(6),   },
+    {.x = P(4,B), .y = S(7),   },
+    {.x = P(5,A), .y = S(8),   },
+    {.x = P(6,B), .y = S(9),   },
+    {.x = P(6,C), .y = P(A,B), },
+    {.x = P(5,C), .y = S(C),   },
+    {.x = P(4,B), .y = S(D),   },
+    {.x = P(3,C), .y = P(E,F), },
 };
 const SpritePart knightFillParts[] = {
     {0}
@@ -188,7 +216,15 @@ const Sprite knight = {
 //0123456789ABCDEF//
 
 const SpritePart bishopOutlineParts[] = {
-    {0}
+    {.x = P(7,8), .y = S(0),   },
+    {.x = P(6,9), .y = P(1,A), },
+    {.x = P(5,A), .y = P(2,6), },
+    {.x = S(4),   .y = P(3,5), },
+    {.x = S(B),   .y = P(4,5), },
+    {.x = P(5,A), .y = S(8),   },
+    {.x = P(5,A), .y = P(B,C), },
+    {.x = P(4,B), .y = S(D),   },
+    {.x = P(3,C), .y = P(E,F), },
 };
 const SpritePart bishopFillParts[] = {
     {0}
@@ -233,7 +269,14 @@ const Sprite bishop = {
 //0123456789ABCDEF//
 
 const SpritePart queenOutlineParts[] = {
-    {0}
+    {.x = P(7,8), .y = S(0),   },
+    {.x = P(3,C), .y = P(1,3), },
+    {.x = P(4,B), .y = S(4),   },
+    {.x = P(5,A), .y = P(5,6), },
+    {.x = P(6,9), .y = P(7,A), },
+    {.x = P(5,A), .y = P(B,C), },
+    {.x = P(4,B), .y = S(D),   },
+    {.x = P(3,C), .y = P(E,F), },
 };
 const SpritePart queenFillParts[] = {
     {0}
@@ -278,7 +321,15 @@ const Sprite queen = {
 //0123456789ABCDEF//
 
 const SpritePart kingOutlineParts[] = {
-    {0}
+    {.x = P(7,8), .y = S(0),   },
+    {.x = P(6,9), .y = S(1),   },
+    {.x = P(4,B), .y = P(2,4), },
+    {.x = P(5,A), .y = P(5,6), },
+    {.x = P(6,9), .y = P(7,A), },
+    {.x = P(5,A), .y = S(8),   },
+    {.x = P(5,A), .y = P(B,C), },
+    {.x = P(4,B), .y = S(D),   },
+    {.x = P(3,C), .y = P(E,F), },
 };
 const SpritePart kingFillParts[] = {
     {0}
