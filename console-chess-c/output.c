@@ -79,9 +79,12 @@ void DrawSprite(int xPixel, int yPixel, UnitType type, UnitTeam team)
 
 void DrawUnit(const Unit* unit)
 {
-    DrawSprite(
-        unit->position.x * NUM_OUTPUT_TILE_SIDE_PIXELS,
-        unit->position.y * NUM_OUTPUT_TILE_SIDE_PIXELS,
-        unit->type,
-        unit->team);
+    if (unit != NULL)
+    {
+        DrawSprite(
+            unit->position.x * NUM_OUTPUT_TILE_SIDE_PIXELS,
+            unit->position.y * NUM_OUTPUT_TILE_SIDE_PIXELS,
+            unit->type,
+            unit->team);
+    }
 }

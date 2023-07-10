@@ -45,6 +45,7 @@ void DecrementTurn(void);
 _Bool IncrementTurn(void);
 void GameFlipbook(void);
 
+void DrawTile(BoardPos tile);
 void RedrawBoard();
 
 #if _DEBUG
