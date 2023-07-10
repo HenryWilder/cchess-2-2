@@ -1,7 +1,9 @@
 #include <Windows.h>
+#include "input.h"
 #include "constants.h"
 #include "unit.h"
 #include "board.h"
+#include "output.h"
 #include <stdio.h>
 
 extern HDC hdc;
@@ -14,10 +16,15 @@ int main()
 
 	_Bool replay = 1;
 
+	inputHandle = GetStdHandle(STD_INPUT_HANDLE);
+	SetConsoleMode(inputHandle, ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
+
 	HWND window = GetConsoleWindow();
 	hdc = GetDC(window);
 
-#if _DEBUG
+	InitBrushes();
+
+#if _DEBUG && 0
 
 	// Faux game for testing gameplay without input
 
@@ -76,6 +83,7 @@ int main()
 		// Game loop
 		while (!gameOver)
 		{
+			RedrawBoard();
 			PlayBoard();
 			gameOver = IncrementTurn();
 		}

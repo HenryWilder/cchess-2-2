@@ -31,8 +31,10 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <EnableASAN>true</EnableASAN>
-    <EnableFuzzer>true</EnableFuzzer>
+    <EnableASAN>
+    </EnableASAN>
+    <EnableFuzzer>
+    </EnableFuzzer>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -46,8 +48,10 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <EnableASAN>true</EnableASAN>
-    <EnableFuzzer>true</EnableFuzzer>
+    <EnableASAN>
+    </EnableASAN>
+    <EnableFuzzer>
+    </EnableFuzzer>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -174,13 +178,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="board.c" />
+    <ClCompile Include="input.c" />
     <ClCompile Include="main.c" />
-    <ClCompile Include="rendering.c" />
+    <ClCompile Include="output.c" />
+    <ClCompile Include="sprite.c" />
     <ClCompile Include="unit.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="board.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="input.h" />
+    <ClInclude Include="output.h" />
+    <ClInclude Include="sprite.h" />
     <ClInclude Include="unit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
