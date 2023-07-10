@@ -1,8 +1,8 @@
-#include <stdio.h>
 #include <Windows.h>
 #include "constants.h"
 #include "unit.h"
 #include "board.h"
+#include <stdio.h>
 
 extern HDC hdc;
 
@@ -21,19 +21,24 @@ int main()
 
 	// Faux game for testing gameplay without input
 
+	ResetBoard();
+
 	PrintBoardDebug();
 
-	struct { BoardPos from, to; } fauxMoves[] = {
+	typedef struct FauxMove { BoardPos from, to; } FauxMove;
+
+	FauxMove fauxMoves[1] = {
 		{
 			.from = { .x = 6, .y = 6, },
 			.to   = { .x = 5, .y = 5, },
 		}
 	};
 
-	for (size_t i = 0; i < sizeof(fauxMoves) / sizeof(fauxMoves[0]); ++i)
+	for (size_t i = 0; i < sizeof(fauxMoves) / sizeof(FauxMove); ++i)
 	{
 		PushMove(fauxMoves[i].from, fauxMoves[i].to);
 		ApplyCurrentMove();
+		PrintBoardDebug();
 	}
 
 #endif
