@@ -12,18 +12,18 @@ typedef unsigned int     size_t;
 #endif
 
 extern size_t turnIndex;
-UnitTeam CurrentTeam();
-UnitTeam OpponentTeam();
+UnitTeam CurrentTeam(void);
+UnitTeam OpponentTeam(void);
 
-void ApplyCurrentMove();
-void ReverseCurrentMove();
+void ApplyCurrentMove(void);
+void UnapplyCurrentMove(void);
 
 void PushMove(BoardPos from, BoardPos to);
 
 // Undo
-void PopMove();
+void PopMove(void);
 //Redo
-void UnPopMove();
+void UnPopMove(void);
 
 struct BoardState {
 
@@ -35,17 +35,18 @@ struct BoardState {
 } extern board;
 
 // Previous move in the history
-void GameStateDecrement();
+void GameStateDecrement(void);
 // Next move in the history
-void GameStateIncrement();
+void GameStateIncrement(void);
 
 void ResetBoard(void);
 void PlayBoard(void);
+void DecrementTurn(void);
 _Bool IncrementTurn(void);
 void GameFlipbook(void);
 
 #if _DEBUG
-void PrintBoardDebug();
+void PrintBoardDebug(void);
 #endif
 
 #endif // !BOARD_H
