@@ -1,5 +1,7 @@
 #include "sprite.h"
 
+HBRUSH spriteBrushes[2][NUM_TEAM_SPRITE_BRUSHES];
+
 // Pawn /////////////
 //                //0
 //                //1
@@ -20,172 +22,12 @@
 /////////////////////
 //0123456789ABCDEF//
 
-// Only this one has the layers shown, for example purposes
 const SpritePart pawnParts[] = {
-    //
-    //
-    //
-    //
-    //
-    //
-    //  222222
-    //
-    //
-    //
-    //
-    //
-    //
-    { .brushIndex = 2, .x0 = 0x5, .x1 = 0xA, .y0 = 0x9, .y1 = 0x9, },
-
-    //
-    //
-    //
-    //
-    //
-    //   2222
-    //  222222
-    //   2222
-    //   2222
-    //   2222
-    //
-    //
-    //
-    { .brushIndex = 2, .x0 = 0x6, .x1 = 0x9, .y0 = 0x8, .y1 = 0xC, },
-
-    //
-    //
-    //
-    //
-    //
-    //   2222
-    //  222222
-    //   2222
-    //   2222
-    //   2222
-    //  222222
-    //
-    //
-    { .brushIndex = 2, .x0 = 0x5, .x1 = 0xA, .y0 = 0xD, .y1 = 0xD, },
-
-    //
-    //
-    //
-    //
-    //
-    //   2222
-    //  222222
-    //   2222
-    //   2222
-    //   2222
-    //  222222
-    // 22222222
-    // 22222222
-    { .brushIndex = 2, .x0 = 0x4, .x1 = 0xB, .y0 = 0xE, .y1 = 0xF, },
-
-    //
-    //
-    //  222222
-    //  222222
-    //  222222
-    //   2222
-    //  222222
-    //   2222
-    //   2222
-    //   2222
-    //  222222
-    // 22222222
-    // 22222222
-    { .brushIndex = 2, .x0 = 0x5, .x1 = 0xA, .y0 = 0x5, .y1 = 0x7, },
-
-    //
-    //  1
-    //  222222
-    //  222222
-    //  222222
-    //   2222
-    //  222222
-    //   2222
-    //   2222
-    //   2222
-    //  222222
-    // 22222222
-    // 22222222
-    { .brushIndex = 1, .x0 = 0x5, .x1 = 0x5, .y0 = 0x4, .y1 = 0x4, },
-
-    //
-    //  1    1
-    //  222221
-    //  222221
-    //  222222
-    //   2222
-    //  222222
-    //   2222
-    //   2222
-    //   2222
-    //  222222
-    // 22222222
-    // 22222222
-    { .brushIndex = 1, .x0 = 0xA, .x1 = 0xA, .y0 = 0x4, .y1 = 0x6, },
-
-    //   1111
-    //  1    1
-    //  222221
-    //  222221
-    //  222222
-    //   2222
-    //  222222
-    //   2222
-    //   2222
-    //   2222
-    //  222222
-    // 22222222
-    // 22222222
-    { .brushIndex = 1, .x0 = 0x6, .x1 = 0x9, .y0 = 0x3, .y1 = 0x3, },
-
-    //   1111
-    //  100  1
-    //  200221
-    //  200221
-    //  222222
-    //   2222
-    //  222222
-    //   2222
-    //   2222
-    //   2222
-    //  222222
-    // 22222222
-    // 22222222
-    { .brushIndex = 0, .x0 = 0x6, .x1 = 0x7, .y0 = 0x4, .y1 = 0x6, },
-
-    //   1111
-    //  100  1
-    //  200221
-    //  200001
-    //  220002
-    //   2222
-    //  222222
-    //   2222
-    //   2222
-    //   2222
-    //  222222
-    // 22222222
-    // 22222222
-    { .brushIndex = 0, .x0 = 0x7, .x1 = 0x9, .y0 = 0x6, .y1 = 0x7, },
-
-    //   1111
-    //  100331
-    //  200331
-    //  200001
-    //  220002
-    //   2222
-    //  222222
-    //   2222
-    //   2222
-    //   2222
-    //  222222
-    // 22222222
-    // 22222222
-    { .brushIndex = 3, .x0 = 0x8, .x1 = 0x9, .y0 = 0x4, .y1 = 0x5, },
+    { .brushIndex = 0, .x0 = 0x6, 0x9, .y0 = 0x3, 0xF, },
+    { .brushIndex = 0, .x0 = 0x5, 0xA, .y0 = 0x4, 0x7, },
+    { .brushIndex = 0, .x0 = 0x5, 0xA, .y0 = 0x9, 0x9, },
+    { .brushIndex = 0, .x0 = 0x5, 0xA, .y0 = 0xD, 0xD, },
+    { .brushIndex = 0, .x0 = 0x4, 0xB, .y0 = 0xE, 0xF, },
 };
 
 // Rook /////////////
@@ -316,7 +158,7 @@ const Sprite bishop = { _countof(bishopParts), &bishopParts };
 const Sprite queen  = { _countof( queenParts),  &queenParts };
 const Sprite king   = { _countof(  kingParts),   &kingParts };
 
-const Sprite* units[] = { &null, &pawn, &rook, &knight, &bishop, &queen, &king, };
+const Sprite* unitSprites[] = { &null, &pawn, &rook, &knight, &bishop, &queen, &king, };
 
 // ArrowL ///////////
 //       22       //0
@@ -369,4 +211,4 @@ const SpritePart arrowRParts[] = {
 const Sprite arrowL = { _countof(arrowLParts), &arrowLParts };
 const Sprite arrowR = { _countof(arrowRParts), &arrowRParts };
 
-const Sprite* arrows[] = { &arrowL, &arrowR, };
+const Sprite* arrowSprites[] = { &arrowL, &arrowR, };

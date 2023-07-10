@@ -7,7 +7,7 @@
 #define NUM_TEAM_SPRITE_BRUSHES 4
 
 // spriteBrushes[team][brushIndex]
-extern const spriteBrushes[2][NUM_TEAM_SPRITE_BRUSHES];
+extern HBRUSH spriteBrushes[2][NUM_TEAM_SPRITE_BRUSHES];
 
 typedef struct SpritePart {
 
@@ -29,7 +29,7 @@ typedef struct Sprite {
 
 } Sprite;
 
-const Sprite* units[7];
-const Sprite* arrows[2];
+const Sprite* unitSprites[7];
+const Sprite* arrowSprites[2];
 
 #endif // !SPRITE_H

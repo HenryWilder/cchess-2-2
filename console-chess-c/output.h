@@ -10,7 +10,7 @@ void InitBrushes();
 void DrawEmptyTile(BoardPos pos);
 void DrawHighlightedTile(BoardPos pos);
 
-void DrawUnit(const Unit* unit);
 void DrawSprite(int xPixel, int yPixel, UnitType type, UnitTeam team);
+void DrawUnit(const Unit* unit);
 
 #endif // OUTPUT_H
