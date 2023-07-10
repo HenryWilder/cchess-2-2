@@ -20,13 +20,7 @@
 ////////////////////
 
 const SpritePart pawnParts[] = {
-    {
-        .brushIndex = 1,
-        .x = 6,
-        .y = 3,
-        .w = 4,
-        .h = 1,
-    }
+    { .brushIndex = 1, .x = 6, .y = 3, .w = 4, .h = 1, }
 };
 
 // Rook ////////////
@@ -49,13 +43,7 @@ const SpritePart pawnParts[] = {
 ////////////////////
 
 const SpritePart rookParts[] = {
-    {
-        .brushIndex = ,
-        .x = ,
-        .y = ,
-        .w = ,
-        .h = ,
-    }
+    { .brushIndex = , .x = , .y = , .w = , .h = , }
 };
 
 // Knight //////////
@@ -78,13 +66,7 @@ const SpritePart rookParts[] = {
 ////////////////////
 
 const SpritePart knightParts[] = {
-    {
-        .brushIndex = ,
-        .x = ,
-        .y = ,
-        .w = ,
-        .h = ,
-    }
+    { .brushIndex = , .x = , .y = , .w = , .h = , }
 };
 
 // Bishop //////////
@@ -107,13 +89,7 @@ const SpritePart knightParts[] = {
 ////////////////////
 
 const SpritePart bishopParts[] = {
-    {
-        .brushIndex = ,
-        .x = ,
-        .y = ,
-        .w = ,
-        .h = ,
-    }
+    { .brushIndex = , .x = , .y = , .w = , .h = , }
 };
 
 // Queen ///////////
@@ -136,13 +112,7 @@ const SpritePart bishopParts[] = {
 ////////////////////
 
 const SpritePart queenParts[] = {
-    {
-        .brushIndex = ,
-        .x = ,
-        .y = ,
-        .w = ,
-        .h = ,
-    }
+    { .brushIndex = , .x = , .y = , .w = , .h = , }
 };
 
 // King ////////////
@@ -165,13 +135,7 @@ const SpritePart queenParts[] = {
 ////////////////////
 
 const SpritePart kingParts[] = {
-    {
-        .brushIndex = ,
-        .x = ,
-        .y = ,
-        .w = ,
-        .h = ,
-    }
+    { .brushIndex = , .x = , .y = , .w = , .h = , }
 };
 
 const Sprite null   = {                     0,         NULL };
@@ -204,13 +168,7 @@ const Sprite* units[] = { &null, &pawn, &rook, &knight, &bishop, &queen, &king, 
 ////////////////////
 
 const SpritePart arrowLParts[] = {
-    {
-        .brushIndex = ,
-        .x = ,
-        .y = ,
-        .w = ,
-        .h = ,
-    }
+    { .brushIndex = , .x = , .y = , .w = , .h = , }
 };
 
 // ArrowR //////////
@@ -233,13 +191,7 @@ const SpritePart arrowLParts[] = {
 ////////////////////
 
 const SpritePart arrowRParts[] = {
-    {
-        .brushIndex = ,
-        .x = ,
-        .y = ,
-        .w = ,
-        .h = ,
-    }
+    { .brushIndex = , .x = , .y = , .w = , .h = , }
 };
 
 const Sprite arrowL = { _countof(arrowLParts), &arrowLParts };
