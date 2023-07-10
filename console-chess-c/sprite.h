@@ -11,21 +11,21 @@ extern HBRUSH spriteBrushes[2][NUM_TEAM_SPRITE_BRUSHES];
 
 typedef struct SpritePart {
 
-    // Team independent
-    _Field_range_(0, NUM_TEAM_SPRITE_BRUSHES - 1)
-    size_t brushIndex;
-
-    unsigned char x0, x1, y0, y1;
+    unsigned char x[2], y[2];
 
 } SpritePart;
 
 typedef struct Sprite {
 
-    _Field_range_(0, NUM_TILE_PIXELS)
-    size_t numParts;
+    _Field_range_(0, NUM_TILE_PIXELS) size_t numOutlineParts;
+    _Field_range_(0, NUM_TILE_PIXELS) size_t numFillParts;
+    _Field_range_(0, NUM_TILE_PIXELS) size_t numShadeParts;
+    _Field_range_(0, NUM_TILE_PIXELS) size_t numShineParts;
 
-    _Field_size_(numParts)
-    SpritePart* parts;
+    _Field_size_(numOutlineParts) SpritePart* outlineParts;
+    _Field_size_(numFillParts)    SpritePart*    fillParts;
+    _Field_size_(numShadeParts)   SpritePart*   shadeParts;
+    _Field_size_(numShineParts)   SpritePart*   shineParts;
 
 } Sprite;
 

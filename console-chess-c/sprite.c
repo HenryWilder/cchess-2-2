@@ -1,5 +1,10 @@
 #include "sprite.h"
 
+// 0 = Fill
+// 1 = Shade
+// 2 = Outline
+// 3 = Shine
+
 HBRUSH spriteBrushes[2][NUM_TEAM_SPRITE_BRUSHES];
 
 // Pawn /////////////
@@ -22,12 +27,42 @@ HBRUSH spriteBrushes[2][NUM_TEAM_SPRITE_BRUSHES];
 /////////////////////
 //0123456789ABCDEF//
 
-const SpritePart pawnParts[] = {
-    { .brushIndex = 0, .x0 = 0x6, 0x9, .y0 = 0x3, 0xF, },
-    { .brushIndex = 0, .x0 = 0x5, 0xA, .y0 = 0x4, 0x7, },
-    { .brushIndex = 0, .x0 = 0x5, 0xA, .y0 = 0x9, 0x9, },
-    { .brushIndex = 0, .x0 = 0x5, 0xA, .y0 = 0xD, 0xD, },
-    { .brushIndex = 0, .x0 = 0x4, 0xB, .y0 = 0xE, 0xF, },
+const SpritePart pawnOutlineParts[] = {
+    {.x = { 0x6, 0x9 }, .y = { 0x3, 0xF }, },
+    {.x = { 0x5, 0xA }, .y = { 0x4, 0x7 }, },
+    {.x = { 0x5, 0xA }, .y = { 0x9, 0x9 }, },
+    {.x = { 0x5, 0xA }, .y = { 0xD, 0xD }, },
+    {.x = { 0x4, 0xB }, .y = { 0xE, 0xF }, },
+};
+const SpritePart pawnFillParts[] = {
+    {.x = { 0x6, 0x9 }, .y = { 0x4, 0x7 }, },
+    {.x = { 0x7, 0x8 }, .y = { 0x9, 0xE }, },
+    {.x = { 0x6, 0x9 }, .y = { 0xE, 0xE }, },
+};
+const SpritePart pawnShadeParts[] = {
+    {.x = { 0x6, 0x9 }, .y = { 0x3, 0x3 }, },
+    {.x = { 0x6, 0x9 }, .y = { 0x3, 0x3 }, },
+    {.x = { 0x5, 0x5 }, .y = { 0x4, 0x4 }, },
+    {.x = { 0xA, 0xA }, .y = { 0x4, 0x6 }, },
+    {.x = { 0x6, 0x6 }, .y = { 0x7, 0x7 }, },
+    {.x = { 0x7, 0x9 }, .y = { 0x8, 0x8 }, },
+    {.x = { 0x6, 0x6 }, .y = { 0x9, 0x9 }, },
+};
+const SpritePart pawnShineParts[] = {
+    {.x = { 0x8, 0x9 }, .y = { 0x4, 0x5 }, },
+    {.x = { 0x8, 0x8 }, .y = { 0x8, 0x8 }, },
+};
+
+const Sprite pawn = {
+    .numOutlineParts = _countof(pawnOutlineParts),
+    .numFillParts    = _countof(pawnFillParts),
+    .numShadeParts   = _countof(pawnShadeParts),
+    .numShineParts   = _countof(pawnShineParts),
+
+    pawnOutlineParts,
+    pawnFillParts,
+    pawnShadeParts,
+    pawnShineParts,
 };
 
 // Rook /////////////
@@ -50,8 +85,29 @@ const SpritePart pawnParts[] = {
 /////////////////////
 //0123456789ABCDEF//
 
-const SpritePart rookParts[] = {
-    { .brushIndex = 0, .x0 = 0x0, .x1 = 0x0, .y0 = 0x0, .y1 = 0x0, },
+const SpritePart rookOutlineParts[] = {
+    {0}
+};
+const SpritePart rookFillParts[] = {
+    {0}
+};
+const SpritePart rookShadeParts[] = {
+    {0}
+};
+const SpritePart rookShineParts[] = {
+    {0}
+};
+
+const Sprite rook = {
+    .numOutlineParts = _countof(rookOutlineParts),
+    .numFillParts    = _countof(rookFillParts),
+    .numShadeParts   = _countof(rookShadeParts),
+    .numShineParts   = _countof(rookShineParts),
+
+    rookOutlineParts,
+    rookFillParts,
+    rookShadeParts,
+    rookShineParts,
 };
 
 // Knight ///////////
@@ -74,8 +130,29 @@ const SpritePart rookParts[] = {
 /////////////////////
 //0123456789ABCDEF//
 
-const SpritePart knightParts[] = {
-    { .brushIndex = 0, .x0 = 0x0, .x1 = 0x0, .y0 = 0x0, .y1 = 0x0, },
+const SpritePart knightOutlineParts[] = {
+    {0}
+};
+const SpritePart knightFillParts[] = {
+    {0}
+};
+const SpritePart knightShadeParts[] = {
+    {0}
+};
+const SpritePart knightShineParts[] = {
+    {0}
+};
+
+const Sprite knight = {
+    .numOutlineParts = _countof(knightOutlineParts),
+    .numFillParts    = _countof(knightFillParts),
+    .numShadeParts   = _countof(knightShadeParts),
+    .numShineParts   = _countof(knightShineParts),
+
+    knightOutlineParts,
+    knightFillParts,
+    knightShadeParts,
+    knightShineParts,
 };
 
 // Bishop ///////////
@@ -98,8 +175,29 @@ const SpritePart knightParts[] = {
 /////////////////////
 //0123456789ABCDEF//
 
-const SpritePart bishopParts[] = {
-    { .brushIndex = 0, .x0 = 0x0, .x1 = 0x0, .y0 = 0x0, .y1 = 0x0, },
+const SpritePart bishopOutlineParts[] = {
+    {0}
+};
+const SpritePart bishopFillParts[] = {
+    {0}
+};
+const SpritePart bishopShadeParts[] = {
+    {0}
+};
+const SpritePart bishopShineParts[] = {
+    {0}
+};
+
+const Sprite bishop = {
+    .numOutlineParts = _countof(bishopOutlineParts),
+    .numFillParts    = _countof(bishopFillParts),
+    .numShadeParts   = _countof(bishopShadeParts),
+    .numShineParts   = _countof(bishopShineParts),
+
+    bishopOutlineParts,
+    bishopFillParts,
+    bishopShadeParts,
+    bishopShineParts,
 };
 
 // Queen ////////////
@@ -122,8 +220,29 @@ const SpritePart bishopParts[] = {
 /////////////////////
 //0123456789ABCDEF//
 
-const SpritePart queenParts[] = {
-    { .brushIndex = 0, .x0 = 0x0, .x1 = 0x0, .y0 = 0x0, .y1 = 0x0, },
+const SpritePart queenOutlineParts[] = {
+    {0}
+};
+const SpritePart queenFillParts[] = {
+    {0}
+};
+const SpritePart queenShadeParts[] = {
+    {0}
+};
+const SpritePart queenShineParts[] = {
+    {0}
+};
+
+const Sprite queen = {
+    .numOutlineParts = _countof(queenOutlineParts),
+    .numFillParts    = _countof(queenFillParts),
+    .numShadeParts   = _countof(queenShadeParts),
+    .numShineParts   = _countof(queenShineParts),
+
+    queenOutlineParts,
+    queenFillParts,
+    queenShadeParts,
+    queenShineParts,
 };
 
 // King /////////////
@@ -146,19 +265,32 @@ const SpritePart queenParts[] = {
 /////////////////////
 //0123456789ABCDEF//
 
-const SpritePart kingParts[] = {
-    { .brushIndex = 0, .x0 = 0x0, .x1 = 0x0, .y0 = 0x0, .y1 = 0x0, },
+const SpritePart kingOutlineParts[] = {
+    {0}
+};
+const SpritePart kingFillParts[] = {
+    {0}
+};
+const SpritePart kingShadeParts[] = {
+    {0}
+};
+const SpritePart kingShineParts[] = {
+    {0}
 };
 
-const Sprite null   = {                     0,         NULL };
-const Sprite pawn   = { _countof(  pawnParts),   &pawnParts };
-const Sprite rook   = { _countof(  rookParts),   &rookParts };
-const Sprite knight = { _countof(knightParts), &knightParts };
-const Sprite bishop = { _countof(bishopParts), &bishopParts };
-const Sprite queen  = { _countof( queenParts),  &queenParts };
-const Sprite king   = { _countof(  kingParts),   &kingParts };
+const Sprite king = {
+    .numOutlineParts = _countof(kingOutlineParts),
+    .numFillParts    = _countof(kingFillParts),
+    .numShadeParts   = _countof(kingShadeParts),
+    .numShineParts   = _countof(kingShineParts),
 
-const Sprite* unitSprites[] = { &null, &pawn, &rook, &knight, &bishop, &queen, &king, };
+    kingOutlineParts,
+    kingFillParts,
+    kingShadeParts,
+    kingShineParts,
+};
+
+const Sprite* unitSprites[] = { NULL, &pawn, &rook, &knight, &bishop, &queen, &king, };
 
 // ArrowL ///////////
 //       22       //0
@@ -180,8 +312,29 @@ const Sprite* unitSprites[] = { &null, &pawn, &rook, &knight, &bishop, &queen, &
 /////////////////////
 //0123456789ABCDEF//
 
-const SpritePart arrowLParts[] = {
-    { .brushIndex = 0, .x0 = 0x0, .x1 = 0x0, .y0 = 0x0, .y1 = 0x0, },
+const SpritePart arrowLOutlineParts[] = {
+    {0}
+};
+const SpritePart arrowLFillParts[] = {
+    {0}
+};
+const SpritePart arrowLShadeParts[] = {
+    {0}
+};
+const SpritePart arrowLShineParts[] = {
+    {0}
+};
+
+const Sprite arrowL = {
+    .numOutlineParts = _countof(arrowLOutlineParts),
+    .numFillParts    = _countof(arrowLFillParts),
+    .numShadeParts   = _countof(arrowLShadeParts),
+    .numShineParts   = _countof(arrowLShineParts),
+
+    arrowLOutlineParts,
+    arrowLFillParts,
+    arrowLShadeParts,
+    arrowLShineParts,
 };
 
 // ArrowR ///////////
@@ -204,11 +357,29 @@ const SpritePart arrowLParts[] = {
 /////////////////////
 //0123456789ABCDEF//
 
-const SpritePart arrowRParts[] = {
-    { .brushIndex = 0, .x0 = 0x0, .x1 = 0x0, .y0 = 0x0, .y1 = 0x0, },
+const SpritePart arrowROutlineParts[] = {
+    {0}
+};
+const SpritePart arrowRFillParts[] = {
+    {0}
+};
+const SpritePart arrowRShadeParts[] = {
+    {0}
+};
+const SpritePart arrowRShineParts[] = {
+    {0}
 };
 
-const Sprite arrowL = { _countof(arrowLParts), &arrowLParts };
-const Sprite arrowR = { _countof(arrowRParts), &arrowRParts };
+const Sprite arrowR = {
+    .numOutlineParts = _countof(arrowROutlineParts),
+    .numFillParts    = _countof(arrowRFillParts),
+    .numShadeParts   = _countof(arrowRShadeParts),
+    .numShineParts   = _countof(arrowRShineParts),
+
+    arrowROutlineParts,
+    arrowRFillParts,
+    arrowRShadeParts,
+    arrowRShineParts,
+};
 
 const Sprite* arrowSprites[] = { &arrowL, &arrowR, };
