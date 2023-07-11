@@ -6,6 +6,13 @@
 
 #define NUM_TEAM_SPRITE_BRUSHES 4
 
+typedef enum UnitBrush {
+    UNITBRUSH_OUTLINE,
+    UNITBRUSH_FILL,
+    UNITBRUSH_SHADE,
+    UNITBRUSH_SHINE,
+} UnitBrush;
+
 // spriteBrushes[team][brushIndex]
 extern HBRUSH spriteBrushes[2][NUM_TEAM_SPRITE_BRUSHES];
 
@@ -14,6 +21,15 @@ typedef struct SpritePart {
     unsigned char x[2], y[2];
 
 } SpritePart;
+
+typedef struct SpritePalette {
+
+    HBRUSH outlineBrush;
+    HBRUSH    fillBrush;
+    HBRUSH   shadeBrush;
+    HBRUSH   shineBrush;
+
+} SpritePalette;
 
 typedef struct Sprite {
 

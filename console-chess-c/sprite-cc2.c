@@ -501,28 +501,22 @@ const Sprite* unitSprites[] = { NULL, &pawn, &rook, &knight, &bishop, &queen, &k
 //0123456789ABCDEF//   |  //0123456789ABCDEF//   //0123456789ABCDEF//
 
 const SpritePart arrowLOutlineParts[] = {
-    {.x = V(8,A), .y = V( 3 ), },
+    {.x = V(7,8), .y = V(0,F), },
 };
 const SpritePart arrowLFillParts[] = {
-    {0}
-};
-const SpritePart arrowLShadeParts[] = {
-    {0}
-};
-const SpritePart arrowLShineParts[] = {
-    {0}
+    {.x = V( 7 ), .y = V(1,E), },
 };
 
 const Sprite arrowL = {
     .numOutlineParts = _countof(arrowLOutlineParts),
     .numFillParts    = _countof(arrowLFillParts),
-    .numShadeParts   = _countof(arrowLShadeParts),
-    .numShineParts   = _countof(arrowLShineParts),
+    .numShadeParts   = 0,
+    .numShineParts   = 0,
 
     arrowLOutlineParts,
     arrowLFillParts,
-    arrowLShadeParts,
-    arrowLShineParts,
+    NULL,
+    NULL,
 };
 
 // ArrowR ///////////  |  // Outline //////////  // Fill /////////////
@@ -546,28 +540,22 @@ const Sprite arrowL = {
 //0123456789ABCDEF//   |  //0123456789ABCDEF//   //0123456789ABCDEF//
 
 const SpritePart arrowROutlineParts[] = {
-    {0}
+    {.x = V(7,8), .y = V(0,F), },
 };
 const SpritePart arrowRFillParts[] = {
-    {0}
-};
-const SpritePart arrowRShadeParts[] = {
-    {0}
-};
-const SpritePart arrowRShineParts[] = {
-    {0}
+    {.x = V( 8 ), .y = V(1,E), },
 };
 
 const Sprite arrowR = {
     .numOutlineParts = _countof(arrowROutlineParts),
     .numFillParts    = _countof(arrowRFillParts),
-    .numShadeParts   = _countof(arrowRShadeParts),
-    .numShineParts   = _countof(arrowRShineParts),
+    .numShadeParts   = 0,
+    .numShineParts   = 0,
 
     arrowROutlineParts,
     arrowRFillParts,
-    arrowRShadeParts,
-    arrowRShineParts,
+    NULL,
+    NULL,
 };
 
 const Sprite* arrowSprites[] = { &arrowL, &arrowR, };
