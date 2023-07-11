@@ -1,22 +1,6 @@
 #include "sprite.h"
 
-#if 1
-// Single
-#define S(x)   { 0x##x, 0x##x }
-// Pair
-#define P(x,y) { 0x##x, 0x##y }
-#else
-#define A 0xA
-#define B 0xB
-#define C 0xC
-#define D 0xD
-#define E 0xE
-#define F 0xF
-// Single
-#define S(x)   { x, x }
-// Pair
-#define P(x,y) { x, y }
-#endif
+#define V(x,...) { 0x0##x, ((0x1##__VA_ARGS__ == 0x1) ? 0x0##x : 0x0##__VA_ARGS__) }
 
 // # = Outline
 // + = Shade
@@ -46,36 +30,36 @@ HBRUSH spriteBrushes[2][NUM_TEAM_SPRITE_BRUSHES];
 //0123456789ABCDEF//   |  //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//
 
 const SpritePart pawnOutlineParts[] = {
-    {.x = P(6,9), .y = P(3,F), },
-    {.x = P(5,A), .y = P(4,7), },
-    {.x = P(5,A), .y = S(9),   },
-    {.x = P(5,A), .y = S(D),   },
-    {.x = P(4,B), .y = P(E,F), },
+    {.x = V(6,9), .y = V(3,F), },
+    {.x = V(5,A), .y = V(4,7), },
+    {.x = V(5,A), .y = V( 9 ), },
+    {.x = V(5,A), .y = V( D ), },
+    {.x = V(4,B), .y = V(E,F), },
 };
 const SpritePart pawnFillParts[] = {
-    {.x = P(6,9), .y = P(4,7), },
-    {.x = P(7,8), .y = P(8,E), },
-    {.x = P(6,9), .y = S(9),   },
-    {.x = P(6,9), .y = S(D),   },
-    {.x = P(5,A), .y = S(E),   },
+    {.x = V(6,9), .y = V(4,7), },
+    {.x = V(7,8), .y = V(8,E), },
+    {.x = V(6,9), .y = V( 9 ), },
+    {.x = V(6,9), .y = V( D ), },
+    {.x = V(5,A), .y = V( E ), },
 };
 const SpritePart pawnShadeParts[] = {
-    {.x = P(6,9), .y = S(3),   },
-    {.x = S(5),   .y = S(4),   },
-    {.x = S(A),   .y = P(4,6), },
-    {.x = S(6),   .y = S(7),   },
-    {.x = S(7),   .y = S(8),   },
-    {.x = S(6),   .y = S(9),   },
-    {.x = S(7),   .y = S(A),   },
-    {.x = S(6),   .y = S(D),   },
-    {.x = S(5),   .y = S(E),   },
+    {.x = V(6,9), .y = V( 3 ), },
+    {.x = V( 5 ), .y = V( 4 ), },
+    {.x = V( A ), .y = V(4,6), },
+    {.x = V( 6 ), .y = V( 7 ), },
+    {.x = V( 7 ), .y = V( 8 ), },
+    {.x = V( 6 ), .y = V( 9 ), },
+    {.x = V( 7 ), .y = V( A ), },
+    {.x = V( 6 ), .y = V( D ), },
+    {.x = V( 5 ), .y = V( E ), },
 };
 const SpritePart pawnShineParts[] = {
-    {.x = P(8,9), .y = P(4,5), },
-    {.x = S(8),   .y = S(8),   },
-    {.x = S(9),   .y = S(9),   },
-    {.x = S(8),   .y = P(A,D), },
-    {.x = P(9,A), .y = S(E),   },
+    {.x = V(8,9), .y = V(4,5), },
+    {.x = V( 8 ), .y = V( 8 ), },
+    {.x = V( 9 ), .y = V( 9 ), },
+    {.x = V( 8 ), .y = V(A,D), },
+    {.x = V(9,A), .y = V( E ), },
 };
 
 const Sprite pawn = {
@@ -111,41 +95,41 @@ const Sprite pawn = {
 //0123456789ABCDEF//   |  //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//
 
 const SpritePart rookOutlineParts[] = {
-    {.x = P(3,C), .y = P(2,5), },
-    {.x = P(4,B), .y = S(6),   },
-    {.x = P(5,A), .y = P(7,A), },
-    {.x = P(4,B), .y = P(B,C), },
-    {.x = P(3,C), .y = P(D,F), },
+    {.x = V(3,C), .y = V(2,5), },
+    {.x = V(4,B), .y = V( 6 ), },
+    {.x = V(5,A), .y = V(7,A), },
+    {.x = V(4,B), .y = V(B,C), },
+    {.x = V(3,C), .y = V(D,F), },
 };
 const SpritePart rookFillParts[] = {
-    {.x = S(4),   .y = P(3,4), },
-    {.x = P(7,8), .y = P(3,4), },
-    {.x = S(B),   .y = P(3,4), },
-    {.x = P(4,B), .y = S(5),   },
-    {.x = P(5,A), .y = S(6),   },
-    {.x = P(6,9), .y = P(7,A), },
-    {.x = P(5,A), .y = P(B,C), },
-    {.x = P(4,B), .y = P(D,E), },
+    {.x = V( 4 ), .y = V(3,4), },
+    {.x = V(7,8), .y = V(3,4), },
+    {.x = V( B ), .y = V(3,4), },
+    {.x = V(4,B), .y = V( 5 ), },
+    {.x = V(5,A), .y = V( 6 ), },
+    {.x = V(6,9), .y = V(7,A), },
+    {.x = V(5,A), .y = V(B,C), },
+    {.x = V(4,B), .y = V(D,E), },
 };
 const SpritePart rookShadeParts[] = {
-    {.x = S(5),   .y = P(2,3), },
-    {.x = S(A),   .y = P(2,3), },
-    {.x = S(4),   .y = P(3,5), },
-    {.x = S(5),   .y = S(6),   },
-    {.x = S(6),   .y = P(7,B), },
-    {.x = S(5),   .y = P(B,E), },
-    {.x = P(6,8), .y = S(D),   },
-    {.x = S(4),   .y = P(D,E), },
-    {.x = S(4),   .y = P(D,E), },
-    {.x = S(9),   .y = S(7),   },
+    {.x = V( 5 ), .y = V(2,3), },
+    {.x = V( A ), .y = V(2,3), },
+    {.x = V( 4 ), .y = V(3,5), },
+    {.x = V( 5 ), .y = V( 6 ), },
+    {.x = V( 6 ), .y = V(7,B), },
+    {.x = V( 5 ), .y = V(B,E), },
+    {.x = V(6,8), .y = V( D ), },
+    {.x = V( 4 ), .y = V(D,E), },
+    {.x = V( 4 ), .y = V(D,E), },
+    {.x = V( 9 ), .y = V( 7 ), },
 };
 const SpritePart rookShineParts[] = {
-    {.x = S(B),   .y = P(3,5), },
-    {.x = S(9),   .y = P(8,C), },
-    {.x = S(A),   .y = P(B,C), },
-    {.x = S(8),   .y = S(C),   },
-    {.x = S(B),   .y = P(D,E), },
-    {.x = S(A),   .y = S(E),   },
+    {.x = V( B ), .y = V(3,5), },
+    {.x = V( 9 ), .y = V(8,C), },
+    {.x = V( A ), .y = V(B,C), },
+    {.x = V( 8 ), .y = V( C ), },
+    {.x = V( B ), .y = V(D,E), },
+    {.x = V( A ), .y = V( E ), },
 };
 
 const Sprite rook = {
@@ -181,36 +165,60 @@ const Sprite rook = {
 //0123456789ABCDEF//   |  //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//
 
 const SpritePart knightOutlineParts[] = {
-    {.x = P(6,7), .y = S(0),   },
-    {.x = P(5,8), .y = S(1),   },
-    {.x = P(4,D), .y = S(2),   },
-    {.x = P(3,E), .y = P(3,5), },
-    {.x = P(4,D), .y = S(6),   },
-    {.x = P(4,B), .y = S(7),   },
-    {.x = P(5,A), .y = S(8),   },
-    {.x = P(6,B), .y = S(9),   },
-    {.x = P(6,C), .y = P(A,B), },
-    {.x = P(5,C), .y = S(C),   },
-    {.x = P(4,B), .y = S(D),   },
-    {.x = P(3,C), .y = P(E,F), },
+    {.x = V(6,7), .y = V( 0 ), },
+    {.x = V(5,8), .y = V( 1 ), },
+    {.x = V(4,D), .y = V( 2 ), },
+    {.x = V(3,E), .y = V(3,5), },
+    {.x = V(4,D), .y = V( 6 ), },
+    {.x = V(4,B), .y = V( 7 ), },
+    {.x = V(5,A), .y = V( 8 ), },
+    {.x = V(6,B), .y = V( 9 ), },
+    {.x = V(6,C), .y = V(A,B), },
+    {.x = V(5,C), .y = V( C ), },
+    {.x = V(4,B), .y = V( D ), },
+    {.x = V(3,C), .y = V(E,F), },
 };
 const SpritePart knightFillParts[] = {
-    {.x = P(6,8), .y = S(1),   },
-    {.x = P(5,8), .y = S(2),   },
-    {.x = P(4,D), .y = P(3,5), },
-    {.x = P(5,B), .y = S(6),   },
-    {.x = P(5,A), .y = S(7),   },
-    {.x = P(6,A), .y = S(8),   },
-    {.x = P(7,B), .y = P(9,B), },
-    {.x = P(6,B), .y = S(C),   },
-    {.x = P(5,A), .y = S(D),   },
-    {.x = P(4,C), .y = S(E),   },
+    {.x = V(6,8), .y = V( 1 ), },
+    {.x = V(5,8), .y = V( 2 ), },
+    {.x = V(4,D), .y = V(3,5), },
+    {.x = V(5,B), .y = V( 6 ), },
+    {.x = V(5,A), .y = V( 7 ), },
+    {.x = V(6,A), .y = V( 8 ), },
+    {.x = V(7,B), .y = V(9,B), },
+    {.x = V(6,B), .y = V( C ), },
+    {.x = V(5,A), .y = V( D ), },
+    {.x = V(4,C), .y = V( E ), },
 };
 const SpritePart knightShadeParts[] = {
-    {0}
+    {.x = V( 6 ), .y = V( 1 ), },
+    {.x = V( 8 ), .y = V(1,2), },
+    {.x = V( 5 ), .y = V( 2 ), },
+    {.x = V( 4 ), .y = V(3,5), },
+    {.x = V(A,B), .y = V( 3 ), },
+    {.x = V( D ), .y = V( 4 ), },
+    {.x = V( 7 ), .y = V(5,6), },
+    {.x = V( 5 ), .y = V(6,7), },
+    {.x = V(8,A), .y = V( 7 ), },
+    {.x = V( A ), .y = V( 8 ), },
+    {.x = V( 7 ), .y = V(9,B), },
+    {.x = V( 6 ), .y = V(C,D), },
+    {.x = V( 5 ), .y = V(D,E), },
+    {.x = V( 4 ), .y = V( E ), },
+    {.x = V( B ), .y = V( 9 ), },
+    {.x = V( B ), .y = V( C ), },
+    {.x = V( A ), .y = V( D ), },
+    {.x = V( C ), .y = V( E ), },
 };
 const SpritePart knightShineParts[] = {
-    {0}
+    {.x = V( 7 ), .y = V( 2 ), },
+    {.x = V(8,9), .y = V( 3 ), },
+    {.x = V(C,D), .y = V( 3 ), },
+    {.x = V(8,9), .y = V( 8 ), },
+    {.x = V(9,A), .y = V( 9 ), },
+    {.x = V(A,B), .y = V( A ), },
+    {.x = V( A ), .y = V( B ), },
+    {.x = V(A,B), .y = V( E ), },
 };
 
 const Sprite knight = {
@@ -246,36 +254,51 @@ const Sprite knight = {
 //0123456789ABCDEF//   |  //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//
 
 const SpritePart bishopOutlineParts[] = {
-    {.x = P(7,8), .y = S(0),   },
-    {.x = P(6,9), .y = P(1,A), },
-    {.x = P(5,A), .y = P(2,6), },
-    {.x = S(4),   .y = P(3,5), },
-    {.x = S(B),   .y = P(4,5), },
-    {.x = P(5,A), .y = S(8),   },
-    {.x = P(5,A), .y = P(B,C), },
-    {.x = P(4,B), .y = S(D),   },
-    {.x = P(3,C), .y = P(E,F), },
+    {.x = V(7,8), .y = V( 0 ), },
+    {.x = V(6,9), .y = V(1,A), },
+    {.x = V(5,A), .y = V(2,6), },
+    {.x = V( 4 ), .y = V(3,5), },
+    {.x = V( B ), .y = V(4,5), },
+    {.x = V(5,A), .y = V( 8 ), },
+    {.x = V(5,A), .y = V(B,C), },
+    {.x = V(4,B), .y = V( D ), },
+    {.x = V(3,C), .y = V(E,F), },
 };
 const SpritePart bishopFillParts[] = {
-    {.x = P(7,8), .y = S(1),   },
-    {.x = P(6,8), .y = S(2),   },
-    {.x = S(A),   .y = P(2,4), },
-    {.x = S(9),   .y = S(4),   },
-    {.x = P(5,8), .y = S(3),   },
-    {.x = P(5,7), .y = S(4),   },
-    {.x = P(5,A), .y = S(5),   },
-    {.x = P(6,9), .y = S(6),   },
-    {.x = P(7,8), .y = P(7,A), },
-    {.x = P(6,9), .y = S(8),   },
-    {.x = P(6,9), .y = P(B,C), },
-    {.x = P(5,A), .y = S(D),   },
-    {.x = P(4,B), .y = S(E),   },
+    {.x = V(7,8), .y = V( 1 ), },
+    {.x = V(6,8), .y = V( 2 ), },
+    {.x = V( A ), .y = V(2,4), },
+    {.x = V( 9 ), .y = V( 4 ), },
+    {.x = V(5,8), .y = V( 3 ), },
+    {.x = V(5,7), .y = V( 4 ), },
+    {.x = V(5,A), .y = V( 5 ), },
+    {.x = V(6,9), .y = V( 6 ), },
+    {.x = V(7,8), .y = V(7,A), },
+    {.x = V(6,9), .y = V( 8 ), },
+    {.x = V(6,9), .y = V(B,C), },
+    {.x = V(5,A), .y = V( D ), },
+    {.x = V(4,B), .y = V( E ), },
 };
 const SpritePart bishopShadeParts[] = {
-    {0}
+    {.x = V(6,7), .y = V( 2 ), },
+    {.x = V( A ), .y = V(2,3), },
+    {.x = V( 5 ), .y = V(3,5), },
+    {.x = V( 6 ), .y = V( 6 ), },
+    {.x = V(7,8), .y = V( 7 ), },
+    {.x = V( 6 ), .y = V( 8 ), },
+    {.x = V( 7 ), .y = V( 9 ), },
+    {.x = V( 6 ), .y = V(B,D), },
+    {.x = V( 5 ), .y = V(D,E), },
+    {.x = V( 4 ), .y = V( E ), },
 };
 const SpritePart bishopShineParts[] = {
-    {0}
+    {.x = V( 8 ), .y = V( 1 ), },
+    {.x = V( A ), .y = V(4,5), },
+    {.x = V( 9 ), .y = V( 8 ), },
+    {.x = V( 8 ), .y = V(9,A), },
+    {.x = V( 9 ), .y = V(B,D), },
+    {.x = V( A ), .y = V(D,E), },
+    {.x = V( B ), .y = V( E ), },
 };
 
 const Sprite bishop = {
@@ -311,30 +334,30 @@ const Sprite bishop = {
 //0123456789ABCDEF//   |  //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//
 
 const SpritePart queenOutlineParts[] = {
-    {.x = P(7,8), .y = S(0),   },
-    {.x = P(3,C), .y = P(1,3), },
-    {.x = P(4,B), .y = S(4),   },
-    {.x = P(5,A), .y = P(5,6), },
-    {.x = P(5,A), .y = S(8),   },
-    {.x = P(6,9), .y = P(7,A), },
-    {.x = P(5,A), .y = P(B,C), },
-    {.x = P(4,B), .y = S(D),   },
-    {.x = P(3,C), .y = P(E,F), },
+    {.x = V(7,8), .y = V( 0 ), },
+    {.x = V(3,C), .y = V(1,3), },
+    {.x = V(4,B), .y = V( 4 ), },
+    {.x = V(5,A), .y = V(5,6), },
+    {.x = V(5,A), .y = V( 8 ), },
+    {.x = V(6,9), .y = V(7,A), },
+    {.x = V(5,A), .y = V(B,C), },
+    {.x = V(4,B), .y = V( D ), },
+    {.x = V(3,C), .y = V(E,F), },
 };
 const SpritePart queenFillParts[] = {
-    {.x = S(5),   .y = S(1),   },
-    {.x = P(7,8), .y = S(1),   },
-    {.x = S(A),   .y = S(1),   },
-    {.x = S(4),   .y = P(2,3), },
-    {.x = S(8),   .y = S(2),   },
-    {.x = S(B),   .y = P(2,3), },
-    {.x = P(5,A), .y = P(3,4), },
-    {.x = P(6,9), .y = P(5,6), },
-    {.x = P(7,8), .y = P(7,A), },
-    {.x = P(6,9), .y = S(8),   },
-    {.x = P(6,9), .y = P(B,C), },
-    {.x = P(5,A), .y = S(D),   },
-    {.x = P(4,B), .y = S(E),   },
+    {.x = V( 5 ), .y = V( 1 ), },
+    {.x = V(7,8), .y = V( 1 ), },
+    {.x = V( A ), .y = V( 1 ), },
+    {.x = V( 4 ), .y = V(2,3), },
+    {.x = V( 8 ), .y = V( 2 ), },
+    {.x = V( B ), .y = V(2,3), },
+    {.x = V(5,A), .y = V(3,4), },
+    {.x = V(6,9), .y = V(5,6), },
+    {.x = V(7,8), .y = V(7,A), },
+    {.x = V(6,9), .y = V( 8 ), },
+    {.x = V(6,9), .y = V(B,C), },
+    {.x = V(5,A), .y = V( D ), },
+    {.x = V(4,B), .y = V( E ), },
 };
 const SpritePart queenShadeParts[] = {
     {0}
@@ -376,28 +399,28 @@ const Sprite queen = {
 //0123456789ABCDEF//   |  //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//
 
 const SpritePart kingOutlineParts[] = {
-    {.x = P(7,8), .y = P(0,1), },
-    {.x = P(4,B), .y = P(2,4), },
-    {.x = P(5,A), .y = P(5,6), },
-    {.x = P(6,9), .y = P(7,A), },
-    {.x = P(5,A), .y = S(8),   },
-    {.x = P(5,A), .y = P(B,C), },
-    {.x = P(4,B), .y = S(D),   },
-    {.x = P(3,C), .y = P(E,F), },
+    {.x = V(7,8), .y = V(0,1), },
+    {.x = V(4,B), .y = V(2,4), },
+    {.x = V(5,A), .y = V(5,6), },
+    {.x = V(6,9), .y = V(7,A), },
+    {.x = V(5,A), .y = V( 8 ), },
+    {.x = V(5,A), .y = V(B,C), },
+    {.x = V(4,B), .y = V( D ), },
+    {.x = V(3,C), .y = V(E,F), },
 };
 const SpritePart kingFillParts[] = {
-    {.x = S(6),   .y = S(1),   },
-    {.x = S(9),   .y = S(1),   },
-    {.x = S(4),   .y = S(2),   },
-    {.x = P(7,8), .y = S(2),   },
-    {.x = S(B),   .y = S(2),   },
-    {.x = P(5,A), .y = P(3,4), },
-    {.x = P(6,9), .y = P(5,6), },
-    {.x = P(7,8), .y = P(7,A), },
-    {.x = P(6,9), .y = S(8),   },
-    {.x = P(6,9), .y = P(B,C), },
-    {.x = P(5,A), .y = S(D),   },
-    {.x = P(4,B), .y = S(E),   },
+    {.x = V( 6 ), .y = V( 1 ), },
+    {.x = V( 9 ), .y = V( 1 ), },
+    {.x = V( 4 ), .y = V( 2 ), },
+    {.x = V(7,8), .y = V( 2 ), },
+    {.x = V( B ), .y = V( 2 ), },
+    {.x = V(5,A), .y = V(3,4), },
+    {.x = V(6,9), .y = V(5,6), },
+    {.x = V(7,8), .y = V(7,A), },
+    {.x = V(6,9), .y = V( 8 ), },
+    {.x = V(6,9), .y = V(B,C), },
+    {.x = V(5,A), .y = V( D ), },
+    {.x = V(4,B), .y = V( E ), },
 };
 const SpritePart kingShadeParts[] = {
     {0}
