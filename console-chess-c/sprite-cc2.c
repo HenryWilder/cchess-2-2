@@ -360,10 +360,29 @@ const SpritePart queenFillParts[] = {
     {.x = V(4,B), .y = V( E ), },
 };
 const SpritePart queenShadeParts[] = {
-    {0}
+    {.x = V( 5 ), .y = V( 1 ), },
+    {.x = V( A ), .y = V( 1 ), },
+    {.x = V( 8 ), .y = V( 2 ), },
+    {.x = V( 4 ), .y = V( 3 ), },
+    {.x = V( A ), .y = V( 3 ), },
+    {.x = V(5,7), .y = V( 4 ), },
+    {.x = V( 9 ), .y = V( 4 ), },
+    {.x = V( 6 ), .y = V(5,6), },
+    {.x = V( 9 ), .y = V( 6 ), },
+    {.x = V(7,8), .y = V( 7 ), },
+    {.x = V( 6 ), .y = V( 8 ), },
+    {.x = V( 7 ), .y = V( 9 ), },
+    {.x = V( 6 ), .y = V(B,C), },
+    {.x = V(5,7), .y = V( D ), },
+    {.x = V(4,5), .y = V( E ), },
 };
 const SpritePart queenShineParts[] = {
-    {0}
+    {.x = V( 8 ), .y = V( 1 ), },
+    {.x = V( 9 ), .y = V( 8 ), },
+    {.x = V( 8 ), .y = V(9,A), },
+    {.x = V( 9 ), .y = V(B,D), },
+    {.x = V( A ), .y = V(D,E), },
+    {.x = V( B ), .y = V( E ), },
 };
 
 const Sprite queen = {
@@ -423,10 +442,28 @@ const SpritePart kingFillParts[] = {
     {.x = V(4,B), .y = V( E ), },
 };
 const SpritePart kingShadeParts[] = {
-    {0}
+    {.x = V( 6 ), .y = V( 1 ), },
+    {.x = V( 9 ), .y = V( 1 ), },
+    {.x = V( 4 ), .y = V( 2 ), },
+    {.x = V( B ), .y = V( 2 ), },
+    {.x = V( 5 ), .y = V(3,4), },
+    {.x = V( A ), .y = V( 4 ), },
+    {.x = V( 6 ), .y = V(5,6), },
+    {.x = V( 9 ), .y = V( 6 ), },
+    {.x = V(7,8), .y = V( 7 ), },
+    {.x = V( 6 ), .y = V( 8 ), },
+    {.x = V( 7 ), .y = V( 9 ), },
+    {.x = V( 6 ), .y = V(B,C), },
+    {.x = V(5,7), .y = V( D ), },
+    {.x = V(4,5), .y = V( E ), },
 };
 const SpritePart kingShineParts[] = {
-    {0}
+    {.x = V(8,A), .y = V( 3 ), },
+    {.x = V( 9 ), .y = V( 8 ), },
+    {.x = V( 8 ), .y = V(9,A), },
+    {.x = V( 9 ), .y = V(B,D), },
+    {.x = V( A ), .y = V(D,E), },
+    {.x = V( B ), .y = V( E ), },
 };
 
 const Sprite king = {
@@ -464,7 +501,7 @@ const Sprite* unitSprites[] = { NULL, &pawn, &rook, &knight, &bishop, &queen, &k
 //0123456789ABCDEF//   |  //0123456789ABCDEF//   //0123456789ABCDEF//
 
 const SpritePart arrowLOutlineParts[] = {
-    {0}
+    {.x = V(8,A), .y = V( 3 ), },
 };
 const SpritePart arrowLFillParts[] = {
     {0}
