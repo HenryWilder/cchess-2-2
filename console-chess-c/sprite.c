@@ -118,13 +118,22 @@ const SpritePart rookOutlineParts[] = {
     {.x = P(3,C), .y = P(D,F), },
 };
 const SpritePart rookFillParts[] = {
-    {0}
+    {.x = S(4),   .y = P(3,4), },
+    {.x = P(7,8), .y = P(3,4), },
+    {.x = S(B),   .y = P(3,4), },
+    {.x = P(4,B), .y = S(5),   },
+    {.x = P(5,A), .y = S(6),   },
+    {.x = P(6,9), .y = P(7,A), },
+    {.x = P(5,A), .y = P(B,C), },
+    {.x = P(4,B), .y = P(D,E), },
 };
 const SpritePart rookShadeParts[] = {
-    {0}
+    {.x = S(5), .y = P(2,3), },
+    {.x = S(A), .y = P(2,3), },
+    {.x = S(4), .y = P(3,5), },
 };
 const SpritePart rookShineParts[] = {
-    {0}
+    {.x = S(5), .y = P(2,3), },
 };
 
 const Sprite rook = {

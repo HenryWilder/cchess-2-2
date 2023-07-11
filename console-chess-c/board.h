@@ -48,8 +48,4 @@ void GameFlipbook(void);
 void DrawTile(BoardPos tile);
 void RedrawBoard();
 
-#if _DEBUG
-void PrintBoardDebug(void);
-#endif
-
 #endif // !BOARD_H

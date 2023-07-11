@@ -24,55 +24,6 @@ int main()
 
 	InitBrushes();
 
-#if _DEBUG && 0
-
-	// Faux game for testing gameplay without input
-
-	ResetBoard();
-
-	PrintBoardDebug();
-
-	typedef struct FauxMove { BoardPos from, to; } FauxMove;
-
-	FauxMove fauxMoves[] = {
-		{
-			.from = { .x = 6, .y = 6, },
-			.to   = { .x = 5, .y = 5, },
-		},
-		{
-			.from = { .x = 5, .y = 5, },
-			.to   = { .x = 5, .y = 1, },
-		},
-		{
-			.from = { .x = 5, .y = 1, },
-			.to   = { .x = 5, .y = 0, },
-		},
-		{
-			.from = { .x = 5, .y = 0, },
-			.to   = { .x = 5, .y = 4, },
-		}
-	};
-
-	for (size_t i = 0; i < sizeof(fauxMoves) / sizeof(FauxMove); ++i)
-	{
-		PushMove(fauxMoves[i].from, fauxMoves[i].to);
-		ApplyCurrentMove();
-		IncrementTurn();
-	}
-
-	printf("REVERSING\n");
-
-	for (size_t i = 0; i < sizeof(fauxMoves) / sizeof(FauxMove); ++i)
-	{
-		UnapplyCurrentMove();
-		PrintBoardDebug();
-		DecrementTurn();
-	}
-
-	return;
-
-#endif
-
 	// Program loop
 	while (replay)
 	{

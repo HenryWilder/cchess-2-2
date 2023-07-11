@@ -2,6 +2,8 @@
 #include "constants.h"
 #include "sprite.h"
 
+#define SPRITES_LEVEL_OF_DETAIL 0
+
 HDC hdc;
 
 HBRUSH boardWhite;
@@ -71,10 +73,14 @@ void DrawSpriteBrush(int xPixel, int yPixel, size_t brushIndex, size_t numParts,
 void DrawSprite(int xPixel, int yPixel, UnitType type, UnitTeam team)
 {
     Sprite* sprite = unitSprites[type];
+#if SPRITES_LEVEL_OF_DETAIL >= 0
     DrawSpriteBrush(xPixel, yPixel, 2, sprite->numOutlineParts, sprite->outlineParts, team);
     DrawSpriteBrush(xPixel, yPixel, 0, sprite->numFillParts,    sprite->fillParts,    team);
+#endif
+#if SPRITES_LEVEL_OF_DETAIL >= 1
     DrawSpriteBrush(xPixel, yPixel, 1, sprite->numShadeParts,   sprite->shadeParts,   team);
     DrawSpriteBrush(xPixel, yPixel, 3, sprite->numShineParts,   sprite->shineParts,   team);
+#endif
 }
 
 void DrawUnit(const Unit* unit)
