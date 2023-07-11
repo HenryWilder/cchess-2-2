@@ -181,7 +181,8 @@
     <ClCompile Include="input.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="output.c" />
-    <ClCompile Include="sprite.c" />
+    <ClCompile Include="sprite-cc3.c" />
+    <ClCompile Include="sprite-cc2.c" />
     <ClCompile Include="unit.c" />
   </ItemGroup>
   <ItemGroup>

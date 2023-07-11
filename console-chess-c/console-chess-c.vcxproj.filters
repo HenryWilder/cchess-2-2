@@ -30,7 +30,10 @@
     <ClCompile Include="input.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sprite.c">
+    <ClCompile Include="sprite-cc2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sprite-cc3.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

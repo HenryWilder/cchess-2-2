@@ -2,7 +2,7 @@
 #include "constants.h"
 #include "sprite.h"
 
-#define SPRITES_LEVEL_OF_DETAIL 0
+#define SPRITES_LEVEL_OF_DETAIL 1
 
 HDC hdc;
 
