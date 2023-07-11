@@ -195,7 +195,16 @@ const SpritePart knightOutlineParts[] = {
     {.x = P(3,C), .y = P(E,F), },
 };
 const SpritePart knightFillParts[] = {
-    {0}
+    {.x = P(6,8), .y = S(1),   },
+    {.x = P(5,8), .y = S(2),   },
+    {.x = P(4,D), .y = P(3,5), },
+    {.x = P(5,B), .y = S(6),   },
+    {.x = P(5,A), .y = S(7),   },
+    {.x = P(6,A), .y = S(8),   },
+    {.x = P(7,B), .y = P(9,B), },
+    {.x = P(6,B), .y = S(C),   },
+    {.x = P(5,A), .y = S(D),   },
+    {.x = P(4,C), .y = S(E),   },
 };
 const SpritePart knightShadeParts[] = {
     {0}
@@ -248,7 +257,19 @@ const SpritePart bishopOutlineParts[] = {
     {.x = P(3,C), .y = P(E,F), },
 };
 const SpritePart bishopFillParts[] = {
-    {0}
+    {.x = P(7,8), .y = S(1),   },
+    {.x = P(6,8), .y = S(2),   },
+    {.x = S(A),   .y = P(2,4), },
+    {.x = S(9),   .y = S(4),   },
+    {.x = P(5,8), .y = S(3),   },
+    {.x = P(5,7), .y = S(4),   },
+    {.x = P(5,A), .y = S(5),   },
+    {.x = P(6,9), .y = S(6),   },
+    {.x = P(7,8), .y = P(7,A), },
+    {.x = P(6,9), .y = S(8),   },
+    {.x = P(6,9), .y = P(B,C), },
+    {.x = P(5,A), .y = S(D),   },
+    {.x = P(4,B), .y = S(E),   },
 };
 const SpritePart bishopShadeParts[] = {
     {0}
@@ -294,13 +315,26 @@ const SpritePart queenOutlineParts[] = {
     {.x = P(3,C), .y = P(1,3), },
     {.x = P(4,B), .y = S(4),   },
     {.x = P(5,A), .y = P(5,6), },
+    {.x = P(5,A), .y = S(8),   },
     {.x = P(6,9), .y = P(7,A), },
     {.x = P(5,A), .y = P(B,C), },
     {.x = P(4,B), .y = S(D),   },
     {.x = P(3,C), .y = P(E,F), },
 };
 const SpritePart queenFillParts[] = {
-    {0}
+    {.x = S(5),   .y = S(1),   },
+    {.x = P(7,8), .y = S(1),   },
+    {.x = S(A),   .y = S(1),   },
+    {.x = S(4),   .y = P(2,3), },
+    {.x = S(8),   .y = S(2),   },
+    {.x = S(B),   .y = P(2,3), },
+    {.x = P(5,A), .y = P(3,4), },
+    {.x = P(6,9), .y = P(5,6), },
+    {.x = P(7,8), .y = P(7,A), },
+    {.x = P(6,9), .y = S(8),   },
+    {.x = P(6,9), .y = P(B,C), },
+    {.x = P(5,A), .y = S(D),   },
+    {.x = P(4,B), .y = S(E),   },
 };
 const SpritePart queenShadeParts[] = {
     {0}
@@ -323,7 +357,7 @@ const Sprite queen = {
 
 // King /////////////  |  // Outline //////////  // Fill /////////////  // Shade ////////////  // Shine ////////////
 //       ##       //0  |  //       ##       //0  //                //0  //                //0  //                //0
-//      +##+      //1  |  //      ####      //1  //      -  -      //1  //      +  +      //1  //                //1
+//      +##+      //1  |  //       ##       //1  //      -  -      //1  //      +  +      //1  //                //1
 //    +##--##+    //2  |  //    ########    //2  //    -  --  -    //2  //    +      +    //2  //                //2
 //    #+--...#    //3  |  //    ########    //3  //     ------     //3  //     +          //3  //        ...     //3
 //    #+----+#    //4  |  //    ########    //4  //     ------     //4  //     +    +     //4  //                //4
@@ -342,8 +376,7 @@ const Sprite queen = {
 //0123456789ABCDEF//   |  //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//
 
 const SpritePart kingOutlineParts[] = {
-    {.x = P(7,8), .y = S(0),   },
-    {.x = P(6,9), .y = S(1),   },
+    {.x = P(7,8), .y = P(0,1), },
     {.x = P(4,B), .y = P(2,4), },
     {.x = P(5,A), .y = P(5,6), },
     {.x = P(6,9), .y = P(7,A), },
@@ -353,7 +386,18 @@ const SpritePart kingOutlineParts[] = {
     {.x = P(3,C), .y = P(E,F), },
 };
 const SpritePart kingFillParts[] = {
-    {0}
+    {.x = S(6),   .y = S(1),   },
+    {.x = S(9),   .y = S(1),   },
+    {.x = S(4),   .y = S(2),   },
+    {.x = P(7,8), .y = S(2),   },
+    {.x = S(B),   .y = S(2),   },
+    {.x = P(5,A), .y = P(3,4), },
+    {.x = P(6,9), .y = P(5,6), },
+    {.x = P(7,8), .y = P(7,A), },
+    {.x = P(6,9), .y = S(8),   },
+    {.x = P(6,9), .y = P(B,C), },
+    {.x = P(5,A), .y = S(D),   },
+    {.x = P(4,B), .y = S(E),   },
 };
 const SpritePart kingShadeParts[] = {
     {0}
