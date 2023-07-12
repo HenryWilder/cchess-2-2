@@ -96,70 +96,89 @@ extern HBRUSH* cccSpriteBrushes; // Array reference
 void InitSpriteBrushes();
 void SetSpriteBrushMode(CCRenderVersion mode);
 
-typedef struct SpriteRecPart {
+typedef struct Point {
+    
+    UINT16 x, y;
 
-    unsigned short x[2], y[2];
+} Point;
 
-} SpriteRecPart;
+// Rectangle
+typedef struct SpriteRec {
 
-typedef struct SpriteTriPart {
+    UINT16 x[2], y[2];
 
-    POINT pt[3];
+} SpriteRec;
 
-} SpriteTriPart;
+// Triangle
+typedef struct SpriteTri {
 
-typedef enum SpritePartType {
+    Point pt[3];
+
+} SpriteTri;
+
+// Ellipse
+typedef struct SpriteElp  {
+
+    Point o;
+    UINT16 r[2];
+
+} SpriteElp;
+
+// Shape
+typedef enum SpriteShapeType {
 
     SPRITE_PART_TYPE_REC, // Rectangle
     SPRITE_PART_TYPE_TRI, // Triangle
+    SPRITE_PART_TYPE_ELP, // Ellipse
 
-} SpritePartType;
+} SpriteShapeType;
 
-enum {
+// Single shape - color is controlled by parent layer
+typedef struct SpriteShape {
 
-    // Number of unique colors that can be on a sprite
-    NUM_MAX_SPRITE_BRUSHES = 6,
+    // What shape this represents
+    SpriteShapeType type;
 
-    // Number of shapes that can be the same color
-    NUM_MAX_SPRITE_BRUSH_PARTS = 16,
-};
+    // The actual geometry information
+    union {
+        SpriteRec rec;
+        SpriteTri tri;
+        SpriteElp elp;
+    };
 
+} SpriteShape;
+
+// Monochrome layer
+typedef struct SpriteLayer {
+
+    /// Geometry ///
+
+    // Number of readable parts
+    size_t numShapes;
+
+    // Array of shapes used in the vector sprite
+    _Field_size_(numShapes) SpriteShape* shapes;
+
+    /// Color ///
+
+    // Number of items in brushKey
+    _Field_range_(1, 2) size_t numBrushAlts;
+
+    // Set of PaletteKeys for brush and alts.
+    // Dereference for default brush (will always have at least one)
+    _Field_size_(numBrushAlts) PaletteKey* brushes;
+
+} SpriteLayer;
+
+// Vector image
 typedef struct Sprite {
 
-    struct SpriteLayer {
+    // Number of readable brushes
+    size_t numLayers;
 
-        // Geometry
-
-        struct SpritePart {
-
-            SpritePartType type;
-
-            union {
-                SpriteRecPart rec;
-                SpriteTriPart tri;
-            };
-
-        }
-        _Field_size_part_(NUM_MAX_SPRITE_BRUSH_PARTS, numParts)
-        shapes[NUM_MAX_SPRITE_BRUSH_PARTS]; // Array of shapes used in the vector sprite
-
-        _Field_range_(1, NUM_MAX_SPRITE_BRUSH_PARTS)
-        size_t numParts; // Number of readable parts
-
-        // Color
-
-        _Field_size_(numBrushAlts)
-        PaletteKey* brushKeys; // Set of PaletteKeys for brush and alts - Dereference for default brush (will always have at least one)
-
-        _Field_range_(1, 2) // @Until I find a need for more than one alternate color (currently used for unit teams), this will remain [1..2].
-        size_t numBrushAlts; // Number of items in brushKey
-
-    }
-    _Field_size_part_(NUM_MAX_SPRITE_BRUSHES, numLayers)
-    layers[NUM_MAX_SPRITE_BRUSHES]; // Color layers in the sprite - Get drawn in ascending order. 0 is drawn first, then 1, etc.
-
-    _Field_range_(1, NUM_MAX_SPRITE_BRUSHES)
-    size_t numLayers; // Number of readable brushes
+    // Color layers in the sprite.
+    // Drawn in ascending order - 0 is drawn first, then 1, etc.
+    _Field_size_(numLayers) SpriteLayer* layers;
 
 } Sprite;
 

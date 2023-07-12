@@ -1,13 +1,18 @@
 #include "sprite.h"
+#include "sprite-builder-macros.h"
 
-#define V(x,...) { 0x0##x, ((0x1##__VA_ARGS__ == 0x1) ? 0x0##x : 0x0##__VA_ARGS__) }
+#define _SPRITE_BRUSH(uniqueKey, name, colors, parts) \
+    const SpritePart parts##uniqueKey [] = parts; \
+    const SpriteBrush name { .brushKeyOptions = colors, };
+
+#define SPRITE_BRUSH(name, colors, parts) _SPRITE_BRUSH(__LINE__, name, colors, parts)
+
+COLORREF cc2SpriteColors[_NUM_PALETTE_BRUSHES];
 
 // # = Outline
 // + = Shade
 // - = Fill
 // . = Shine
-
-HBRUSH spriteBrushes[2][NUM_TEAM_SPRITE_BRUSHES];
 
 // Pawn /////////////  |  // Outline //////////  // Fill /////////////  // Shade ////////////  // Shine ////////////
 //                //0  |  //                //0  //                //0  //                //0  //                //0
@@ -29,49 +34,51 @@ HBRUSH spriteBrushes[2][NUM_TEAM_SPRITE_BRUSHES];
 /////////////////////  |  /////////////////////  /////////////////////  /////////////////////  /////////////////////
 //0123456789ABCDEF//   |  //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//   //0123456789ABCDEF//
 
-const SpritePart pawnOutlineParts[] = {
-    {.x = V(6,9), .y = V(3,F), },
-    {.x = V(5,A), .y = V(4,7), },
-    {.x = V(5,A), .y = V( 9 ), },
-    {.x = V(5,A), .y = V( D ), },
-    {.x = V(4,B), .y = V(E,F), },
+const SpriteShape pawnOutlineParts[] = {
+    REC( V(6,9), V(3,F) ),
+    REC( V(5,A), V(4,7) ),
+    REC( V(5,A), V( 9 ) ),
+    REC( V(5,A), V( D ) ),
+    REC( V(4,B), V(E,F) ),
 };
+const SpriteLayer pawnOutlineBrush = {
+    .brushKeyOptions = { BRUSH_UNIT_WHITE_CC2_FILL, BRUSH_UNIT_BLACK_CC2_FILL },
+    .numParts = _countof(pawnOutlineParts),
+    .parts = pawnOutlineParts,
+}
 const SpritePart pawnFillParts[] = {
-    {.x = V(6,9), .y = V(4,7), },
-    {.x = V(7,8), .y = V(8,E), },
-    {.x = V(6,9), .y = V( 9 ), },
-    {.x = V(6,9), .y = V( D ), },
-    {.x = V(5,A), .y = V( E ), },
+    REC( V(6,9), V(4,7) ),
+    REC( V(7,8), V(8,E) ),
+    REC( V(6,9), V( 9 ) ),
+    REC( V(6,9), V( D ) ),
+    REC( V(5,A), V( E ) ),
 };
 const SpritePart pawnShadeParts[] = {
-    {.x = V(6,9), .y = V( 3 ), },
-    {.x = V( 5 ), .y = V( 4 ), },
-    {.x = V( A ), .y = V(4,6), },
-    {.x = V( 6 ), .y = V( 7 ), },
-    {.x = V( 7 ), .y = V( 8 ), },
-    {.x = V( 6 ), .y = V( 9 ), },
-    {.x = V( 7 ), .y = V( A ), },
-    {.x = V( 6 ), .y = V( D ), },
-    {.x = V( 5 ), .y = V( E ), },
+    REC( V(6,9), V( 3 ) ),
+    REC( V( 5 ), V( 4 ) ),
+    REC( V( A ), V(4,6) ),
+    REC( V( 6 ), V( 7 ) ),
+    REC( V( 7 ), V( 8 ) ),
+    REC( V( 6 ), V( 9 ) ),
+    REC( V( 7 ), V( A ) ),
+    REC( V( 6 ), V( D ) ),
+    REC( V( 5 ), V( E ) ),
 };
 const SpritePart pawnShineParts[] = {
-    {.x = V(8,9), .y = V(4,5), },
-    {.x = V( 8 ), .y = V( 8 ), },
-    {.x = V( 9 ), .y = V( 9 ), },
-    {.x = V( 8 ), .y = V(A,D), },
-    {.x = V(9,A), .y = V( E ), },
+    REC( V(8,9), V(4,5) ),
+    REC( V( 8 ), V( 8 ) ),
+    REC( V( 9 ), V( 9 ) ),
+    REC( V( 8 ), V(A,D) ),
+    REC( V(9,A), V( E ) ),
 };
 
-const Sprite pawn = {
-    .numOutlineParts = _countof(pawnOutlineParts),
-    .numFillParts    = _countof(pawnFillParts),
-    .numShadeParts   = _countof(pawnShadeParts),
-    .numShineParts   = _countof(pawnShineParts),
+const SpriteBrush pawnBrushes = {
+    
+}
 
-    pawnOutlineParts,
-    pawnFillParts,
-    pawnShadeParts,
-    pawnShineParts,
+const Sprite pawn = {
+    .numBrushes = _countof(pawnBrushes),
+    .brushes = pawnBrushes,
 };
 
 // Rook /////////////  |  // Outline //////////  // Fill /////////////  // Shade ////////////  // Shine ////////////

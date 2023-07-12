@@ -6,7 +6,7 @@
 
 extern HDC hdc;
 
-#define NUM_TILEBRUSHES 7
+enum { NUM_TILEBRUSHES = 7 };
 
 typedef enum TileBrush {
 
@@ -31,6 +31,19 @@ typedef enum TileBrush {
 extern HBRUSH tileBrushes[NUM_TILEBRUSHES];
 
 void InitBrushes();
+
+typedef enum CCRenderVersion {
+    
+    UNINITIALIZED = 0,
+
+    // CC1 is not supported
+
+    CC2 = 2,
+    CC3 = 3,
+
+} CCRenderVersion;
+
+void SetRenderVersion(CCRenderVersion version);
 
 void DrawEmptyTile(BoardPos pos);
 void DrawColoredTile(BoardPos pos, HBRUSH brush);

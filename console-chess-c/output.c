@@ -1,35 +1,69 @@
 #include "output.h"
 #include "constants.h"
-
-#define SPRITES_LEVEL_OF_DETAIL 1
+#include <assert.h>
 
 // Sprite > Brush > Part
 
 HDC hdc;
 
-HBRUSH tileBrushes[NUM_TILEBRUSHES];
+unsigned char mode = 2;
+
+HBRUSH cc2TileBrushes[NUM_TILEBRUSHES];
+HBRUSH cc3TileBrushes[NUM_TILEBRUSHES];
+HBRUSH* cccTileBrushes = cc2TileBrushes; // Brushes used in this
+
+HBRUSH cc2UnitBrushes[2][NUM_TEAM_SPRITE_BRUSHES_CC2];
+HBRUSH cc3UnitBrushes[2][NUM_TEAM_SPRITE_BRUSHES_CC3];
+
+size_t numUnitBrushes = NUM_TEAM_SPRITE_BRUSHES_CC2;
+HBRUSH* cccUnitBrushes[2] = cc2UnitBrushes; // Brushes used in this | Array of array references
 
 void InitBrushes()
 {
-    tileBrushes[TILEBRUSH_TILE_WHITE           ] = CreateSolidBrush(RGB(252, 219, 166));
-    tileBrushes[TILEBRUSH_TILE_BLACK           ] = CreateSolidBrush(RGB(236, 167,  95));
+    // CC2
+    {
+        const COLORREF cc2TileBrushColors[] = {
+            [TILEBRUSH_TILE_WHITE]        = RGB(252, 219, 166),
+            [TILEBRUSH_TILE_BLACK]        = RGB(236, 167,  95),
 
-    tileBrushes[TILEBRUSH_SELECT               ] = CreateSolidBrush(RGB( 44, 200,  37));
-    tileBrushes[TILEBRUSH_AVAILABLE_MOVE       ] = CreateSolidBrush(RGB(155, 235, 135));
-    tileBrushes[TILEBRUSH_AVAILABLE_CAPTURE    ] = CreateSolidBrush(RGB(255,  80,  80));
+            [TILEBRUSH_SELECT]            = RGB( 44, 200,  37),
+            [TILEBRUSH_AVAILABLE_MOVE]    = RGB(155, 235, 135),
+            [TILEBRUSH_AVAILABLE_CAPTURE] = RGB(255,  80,  80),
 
-    tileBrushes[TILEBRUSH_KING_CHECK           ] = CreateSolidBrush(RGB(255, 200,  80));
-    tileBrushes[TILEBRUSH_SPACE_TAKEN          ] = CreateSolidBrush(RGB(127, 127, 127));
+            [TILEBRUSH_KING_CHECK]        = RGB(255, 200,  80),
+            [TILEBRUSH_SPACE_TAKEN]       = RGB(127, 127, 127),
+        };
 
-    spriteBrushes[TEAM_WHITE][UNITBRUSH_FILL   ] = CreateSolidBrush(RGB(240, 240, 230));
-    spriteBrushes[TEAM_WHITE][UNITBRUSH_SHADE  ] = CreateSolidBrush(RGB(180, 150, 120));
-    spriteBrushes[TEAM_WHITE][UNITBRUSH_OUTLINE] = CreateSolidBrush(RGB(100, 100,  90));
-    spriteBrushes[TEAM_WHITE][UNITBRUSH_SHINE  ] = CreateSolidBrush(RGB(255, 255, 255));
+        const COLORREF cc2UnitBrushColors[2][4] = {
+            [TEAM_WHITE] = {
+                [UNITBRUSH_FILL]    = RGB(240, 240, 230),
+                [UNITBRUSH_SHADE]   = RGB(180, 150, 120),
+                [UNITBRUSH_OUTLINE] = RGB(100, 100,  90),
+                [UNITBRUSH_SHINE]   = RGB(255, 255, 255),
+            },
 
-    spriteBrushes[TEAM_BLACK][UNITBRUSH_FILL   ] = CreateSolidBrush(RGB( 80,  80,  90));
-    spriteBrushes[TEAM_BLACK][UNITBRUSH_SHADE  ] = CreateSolidBrush(RGB( 50,  55,  60));
-    spriteBrushes[TEAM_BLACK][UNITBRUSH_OUTLINE] = CreateSolidBrush(RGB( 40,  30,  50));
-    spriteBrushes[TEAM_BLACK][UNITBRUSH_SHINE  ] = CreateSolidBrush(RGB(100, 100, 110));
+            [TEAM_BLACK] = {
+                [UNITBRUSH_FILL]    = RGB( 80,  80,  90),
+                [UNITBRUSH_SHADE]   = RGB( 50,  55,  60),
+                [UNITBRUSH_OUTLINE] = RGB( 40,  30,  50),
+                [UNITBRUSH_SHINE]   = RGB(100, 100, 110),
+            },
+        };
+
+        for (size_t i = 0; i < _countof(cc2TileBrushColors); ++i)
+        {
+            cc2TileBrushes[i] = CreateSolidBrush(cc2TileBrushColors[i]);
+        }
+
+        for (size_t team = 0; team < _countof(cc2UnitBrushColors); ++team)
+        {
+            const COLORREF colorArray[] = cc2UnitBrushColors[team];
+            for (size_t i = 0; i < _countof(cc2UnitBrushColors[0]); ++i)
+            {
+                cc2TileBrushes[i] = CreateSolidBrush(colorArray[i]);
+            }
+        }
+    }
 }
 
 RECT TileRect(BoardPos pos)
@@ -65,7 +99,7 @@ void DrawColoredTile(BoardPos pos, HBRUSH brush)
     FillRect(hdc, &rect, brush);
 }
 
-RECT PartRect(int xPixel, int yPixel, SpritePart part)
+RECT PartRect(int xPixel, int yPixel, SpriteRectPart part)
 {
     RECT rect = {
         xPixel + (part.x[0] + 0) * GAME_SCALE,
@@ -76,24 +110,22 @@ RECT PartRect(int xPixel, int yPixel, SpritePart part)
     return rect;
 }
 
-void DrawSpriteBrush(int xPixel, int yPixel, size_t numParts, const SpritePart parts[], HBRUSH brush)
+void DrawSpriteBrush(int xPixel, int yPixel, size_t numParts, const SpriteRectPart parts[], HBRUSH brush)
 {
     for (size_t i = 0; i < numParts; ++i)
     {
-        SpritePart part = parts[i];
+        SpriteRectPart part = parts[i];
         const RECT rect = PartRect(xPixel, yPixel, part);
         FillRect(hdc, &rect, brush);
     }
 }
 
-void DrawSprite(int xPixel, int yPixel, const Sprite* sprite, const SpritePalette* palette)
+void DrawSprite(int xPixel, int yPixel, const Sprite* sprite, const HBRUSH palette[], size_t numBrushes)
 {
     DrawSpriteBrush(xPixel, yPixel, sprite->numOutlineParts, sprite->outlineParts, palette->outlineBrush);
     DrawSpriteBrush(xPixel, yPixel, sprite->numFillParts,    sprite->fillParts,    palette->fillBrush);
-#if SPRITES_LEVEL_OF_DETAIL >= 1
     DrawSpriteBrush(xPixel, yPixel, sprite->numShadeParts,   sprite->shadeParts,   palette->shadeBrush);
     DrawSpriteBrush(xPixel, yPixel, sprite->numShineParts,   sprite->shineParts,   palette->shineBrush);
-#endif
 }
 
 void DrawUnitSpriteBrush(int xPixel, int yPixel, size_t brushIndex, size_t numParts, const SpritePart parts[], UnitTeam team)
